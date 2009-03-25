@@ -14,6 +14,7 @@ version(Tango){
 } else { // Phobos
     static import core.exception;
     static import std.c.stdlib;
+    static import std.stdio;
     alias std.c.stdlib.exit exit;
 }
 
@@ -77,14 +78,19 @@ version(Tango){
         private this( String name ){
         }
         void trace( String file, ulong line, String fmt, ... ){
+            std.stdio.writefln( "TRC %s %d: %s", file, line, fmt );
         }
         void info( String file, ulong line, String fmt, ... ){
+            std.stdio.writefln( "INF %s %d: %s", file, line, fmt );
         }
         void warn( String file, ulong line, String fmt, ... ){
+            std.stdio.writefln( "WRN %s %d: %s", file, line, fmt );
         }
         void error( String file, ulong line, String fmt, ... ){
+            std.stdio.writefln( "ERR %s %d: %s", file, line, fmt );
         }
         void fatal( String file, ulong line, String fmt, ... ){
+            std.stdio.writefln( "FAT %s %d: %s", file, line, fmt );
         }
     }
 }
