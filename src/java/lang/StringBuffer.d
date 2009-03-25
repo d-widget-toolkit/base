@@ -35,7 +35,7 @@ class StringBuffer : CharSequence {
         }
     }
 
-    public this( String content ){
+    public this( CString content ){
         version(Tango){
             buf = new TBuf( content );
         } else { // Phobos
@@ -77,7 +77,7 @@ class StringBuffer : CharSequence {
         }
     }
 
-    StringBuffer append( String s ){
+    StringBuffer append( CString s ){
         version(Tango){
             buf.append( s );
         } else { // Phobos
@@ -90,7 +90,7 @@ class StringBuffer : CharSequence {
         return this;
     }
 
-    StringBuffer append( String s, int offset, int len ){
+    StringBuffer append( CString s, int offset, int len ){
         return append( s[ offset .. offset+len ] );
     }
 
@@ -144,7 +144,7 @@ class StringBuffer : CharSequence {
     StringBuffer insert(int offset, int i){
         return insert( offset, String_valueOf(i) );
     }
-    StringBuffer insert(int offset, String str){
+    StringBuffer insert(int offset, CString str){
         return replace( offset, offset, str );
     }
 
@@ -152,7 +152,7 @@ class StringBuffer : CharSequence {
         return insert( offset, other.slice());
     }
 
-    StringBuffer replace(int start, int end, String str) {
+    StringBuffer replace(int start, int end, CString str) {
         version(Tango){
             buf.select(start, end-start);
             buf.replace(str);
