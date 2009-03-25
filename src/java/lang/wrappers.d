@@ -12,6 +12,13 @@ class ArrayWrapperT(T) : ArrayWrapper {
     public this( T[] data ){
         array = data;
     }
+    version(D_Version2){
+        static if( is(T == char )){
+            public this( String data ){
+                array = data.dup;
+            }
+        }
+    }
     public override equals_t opEquals( Object o ){
         if( auto other = cast(ArrayWrapperT!(T))o){
             return array == other.array;

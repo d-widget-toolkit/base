@@ -120,6 +120,15 @@ version(Tango){
     }
 }
 
+version( D_Version2 ){
+} else { // D1
+    String16 idup( String16 str ){
+        return str.dup;
+    }
+    String idup( String str ){
+        return str.dup;
+    }
+}
 
 private struct GCStats {
     size_t poolsize;        // total size of pool
@@ -219,7 +228,7 @@ struct ImportData{
 }
 
 template getImportData(String name ){
-    const ImportData getImportData = ImportData( import(name), name );
+    const ImportData getImportData = ImportData( cast(void[]) import(name), name );
 }
 
 

@@ -80,7 +80,12 @@ template SimpleType(T) {
         }
     }
 
-    static void arraycopy(T[] src, uint srcPos, T[] dest, uint destPos, uint len)
+    version(D_Version2){
+        mixin("alias const(T) CT;");
+    } else { // D1
+        alias T CT;
+    }
+    static void arraycopy(CT[] src, uint srcPos, T[] dest, uint destPos, uint len)
     {
         if(len == 0) return;
 
@@ -88,19 +93,21 @@ template SimpleType(T) {
         assert(dest);
         debug{validCheck(src.length - srcPos, dest.length - destPos, len);}
 
-        if(src is dest){
+        // overlapping?
+        if((src.ptr <= dest.ptr && src.ptr + len > dest.ptr)
+         ||(src.ptr >= dest.ptr && src.ptr < dest.ptr + len)){
             if( destPos < srcPos ){
                 for(int i=0; i<len; ++i){
-                    dest[destPos+i] = src[srcPos+i];
+                    dest[destPos+i] = cast(T)src[srcPos+i];
                 }
             }
             else{
                 for(int i=len-1; i>=0; --i){
-                    dest[destPos+i] = src[srcPos+i];
+                    dest[destPos+i] = cast(T)src[srcPos+i];
                 }
             }
         }else{
-            dest[destPos..(len+destPos)] = src[srcPos..(len+srcPos)];
+            dest[destPos..(len+destPos)] = cast(T[])src[srcPos..(len+srcPos)];
         }
     }
 }
