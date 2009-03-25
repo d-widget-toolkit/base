@@ -121,11 +121,12 @@ version(Tango){
 }
 
 version( D_Version2 ){
+    mixin("invariant(T)[] _idup(T)( T[] str ){ return str.idup; }");
 } else { // D1
-    String16 idup( String16 str ){
+    String16 _idup( String16 str ){
         return str.dup;
     }
-    String idup( String str ){
+    String _idup( String str ){
         return str.dup;
     }
 }

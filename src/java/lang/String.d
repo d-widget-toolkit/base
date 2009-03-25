@@ -19,6 +19,7 @@ version(Tango){
 version(Tango){
     alias char[] String;
     alias char[] CString;
+    alias wchar[] String16;
     alias wchar[] CString16;
 } else { // Phobos
     alias string String;
@@ -98,11 +99,11 @@ String firstCodePointStr( String str, out int consumed ){
 + dchar res = str[ offset .. $ ].firstCodePoint();
 + ---
 +/
-dchar firstCodePoint( String str ){
+dchar firstCodePoint( CString str ){
     int dummy;
     return firstCodePoint( str, dummy );
 }
-dchar firstCodePoint( String str, out int consumed ){
+dchar firstCodePoint( CString str, out int consumed ){
     version(Tango){
         dchar[1] buf;
         uint ate;
@@ -119,7 +120,7 @@ dchar firstCodePoint( String str, out int consumed ){
         return '\0';
     }
 }
-dchar firstCodePoint( wchar[] str, out int consumed ){
+dchar firstCodePoint( CString16 str, out int consumed ){
     version(Tango){
         dchar[1] buf;
         uint ate;
@@ -256,7 +257,7 @@ int getAbsoluteCodePointOffset( String str, int startIndex, int searchRelCp ){
     }
     return i;
 }
-int getAbsoluteCodePointOffset( wchar[] str, int startIndex, int searchRelCp ){
+int getAbsoluteCodePointOffset( CString16 str, int startIndex, int searchRelCp ){
     int ignore;
     int i = startIndex;
     if( searchRelCp > 0 ){
@@ -457,7 +458,7 @@ String String_valueOf( Object v ){
     return v is null ? "null" : v.toString();
 }
 
-String String_valueOf( wchar[] wstr ){
+String String_valueOf( CString16 wstr ){
     version(Tango){
         return tango.text.convert.Utf.toString(wstr);
     } else { // Phobos
@@ -471,7 +472,7 @@ int length( String str ){
 }
 
 /// Extension to String
-public String toUpperCase( String str ){
+public String toUpperCase( CString str ){
     version(Tango){
         return tango.text.Unicode.toUpper( str );
     } else { // Phobos
@@ -481,13 +482,13 @@ public String toUpperCase( String str ){
 }
 
 /// Extension to String
-public String replaceFirst( String str, String regex, String replacement ){
+public String replaceFirst( CString str, CString regex, CString replacement ){
     implMissing(__FILE__,__LINE__);
-    return str;
+    return null;
 }
 
 /// Extension to String
-public int indexOf( String str, char searched ){
+public int indexOf( CString str, char searched ){
     version(Tango){
         int res = tango.text.Util.locate( str, searched );
         if( res is str.length ) res = -1;
@@ -499,7 +500,7 @@ public int indexOf( String str, char searched ){
 }
 
 /// Extension to String
-public int indexOf( String str, char searched, int startpos ){
+public int indexOf( CString str, char searched, int startpos ){
     version(Tango){
         int res = tango.text.Util.locate( str, searched, startpos );
         if( res is str.length ) res = -1;
@@ -511,12 +512,12 @@ public int indexOf( String str, char searched, int startpos ){
 }
 
 /// Extension to String
-public int indexOf(String str, String ch){
+public int indexOf(CString str, String ch){
     return indexOf( str, ch, 0 );
 }
 
 /// Extension to String
-public int indexOf(String str, String ch, int start){
+public int indexOf(CString str, String ch, int start){
     version(Tango){
         int res = tango.text.Util.locatePattern( str, ch, start );
         if( res is str.length ) res = -1;
@@ -528,12 +529,12 @@ public int indexOf(String str, String ch, int start){
 }
 
 /// Extension to String
-public int lastIndexOf(String str, char ch){
+public int lastIndexOf(CString str, char ch){
     return lastIndexOf( str, ch, str.length );
 }
 
 /// Extension to String
-public int lastIndexOf(String str, char ch, int formIndex){
+public int lastIndexOf(CString str, char ch, int formIndex){
     version(Tango){
         int res = tango.text.Util.locatePrior( str, ch, formIndex );
         if( res is str.length ) res = -1;
@@ -545,12 +546,12 @@ public int lastIndexOf(String str, char ch, int formIndex){
 }
 
 /// Extension to String
-public int lastIndexOf(String str, String ch ){
+public int lastIndexOf(CString str, String ch ){
     return lastIndexOf( str, ch, str.length );
 }
 
 /// Extension to String
-public int lastIndexOf(String str, String ch, int start ){
+public int lastIndexOf(CString str, String ch, int start ){
     version(Tango){
         int res = tango.text.Util.locatePatternPrior( str, ch, start );
         if( res is str.length ) res = -1;
@@ -562,13 +563,13 @@ public int lastIndexOf(String str, String ch, int start ){
 }
 
 /// Extension to String
-public String replaceAll( String str, String regex, String replacement ){
+public String replaceAll( CString str, String regex, String replacement ){
     implMissing(__FILE__,__LINE__);
     return null;
 }
 
 /// Extension to String
-public String replace( String str, char from, char to ){
+public String replace( CString str, char from, char to ){
     version(Tango){
         return tango.text.Util.replace( str.dup, from, to );
     } else { // Phobos
@@ -578,32 +579,32 @@ public String replace( String str, char from, char to ){
 }
 
 /// Extension to String
-public String substring( String str, int start ){
+public String substring( CString str, int start ){
     return cast(String)str[ start .. $ ].dup;
 }
 
 /// Extension to String
-public String substring( String str, int start, int end ){
+public String substring( CString str, int start, int end ){
     return cast(String)str[ start .. end ].dup;
 }
 
 /// Extension to String
-public wchar[] substring( wchar[] str, int start ){
+public wchar[] substring( CString16 str, int start ){
     return cast(wchar[])(str[ start .. $ ].dup);
 }
 
 /// Extension to String
-public wchar[] substring( wchar[] str, int start, int end ){
+public wchar[] substring( CString16 str, int start, int end ){
     return str[ start .. end ].dup;
 }
 
 /// Extension to String
-public char charAt( String str, int pos ){
+public char charAt( CString str, int pos ){
     return str[ pos ];
 }
 
 /// Extension to String
-public dchar dcharAt( String str, int pos ){
+public dchar dcharAt( CString str, int pos ){
     return str[ pos .. $ ].firstCodePoint();
 }
 
@@ -613,7 +614,7 @@ public void getChars( String src, int srcBegin, int srcEnd, char[] dst, int dstB
 }
 
 /// Extension to String
-public wchar[] toWCharArray( String str ){
+public String16 toWCharArray( CString str ){
     version(Tango){
         return tango.text.convert.Utf.toString16(str);
     } else { // Phobos
