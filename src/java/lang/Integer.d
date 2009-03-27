@@ -18,6 +18,9 @@ class Integer : ValueWrapperT!(int) {
     public static const int MAX_VALUE = 0x7fffffff;
     public static const int SIZE = 32;
 
+    public this ( void* value ){
+        super( cast(int)value );
+    }
     public this ( int value ){
         super( value );
     }

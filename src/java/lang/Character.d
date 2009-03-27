@@ -135,12 +135,12 @@ bool CharacterIsDefined( dchar ch ){
     }
 }
 
-dchar CharacterFirstToLower( String str ){
+dchar CharacterFirstToLower( CString str ){
     int consumed;
     return CharacterFirstToLower( str, consumed );
 }
 
-dchar CharacterFirstToLower( String str, out int consumed ){
+dchar CharacterFirstToLower( CString str, out int consumed ){
     version(Tango){
         dchar[1] buf;
         buf[0] = firstCodePoint( str, consumed );

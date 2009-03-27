@@ -69,9 +69,12 @@ class Vector : AbstractList, List {
         implMissing( __FILE__, __LINE__ );
         return false;
     }
-    public void   copyInto(Object[] anArray){
+    public void   copyInto(void*[] anArray){
         implMissing( __FILE__, __LINE__ );
     }
+    //public void   copyInto(Object[] anArray){
+    //    implMissing( __FILE__, __LINE__ );
+    //}
     public Object     elementAt(int index){
         return get(index);
     }

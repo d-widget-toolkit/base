@@ -36,7 +36,7 @@ version(Tango){
     mixin("alias invariant(wchar*) IWCharPtr;");
 }
 
-int codepointIndexToIndex( String str, int cpIndex ){
+int codepointIndexToIndex( CString str, int cpIndex ){
     int cps = cpIndex;
     int res = 0;
     while( cps > 0 ){
@@ -60,7 +60,7 @@ int codepointIndexToIndex( String str, int cpIndex ){
 /++
 +
 +/
-int indexToCodepointIndex( String str, int index ){
+int indexToCodepointIndex( CString str, int index ){
     if( index < 0 ) return index;
     int i = 0;
     int res = 0;
@@ -88,7 +88,7 @@ int indexToCodepointIndex( String str, int index ){
 /++
 + Get that String, that contains the next codepoint of a String.
 +/
-String firstCodePointStr( String str, out int consumed ){
+String firstCodePointStr( CString str, out int consumed ){
     version(Tango){
         dchar[1] buf;
         uint ate;
@@ -157,7 +157,7 @@ String dcharToString( dchar key ){
     }
 }
 
-int codepointCount( String str ){
+int codepointCount( CString str ){
     version(Tango){
         scope dchar[] buf = new dchar[]( str.length );
         uint ate;
@@ -173,7 +173,7 @@ int codepointCount( String str ){
 //alias tango.text.convert.Utf.toString16 toString16;
 //alias tango.text.convert.Utf.toString toString;
 
-int toAbsoluteCodePointStartOffset( String str, int index ){
+int toAbsoluteCodePointStartOffset( CString str, int index ){
     //getDwtLogger().trace( __FILE__, __LINE__, "str={}, str.length={}, index={}", str, str.length, index );
     //getDwtLogger().trace( __FILE__, __LINE__, Trace.memory( str );
     if( str.length is index ){
@@ -206,10 +206,10 @@ int toAbsoluteCodePointStartOffset( String str, int index ){
         return index;
     }
 }
-int getRelativeCodePointOffset( String str, int startIndex, int searchRelCp ){
+int getRelativeCodePointOffset( CString str, int startIndex, int searchRelCp ){
     return getAbsoluteCodePointOffset( str, startIndex, searchRelCp ) - startIndex;
 }
-int getAbsoluteCodePointOffset( String str, int startIndex, int searchRelCp ){
+int getAbsoluteCodePointOffset( CString str, int startIndex, int searchRelCp ){
 
     //getDwtLogger().trace( __FILE__, __LINE__, "str={}, str.length={}, startIndex={}, searchRelCp={}", str, str.length, startIndex, searchRelCp );
     //getDwtLogger().trace( __FILE__, __LINE__, Trace.memory( str );
@@ -716,7 +716,7 @@ public String intern( String str ){
  + This is like tango.stdc.stringz.toStringz, but in case of an empty input string,
  + this function returns a pointer to a null value instead of a null ptr.
  +/
-public char* toStringzValidPtr( String src ){
+public char* toStringzValidPtr( CString src ){
     if( src ){
         return src.toStringz();
     }
