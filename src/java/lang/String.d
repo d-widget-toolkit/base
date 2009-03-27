@@ -30,10 +30,10 @@ version(Tango){
     alias wstring String16;
     mixin("alias const(char)[]     CString;");
     mixin("alias const(wchar)[]    CString16;");
-    mixin("alias invariant(char*)  ICharPtr;");
-    mixin("alias const(char*)      CCharPtr;");
-    mixin("alias const(wchar*)     CWCharPtr;");
-    mixin("alias invariant(wchar*) IWCharPtr;");
+    mixin("alias invariant(char)*  ICharPtr;");
+    mixin("alias const(char)*      CCharPtr;");
+    mixin("alias const(wchar)*     CWCharPtr;");
+    mixin("alias invariant(wchar)* IWCharPtr;");
 }
 
 int codepointIndexToIndex( CString str, int cpIndex ){
@@ -304,17 +304,17 @@ int getAbsoluteCodePointOffset( CString16 str, int startIndex, int searchRelCp )
     }
     return i;
 }
-dchar getRelativeCodePoint( String str, int startIndex, int searchRelCp ){
+dchar getRelativeCodePoint( CString str, int startIndex, int searchRelCp ){
     int dummy;
     return getRelativeCodePoint( str, startIndex, dummy );
 }
-dchar getRelativeCodePoint( String str, int startIndex, int searchRelCp, out int relIndex ){
+dchar getRelativeCodePoint( CString str, int startIndex, int searchRelCp, out int relIndex ){
     relIndex = getRelativeCodePointOffset( str, startIndex, searchRelCp );
     int ignore;
     return firstCodePoint( str[ startIndex+relIndex .. $ ], ignore );
 }
 
-int utf8AdjustOffset( String str, int offset ){
+int utf8AdjustOffset( CString str, int offset ){
     if( str.length <= offset || offset <= 0 ){
         return offset;
     }
@@ -323,7 +323,7 @@ int utf8AdjustOffset( String str, int offset ){
     }
     return offset;
 }
-int utf8OffsetIncr( String str, int offset ){
+int utf8OffsetIncr( CString str, int offset ){
     int res = offset +1;
     if( str.length <= res || res <= 0 ){
         return res;
@@ -335,7 +335,7 @@ int utf8OffsetIncr( String str, int offset ){
     }
     return res;
 }
-int utf8OffsetDecr( String str, int offset ){
+int utf8OffsetDecr( CString str, int offset ){
     int res = offset-1;
     if( str.length <= res || res <= 0 ){
         return res;
@@ -350,7 +350,7 @@ int utf8OffsetDecr( String str, int offset ){
     return res;
 }
 
-String new_String( String cont, int offset, int len ){
+String new_String( CString cont, int offset, int len ){
     version(D_Version2){
         return cont[ offset .. offset+len ].idup;
     } else {
@@ -358,7 +358,7 @@ String new_String( String cont, int offset, int len ){
     }
 }
 
-String new_String( String cont ){
+String new_String( CString cont ){
     version(D_Version2){
         return cont.idup;
     } else {
@@ -475,7 +475,7 @@ String String_valueOf( CString16 wstr ){
     }
 }
 
-int length( String str ){
+int length( CString str ){
     return str.length;
 }
 
@@ -632,12 +632,12 @@ public String16 toWCharArray( CString str ){
 }
 
 /// Extension to String
-public char[] toCharArray( String str ){
+public char[] toCharArray( CString str ){
     return cast(char[])str;
 }
 
 /// Extension to String
-public bool endsWith( String src, String pattern ){
+public bool endsWith( CString src, CString pattern ){
     if( src.length < pattern.length ){
         return false;
     }
@@ -645,12 +645,12 @@ public bool endsWith( String src, String pattern ){
 }
 
 /// Extension to String
-public bool equals( String src, String other ){
+public bool equals( CString src, CString other ){
     return src == other;
 }
 
 /// Extension to String
-public bool equalsIgnoreCase( String src, String other ){
+public bool equalsIgnoreCase( CString src, CString other ){
     version(Tango){
         return tango.text.Unicode.toFold(src) == tango.text.Unicode.toFold(other);
     } else { // Phobos
@@ -660,7 +660,7 @@ public bool equalsIgnoreCase( String src, String other ){
 }
 
 /// Extension to String
-public int compareToIgnoreCase( String src, String other ){
+public int compareToIgnoreCase( CString src, CString other ){
     version(Tango){
         return compareTo( tango.text.Unicode.toFold(src), tango.text.Unicode.toFold(other));
     } else { // Phobos
@@ -670,12 +670,12 @@ public int compareToIgnoreCase( String src, String other ){
 }
 
 /// Extension to String
-public int compareTo( String src, String other ){
+public int compareTo( CString src, CString other ){
     return typeid(String).compare( cast(void*)&src, cast(void*)&other );
 }
 
 /// Extension to String
-public bool startsWith( String src, String pattern ){
+public bool startsWith( CString src, CString pattern ){
     if( src.length < pattern.length ){
         return false;
     }
@@ -683,7 +683,7 @@ public bool startsWith( String src, String pattern ){
 }
 
 /// Extension to String
-public String toLowerCase( String src ){
+public String toLowerCase( CString src ){
     version(Tango){
         return tango.text.Unicode.toLower( src );
     } else { // Phobos
@@ -693,12 +693,12 @@ public String toLowerCase( String src ){
 }
 
 /// Extension to String
-public hash_t toHash( String src ){
+public hash_t toHash( CString src ){
     return typeid(String).getHash(&src);
 }
 
 /// Extension to String
-public String trim( String str ){
+public String trim( CString str ){
     version(Tango){
         return tango.text.Util.trim( str ).dup;
     } else { // Phobos
@@ -708,8 +708,8 @@ public String trim( String str ){
 }
 
 /// Extension to String
-public String intern( String str ){
-    return str;
+public String intern( CString str ){
+    return str._idup();
 }
 
 /++

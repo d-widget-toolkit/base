@@ -46,30 +46,30 @@ public class File {
         }
     }
 
-    private static String toStd( String path ){
+    private static String toStd( CString path ){
         version(Tango){
-            return tango.io.Path.standard( path );
+            return tango.io.Path.standard( path._idup() );
         } else { // Phobos
-            return path;
+            return path._idup();
         }
     }
-    private static String join( String path, String file ){
+    private static String join( CString path, CString file ){
         version(Tango){
-            return tango.io.Path.join( path, file );
+            return tango.io.Path.join( path._idup(), file._idup() );
         } else { // Phobos
-            return std.path.join( path, file );
+            return std.path.join( path._idup(), file._idup() );
         }
     }
 
-    public this ( String pathname ){
+    public this ( CString pathname ){
         mFilePath = toStd( pathname );
     }
 
-    public this ( String parent, String child ){
+    public this ( CString parent, CString child ){
         mFilePath = join( toStd(parent), toStd(child) );
     }
 
-    public this ( java.io.File.File parent, String child ){
+    public this ( java.io.File.File parent, CString child ){
         mFilePath = join( parent.mFilePath, toStd(child) );
     }
 
@@ -237,12 +237,12 @@ public class File {
         return null;
     }
 
-    public static java.io.File.File createTempFile( String prefix, String suffix, java.io.File.File directory ){
+    public static java.io.File.File createTempFile( CString prefix, CString suffix, java.io.File.File directory ){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
 
-    public static java.io.File.File createTempFile( String prefix, String suffix ){
+    public static java.io.File.File createTempFile( CString prefix, CString suffix ){
         implMissing( __FILE__, __LINE__ );
         return null;
     }

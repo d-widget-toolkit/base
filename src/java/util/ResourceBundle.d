@@ -147,11 +147,11 @@ nextline:
         }
     }
 
-    public bool hasString( String key ){
+    public bool hasString( CString key ){
         return ( key in map ) !is null;
     }
 
-    public String getString( String key ){
+    public String getString( CString key ){
         if( auto v = key in map ){
             version(D_Version2){
                 return (*v).idup;
@@ -159,7 +159,7 @@ nextline:
                 return (*v).dup;
             }
         }
-        throw new MissingResourceException( "key not found", this.classinfo.name, key );
+        throw new MissingResourceException( "key not found", this.classinfo.name, key._idup() );
     }
 
     public String[] getKeys(){
@@ -172,7 +172,7 @@ nextline:
     public static ResourceBundle getBundle( ImportData data ){
         return new ResourceBundle( data );
     }
-    public static ResourceBundle getBundle( String name ){
+    public static ResourceBundle getBundle( CString name ){
         try{
             version(Tango){
                 return new ResourceBundle( cast(String) File.get(name) );
