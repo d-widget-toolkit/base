@@ -21,11 +21,19 @@ version(Tango){
     alias char[] CString;
     alias wchar[] String16;
     alias wchar[] CString16;
+    alias char*   ICharPtr;
+    alias char*   CCharPtr;
+    alias wchar*  CWCharPtr;
+    alias wchar*  IWCharPtr;
 } else { // Phobos
     alias string String;
     alias wstring String16;
-    mixin("alias const(char)[] CString;");
-    mixin("alias const(wchar)[] CString16;");
+    mixin("alias const(char)[]     CString;");
+    mixin("alias const(wchar)[]    CString16;");
+    mixin("alias invariant(char*)  ICharPtr;");
+    mixin("alias const(char*)      CCharPtr;");
+    mixin("alias const(wchar*)     CWCharPtr;");
+    mixin("alias invariant(wchar*) IWCharPtr;");
 }
 
 int codepointIndexToIndex( String str, int cpIndex ){
@@ -724,19 +732,19 @@ version(Tango){
     public alias tango.stdc.stringz.fromStringz fromStringz;
     public alias tango.stdc.stringz.fromString16z fromString16z;
 } else { // Phobos
-    public char* toStringz( String s ){
+    public char* toStringz( CString s ){
         implMissing(__FILE__,__LINE__);
         return null;
     }
-    public wchar* toString16z( String16 s ){
+    public wchar* toString16z( CString16 s ){
         implMissing(__FILE__,__LINE__);
         return null;
     }
-    public char[] fromStringz( String s ){
+    public char[] fromStringz( CCharPtr s ){
         implMissing(__FILE__,__LINE__);
         return null;
     }
-    public char[] fromString16z( String16 s ){
+    public char[] fromString16z( CWCharPtr s ){
         implMissing(__FILE__,__LINE__);
         return null;
     }
