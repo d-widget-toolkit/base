@@ -23,7 +23,7 @@ struct SharedLib {
         version(Tango){
             if (auto lib = tango.sys.SharedLib.SharedLib.load(libname)) {
                 foreach( inout s; symbols ){
-                    if( s.major < major ) continue;
+                    if( s.major > major ) continue;
                     if( s.major == major && s.minor > minor ) continue;
                     *s.symbol = lib.getSymbol( tango.stdc.stringz.toStringz(s.name ) );
                     if( s.symbol is null ){
