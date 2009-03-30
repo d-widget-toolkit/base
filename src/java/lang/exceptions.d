@@ -144,8 +144,8 @@ void ExceptionPrintStackTrace( Throwable e, void delegate ( String file, ulong l
     while( exception !is null ){
         dg( exception.file, exception.line, "Exception in {}({}): {}", exception.file, exception.line, exception.msg );
         if( exception.info !is null ){
-            foreach( msg; exception.info ){
-                dg( exception.file, exception.line, "trc {}", msg );
+            foreach( frame; exception.info ){
+                dg( exception.file, exception.line, "trc {} {}", frame.file, frame.line );
             }
         }
         exception = exception.next;
@@ -156,9 +156,9 @@ void PrintStackTrace( int deepth = 100, String prefix = "trc" ){
     auto e = new Exception( null );
     int idx = 0;
     const start = 3;
-    foreach( msg; e.info ){
+    foreach( frame; e.info ){
         if( idx >= start && idx < start+deepth ) {
-            getDwtLogger().trace( __FILE__, __LINE__, "{}: {}", prefix, msg );
+            getDwtLogger().trace( __FILE__, __LINE__, "{} {}: {}", prefix, frame.file, frame.line );
         }
         idx++;
     }
