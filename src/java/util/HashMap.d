@@ -196,10 +196,9 @@ class HashMap : Map {
             ObjRef keyr = ObjRef(key);
             if( auto v = keyr in map ){
                 Object res = (*v).obj;
-                map.remove(keyr);
+                map.removeKey(keyr);
                 return res;
             }
-            map.remove(keyr);
             return null;
         } else { // Phobos
             implMissing( __FILE__, __LINE__ );
