@@ -8,6 +8,7 @@ version(Tango){
     static import tango.text.convert.Format;
     static import tango.core.Exception;
     static import tango.util.log.Log;
+    static import tango.util.log.Config;
     static import tango.stdc.stdlib;
 
     alias tango.stdc.stdlib.exit exit;
