@@ -9,9 +9,10 @@ version(Tango){
     import tango.io.compress.ZlibStream;
     import tango.io.device.Conduit;
     version(Windows){
-        version(build){
-            pragma(link,"zlib");
-        }
+        pragma(lib,"zlib.lib");
+    }
+    else{
+        pragma(lib,"zlib");
     }
 } else { // Phobos
     import std.zlib;

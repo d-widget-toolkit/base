@@ -1,5 +1,6 @@
 module java.lang.all;
 
+pragma( lib, "dwt-base.lib" );
 
 public import java.lang.Boolean;
 public import java.lang.Byte;
