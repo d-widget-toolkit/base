@@ -17,7 +17,7 @@ class Thread {
     }
     private TThread thread;
     private Runnable runnable;
-
+    private bool interrupted_ = false;
     version(Tango){
         private alias tango.core.Thread.ThreadLocal!(Thread) TTLS;
         private static TTLS tls;
@@ -97,7 +97,7 @@ class Thread {
 //         assert( MIN_PRIORITY < MAX_PRIORITY );
 //         assert( tango.core.Thread.Thread.PRIORITY_MIN < tango.core.Thread.Thread.PRIORITY_MAX );
         auto scaledPrio = (newPriority-MIN_PRIORITY) * (TThread.PRIORITY_MAX-TThread.PRIORITY_MIN) / (MAX_PRIORITY-MIN_PRIORITY) +TThread.PRIORITY_MIN;
-        getDwtLogger().trace( __FILE__, __LINE__, "Thread.setPriority: scale ({} {} {}) -> ({} {} {})", MIN_PRIORITY, newPriority, MAX_PRIORITY, TThread.PRIORITY_MIN, scaledPrio, TThread.PRIORITY_MAX);
+//        getDwtLogger().trace( __FILE__, __LINE__, "Thread.setPriority: scale ({} {} {}) -> ({} {} {})", MIN_PRIORITY, newPriority, MAX_PRIORITY, TThread.PRIORITY_MIN, scaledPrio, TThread.PRIORITY_MAX);
 //         thread.priority( scaledPrio );
     }
 
@@ -140,12 +140,17 @@ class Thread {
     }
 
     void interrupt() {
+        interrupted_ = true;
         implMissing(__FILE__,__LINE__);
     }
 
     static bool interrupted() {
-        implMissing(__FILE__,__LINE__);
-        return false;
+        auto t = currentThread();
+        synchronized(t){
+            bool res = t.interrupted_;
+            t.interrupted_ = false;
+            return res;
+        }
     }
 
     public void run(){
