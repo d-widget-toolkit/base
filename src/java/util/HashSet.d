@@ -25,13 +25,26 @@ class HashSet : Set {
         }
     }
     public this(Collection c){
-        implMissing( __FILE__, __LINE__ );
+        version(Tango){
+            set = new SetType();
+            addAll(c);
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+        }
     }
     public this(int initialCapacity){
-        implMissing( __FILE__, __LINE__ );
+        version(Tango){
+            set = new SetType();
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+        }
     }
     public this(int initialCapacity, float loadFactor){
-        implMissing( __FILE__, __LINE__ );
+        version(Tango){
+            set = new SetType(loadFactor);
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+        }
     }
     public bool    add(Object o){
         version(Tango){
@@ -45,8 +58,11 @@ class HashSet : Set {
         return add(stringcast(o));
     }
     public bool    addAll(Collection c){
-        implMissing( __FILE__, __LINE__ );
-        return false;
+        bool res = false;
+        foreach( o; c ){
+            res |= add(o);
+        }
+        return res;
     }
     public void   clear(){
         version(Tango){
