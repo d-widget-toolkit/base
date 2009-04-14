@@ -10,6 +10,7 @@ public import java.lang.Float;
 public import java.lang.Integer;
 public import java.lang.Long;
 public import java.lang.Math;
+public import java.lang.Number;
 public import java.lang.Runnable;
 public import java.lang.String;
 public import java.lang.StringBuffer;
