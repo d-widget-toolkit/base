@@ -17,32 +17,27 @@ abstract class AbstractSet : AbstractCollection, Set {
         implMissing( __FILE__, __LINE__ );
         return 0;
     }
-    bool        removeAll(Collection c){
-        return super.removeAll(c);
-    }
-    public abstract bool     add(Object o);
-    public abstract bool     add(String o);
-    public abstract bool     addAll(Collection c);
-    public abstract void     clear();
-    public abstract bool     contains(Object o);
-    public abstract bool     contains(String o);
-    public abstract bool     containsAll(Collection c);
+    public bool     add(Object o){ return super.add(o); }
+    public bool     add(String o){ return super.add(stringcast(o)); }
+    public bool     addAll(Collection c){ return super.addAll(c); }
+    public void     clear(){ super.clear(); }
+    public bool     contains(Object o){ return super.contains(o); }
+    public bool     contains(String o){ return super.contains(stringcast(o)); }
+    public bool     containsAll(Collection c){ return super.containsAll(c); }
 
 
-    public abstract bool     isEmpty();
-    public abstract Iterator iterator();
-    public abstract bool     remove(Object o);
-    public abstract bool     remove(String o);
-    public abstract bool     removeAll(Collection c);
-    public abstract bool     retainAll(Collection c);
-    public abstract int      size();
-    public abstract Object[] toArray();
-    public abstract Object[] toArray(Object[] a);
-    public abstract String   toString(){
-        return super.toString();
-    }
+    public bool     isEmpty(){ return super.isEmpty(); }
+    public Iterator iterator(){ return super.iterator(); }
+    public bool     remove(Object o){ return super.remove(o); }
+    public bool     remove(String o){ return super.remove(o); }
+    public bool     removeAll(Collection c){ return super.removeAll(c); }
+    public bool     retainAll(Collection c){ return super.retainAll(c); }
+    public int      size(){ return super.size(); }
+    public Object[] toArray(){ return super.toArray(); }
+    public Object[] toArray(Object[] a){ return super.toArray(a); }
+    public String   toString(){ return super.toString(); }
 
     // only for D
-    public abstract int opApply (int delegate(ref Object value) dg);
+    public int opApply (int delegate(ref Object value) dg){ return super.opApply(dg); }
 }
 

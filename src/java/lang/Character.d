@@ -124,6 +124,19 @@ class Character {
         // must be correct for container storage
         implMissing( __FILE__, __LINE__);
     }
+
+    private static TypeInfo TYPE_;
+    public static TypeInfo TYPE(){
+        if( TYPE_ is null ){
+            TYPE_ = typeid(char);
+        }
+        return TYPE_;
+    }
+
+    public dchar charValue(){
+        implMissing( __FILE__, __LINE__);
+        return ' ';
+    }
 }
 
 bool CharacterIsDefined( dchar ch ){
@@ -194,4 +207,5 @@ bool CharacterIsLetter( dchar c ){
         return false;
     }
 }
+
 

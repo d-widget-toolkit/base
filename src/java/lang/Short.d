@@ -1,4 +1,4 @@
-module java.lang.Byte;
+module java.lang.Short;
 
 import java.lang.util;
 import java.lang.exceptions;
@@ -8,12 +8,11 @@ version(Tango){
     static import tango.text.convert.Integer;
 } else { // Phobos
 }
-class Byte : Number {
-    public static const byte MIN_VALUE = byte.min;
-    public static const byte MAX_VALUE = byte.max;
-    private byte value;
-
-    public static byte parseByte( String s ){
+class Short : Number {
+    public static const short MIN_VALUE = short.min;
+    public static const short MAX_VALUE = short.max;
+    private short value;
+    public static byte parseShort( String s ){
         version(Tango){
             try{
                 int res = tango.text.convert.Integer.parse( s );
@@ -30,30 +29,29 @@ class Byte : Number {
             return 0;
         }
     }
-    this( byte value ){
+    this( short value ){
         super();
         this.value = value;
     }
 
-    public static String toString( byte i ){
+    public static String toString( short i ){
         return String_valueOf(i);
     }
 
     private static TypeInfo TYPE_;
     public static TypeInfo TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(byte);
+            TYPE_ = typeid(short);
         }
         return TYPE_;
     }
 
-    byte byteValue(){ return value; }
+    byte byteValue(){ return cast(byte)value; }
     double doubleValue(){ return value; }
     float floatValue(){ return value; }
     int intValue(){ return value; }
     long longValue(){ return value; }
     short shortValue(){ return value; }
 }
-alias Byte ValueWrapperByte;
-
+alias Short ValueWrapperShort;
 

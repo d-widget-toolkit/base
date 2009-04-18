@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 interface ListIterator : Iterator {
     public void   add(Object o);
-    public bool   add(String o);
+    public void   add(String o);
     public bool   hasNext();
     public bool   hasPrevious();
     public Object next();

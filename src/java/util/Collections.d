@@ -73,7 +73,7 @@ class Collections {
         public void   add(Object o){
             unsupported();
         }
-        public bool   add(String o){
+        public void   add(String o){
             unsupported();
             return false; // make compiler happy
         }
@@ -202,6 +202,9 @@ class Collections {
         public Object[] toArray(Object[] a){
             return list.toArray(a);
         }
+        public String[] toArray(String[] a){
+            return list.toArray(a);
+        }
         public int opApply (int delegate(ref Object value) dg){
             implMissing(__FILE__, __LINE__ );
             return 0;
@@ -209,6 +212,9 @@ class Collections {
         public int opApply (int delegate(ref Object key, ref Object value) dg){
             implMissing(__FILE__, __LINE__ );
             return 0;
+        }
+        public String toString(){
+            return list.toString();
         }
     }
     static int binarySearch(List list, Object key){
@@ -227,6 +233,10 @@ class Collections {
         return null;
     }
     public static Set unmodifiableSet( Set list ){
+        implMissing( __FILE__, __LINE__ );
+        return null;
+    }
+    public static List singletonList( Object o ){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
@@ -280,6 +290,8 @@ class Collections {
         public List     subList(int fromIndex, int toIndex){ synchronized(this){ return this.list.subList(fromIndex,toIndex); } }
         public Object[] toArray(){ synchronized(this){ return this.list.toArray(); } }
         public Object[] toArray(Object[] a){ synchronized(this){ return this.list.toArray(a); } }
+        public String[] toArray(String[] a){ synchronized(this){ return this.list.toArray(a); } }
+        public String toString(){ synchronized(this){ return this.list.toString(); } }
     }
     static List     synchronizedList(List list){
         return new SynchronizedList(list);

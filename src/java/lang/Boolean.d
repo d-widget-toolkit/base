@@ -49,6 +49,15 @@ class Boolean : ValueWrapperT!(bool) {
             return std.string.icmp(System.getProperty(name, "false"), "true" ) is 0;
         }
     }
+
+    private static TypeInfo TYPE_;
+    public static TypeInfo TYPE(){
+        if( TYPE_ is null ){
+            TYPE_ = typeid(bool);
+        }
+        return TYPE_;
+    }
+
 }
 
 alias Boolean    ValueWrapperBool;

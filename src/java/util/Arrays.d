@@ -4,6 +4,10 @@ import java.lang.all;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+version(Tango){
+    static import tango.core.Array;
+} else { // Phobos
+}
 
 class Arrays {
     public static bool equals(T)(T[] a, T[] b){
@@ -37,6 +41,17 @@ class Arrays {
         return true;
     }
 +/
+    static int binarySearch( T )( T[] a, T b ){
+        if( tango.core.Array.bsearch( a, b )){
+            tango.core.Array.lbound( a, b );
+        }
+        else{
+            return -(tango.core.Array.lbound( a, b ))-1;
+        }
+    }
+    static void sort( T )( T[] a ){
+        tango.core.Array.sort( a );
+    }
     static void sort( T )( T[] a, Comparator c ){
         static if( is( T : char[] )){
             bool isLess( String o1, String o2 ){
@@ -50,11 +65,12 @@ class Arrays {
         }
         tango.core.Array.sort( a, &isLess );
     }
-    static List    asList(Object[] a) {
+    static List    asList(T)(T[] a) {
+        static assert( is(T==interface) || is(T==class));
         if( a.length is 0 ) return Collections.EMPTY_LIST;
         ArrayList res = new ArrayList( a.length );
         foreach( o; a ){
-            res.add(o);
+            res.add( cast(Object)o);
         }
         return res;
     }

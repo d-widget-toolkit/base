@@ -120,6 +120,10 @@ class StringBuffer : CharSequence {
         return append( arr );
     }
 
+    StringBuffer append( bool i ){
+        return append( String_valueOf(i) );
+    }
+
     StringBuffer append( int i ){
         return append( String_valueOf(i) );
     }

@@ -172,7 +172,7 @@ class ArrayList : AbstractList, List {
         public void   add(Object o){
             implMissing( __FILE__, __LINE__ );
         }
-        public bool   add(String o){
+        public void   add(String o){
             implMissing( __FILE__, __LINE__ );
             return false;
         }
@@ -266,6 +266,22 @@ class ArrayList : AbstractList, List {
         }
         return a;
     }
+    String[]   toArray(String[] a){
+        version(Tango){
+            auto res = a;
+            if( res.length < data.length ){
+                res.length = data.length;
+            }
+            int idx = 0;
+            foreach( o; data ){
+                res[idx] = stringcast(o);
+            }
+            return res;
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+            return null;
+        }
+    }
 
     // only for D
     public int opApply (int delegate(ref Object value) dg){
@@ -274,6 +290,9 @@ class ArrayList : AbstractList, List {
             if( res ) return res;
         }
         return 0;
+    }
+    public String toString(){
+        return super.toString();
     }
 }
 

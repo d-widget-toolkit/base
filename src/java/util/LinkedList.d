@@ -289,7 +289,6 @@ class LinkedList : List {
     }
     Object[]   toArray(){
         version(Tango){
-            if( list.size() is 0 ) return null; // workaround tango ticket 1237
             return list.toArray();
         } else { // Phobos
             implMissing( __FILE__, __LINE__ );
@@ -298,8 +297,23 @@ class LinkedList : List {
     }
     Object[]   toArray(Object[] a){
         version(Tango){
-            if( list.size() is 0 ) return a[0 .. 0]; // workaround tango ticket 1237
             return list.toArray( a );
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+            return null;
+        }
+    }
+    String[]   toArray(String[] a){
+        version(Tango){
+            auto res = a;
+            if( res.length < list.size() ){
+                res.length = list.size();
+            }
+            int idx = 0;
+            foreach( o; list ){
+                res[idx] = stringcast(o);
+            }
+            return res;
         } else { // Phobos
             implMissing( __FILE__, __LINE__ );
             return null;

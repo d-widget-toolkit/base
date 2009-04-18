@@ -696,6 +696,7 @@ public String toLowerCase( CString src ){
 public hash_t toHash( CString src ){
     return typeid(String).getHash(&src);
 }
+public alias toHash String_toHash;
 
 /// Extension to String
 public String trim( CString str ){
@@ -786,5 +787,15 @@ class StringCharSequence : CharSequence {
     }
 }
 
+class StringCls {
+    private static TypeInfo TYPE_;
+    public static TypeInfo TYPE(){
+        if( TYPE_ is null ){
+            TYPE_ = typeid(char[]);
+        }
+        return TYPE_;
+    }
+
+}
 
 

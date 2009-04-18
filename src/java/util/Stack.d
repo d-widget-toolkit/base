@@ -178,6 +178,10 @@ class Stack : Vector {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    String[]   toArray(String[] a){
+        implMissing( __FILE__, __LINE__ );
+        return null;
+    }
 
     // from Stack
     String     toString(){

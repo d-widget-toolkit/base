@@ -2,6 +2,7 @@ module java.lang.Integer;
 
 import java.lang.util;
 import java.lang.exceptions;
+import java.lang.Number;
 
 version(Tango){
 } else { // Phobos
@@ -12,21 +13,25 @@ version(Tango){
 }
 
 
-class Integer : ValueWrapperT!(int) {
+class Integer : Number {
 
     public static const int MIN_VALUE = 0x80000000;
     public static const int MAX_VALUE = 0x7fffffff;
     public static const int SIZE = 32;
+    private int value;
 
     public this ( void* value ){
-        super( cast(int)value );
+        super();
+        this.value = cast(int)value;
     }
     public this ( int value ){
-        super( value );
+        super();
+        this.value = value;
     }
 
     public this ( String s ){
-        super(parseInt(s));
+        super();
+        this.value = parseInt(s);
     }
 
     public static String toString( int i, int radix ){
@@ -142,6 +147,15 @@ class Integer : ValueWrapperT!(int) {
             return std.string.toString(value);
         }
     }
+
+    private static TypeInfo TYPE_;
+    public static TypeInfo TYPE(){
+        if( TYPE_ is null ){
+            TYPE_ = typeid(int);
+        }
+        return TYPE_;
+    }
+
 }
 alias Integer ValueWrapperInt;
 

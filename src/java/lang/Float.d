@@ -2,8 +2,9 @@ module java.lang.Float;
 
 import java.lang.util;
 import java.lang.exceptions;
+import java.lang.Number;
 
-class Float : ValueWrapperT!(float) {
+class Float : Number {
 
     public static float POSITIVE_INFINITY = (1.0f / 0.0f);
     public static float NEGATIVE_INFINITY = ((-1.0f) / 0.0f);
@@ -11,16 +12,15 @@ class Float : ValueWrapperT!(float) {
     public static float MAX_VALUE = 3.4028235e+38f;
     public static float MIN_VALUE = 1.4e-45f;
     public static int SIZE = 32;
+    private float value;
 
     this( float value ){
-        super(value);
+        super();
+        this.value = value;
     }
     this( String str ){
         implMissing( __FILE__, __LINE__ );
-        super(0.0);
-    }
-    public float floatValue(){
-        return value;
+        super();
     }
     public static String toString( float value ){
         implMissing( __FILE__, __LINE__ );
@@ -40,4 +40,37 @@ class Float : ValueWrapperT!(float) {
         }
     }
 
+    private static TypeInfo TYPE_;
+    public static TypeInfo TYPE(){
+        if( TYPE_ is null ){
+            TYPE_ = typeid(float);
+        }
+        return TYPE_;
+    }
+
+    public byte byteValue(){
+        return cast(byte)value;
+    }
+
+    public short shortValue(){
+        return cast(short)value;
+    }
+
+    public int intValue(){
+        return cast(int)value;
+    }
+
+    public long longValue(){
+        return cast(long)value;
+    }
+
+    public float floatValue(){
+        return cast(float)value;
+    }
+
+    public double doubleValue(){
+        return cast(double)value;
+    }
 }
+
+

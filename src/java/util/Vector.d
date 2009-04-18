@@ -197,6 +197,10 @@ class Vector : AbstractList, List {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    String[]   toArray(String[] a){
+        implMissing( __FILE__, __LINE__ );
+        return null;
+    }
     public String     toString(){
         implMissing( __FILE__, __LINE__ );
         return null;

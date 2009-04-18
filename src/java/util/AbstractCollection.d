@@ -43,8 +43,7 @@ abstract class AbstractCollection : Collection {
         return 0;
     }
     bool        remove(Object o){
-        implMissing( __FILE__, __LINE__ );
-        return false;
+        throw new UnsupportedOperationException();
     }
     bool        remove(String o){
         return remove(stringcast(o));
@@ -67,6 +66,10 @@ abstract class AbstractCollection : Collection {
         return null;
     }
     Object[]       toArray(Object[] a){
+        implMissing( __FILE__, __LINE__ );
+        return null;
+    }
+    String[]       toArray(String[] a){
         implMissing( __FILE__, __LINE__ );
         return null;
     }

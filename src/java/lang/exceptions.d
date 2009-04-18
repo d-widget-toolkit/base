@@ -101,6 +101,9 @@ class NumberFormatException : IllegalArgumentException {
     this( Exception e ){
         super(e.toString);
     }
+    public String getMessage(){
+        return msg;
+    }
 }
 
 class RuntimeException : Exception {
@@ -113,6 +116,9 @@ class RuntimeException : Exception {
     this( Exception e ){
         super(e.toString);
         next = e;
+    }
+    public String getMessage(){
+        return msg;
     }
     public Throwable getCause() {
         return next; // D2 has next of type Throwable
