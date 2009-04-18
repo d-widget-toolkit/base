@@ -66,13 +66,23 @@ class Arrays {
         tango.core.Array.sort( a, &isLess );
     }
     static List    asList(T)(T[] a) {
-        static assert( is(T==interface) || is(T==class));
-        if( a.length is 0 ) return Collections.EMPTY_LIST;
-        ArrayList res = new ArrayList( a.length );
-        foreach( o; a ){
-            res.add( cast(Object)o);
+        static if( is(T==String)){
+            if( a.length is 0 ) return Collections.EMPTY_LIST;
+            ArrayList res = new ArrayList( a.length );
+            foreach( o; a ){
+                res.add( stringcast(o));
+            }
+            return res;
         }
-        return res;
+        else{
+            static assert( is(T==interface) || is(T==class), "asList");
+            if( a.length is 0 ) return Collections.EMPTY_LIST;
+            ArrayList res = new ArrayList( a.length );
+            foreach( o; a ){
+                res.add( cast(Object)o);
+            }
+            return res;
+        }
     }
     public static void fill( char[] str, char c ){
         str[] = c;

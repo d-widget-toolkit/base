@@ -114,6 +114,34 @@ template SimpleType(T) {
 
 
 class System {
+    version(D_Version2){
+        mixin("alias const(T) CT;");
+    } else { // D1
+        static void arraycopyT(T)(T[] src, uint srcPos, T[] dest, uint destPos, uint len) {
+            if(len == 0) return;
+
+            assert(src);
+            assert(dest);
+            debug{validCheck(src.length - srcPos, dest.length - destPos, len);}
+
+            // overlapping?
+            if((src.ptr <= dest.ptr && src.ptr + len > dest.ptr)
+                    ||(src.ptr >= dest.ptr && src.ptr < dest.ptr + len)){
+                if( destPos < srcPos ){
+                    for(int i=0; i<len; ++i){
+                        dest[destPos+i] = cast(T)src[srcPos+i];
+                    }
+                }
+                else{
+                    for(int i=len-1; i>=0; --i){
+                        dest[destPos+i] = cast(T)src[srcPos+i];
+                    }
+                }
+            }else{
+                dest[destPos..(len+destPos)] = cast(T[])src[srcPos..(len+srcPos)];
+            }
+        }
+    }
 
     alias SimpleType!(int).arraycopy arraycopy;
     alias SimpleType!(byte).arraycopy arraycopy;

@@ -15,6 +15,13 @@ class Class {
         implMissing(__FILE__, __LINE__ );
         return null;
     }
+    static Class fromType(T)(){
+        return null;
+    }
+    static Class fromObject(T)(T t){
+        static assert( is(T==class)||is(T==interface));
+        return null;
+    }
     //static Class forName(String name, bool initialize, ClassLoader loader){
     //    implMissing(__FILE__, __LINE__ );
     //    return null;
