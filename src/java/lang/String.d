@@ -17,23 +17,23 @@ version(Tango){
 }
 
 version(Tango){
-    alias char[] String;
-    alias char[] CString;
-    alias wchar[] String16;
-    alias wchar[] CString16;
-    alias char*   ICharPtr;
-    alias char*   CCharPtr;
-    alias wchar*  CWCharPtr;
-    alias wchar*  IWCharPtr;
+    public alias char[] String;
+    public alias char[] CString;
+    public alias wchar[] String16;
+    public alias wchar[] CString16;
+    public alias char*   ICharPtr;
+    public alias char*   CCharPtr;
+    public alias wchar*  CWCharPtr;
+    public alias wchar*  IWCharPtr;
 } else { // Phobos
-    alias string String;
-    alias wstring String16;
-    mixin("alias const(char)[]     CString;");
-    mixin("alias const(wchar)[]    CString16;");
-    mixin("alias invariant(char)*  ICharPtr;");
-    mixin("alias const(char)*      CCharPtr;");
-    mixin("alias const(wchar)*     CWCharPtr;");
-    mixin("alias invariant(wchar)* IWCharPtr;");
+    public alias string String;
+    public alias wstring String16;
+    mixin("public alias const(char)[]     CString;");
+    mixin("public alias const(wchar)[]    CString16;");
+    mixin("public alias invariant(char)*  ICharPtr;");
+    mixin("public alias const(char)*      CCharPtr;");
+    mixin("public alias const(wchar)*     CWCharPtr;");
+    mixin("public alias invariant(wchar)* IWCharPtr;");
 }
 
 int codepointIndexToIndex( CString str, int cpIndex ){
