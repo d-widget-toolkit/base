@@ -3,6 +3,7 @@ module java.lang.Short;
 import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
+import java.lang.Class;
 
 version(Tango){
     static import tango.text.convert.Integer;
@@ -38,10 +39,10 @@ class Short : Number {
         return String_valueOf(i);
     }
 
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(short);
+            TYPE_ = Class.fromType!(short);
         }
         return TYPE_;
     }

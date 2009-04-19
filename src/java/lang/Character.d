@@ -2,6 +2,7 @@ module java.lang.Character;
 
 import java.lang.exceptions;
 import java.lang.util;
+import java.lang.Class;
 
 version(Tango){
     static import tango.text.Unicode;
@@ -125,10 +126,10 @@ class Character {
         implMissing( __FILE__, __LINE__);
     }
 
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(char);
+            TYPE_ = Class.fromType!(char);
         }
         return TYPE_;
     }

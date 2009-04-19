@@ -2,6 +2,7 @@ module java.lang.Boolean;
 
 import java.lang.util;
 import java.lang.System;
+import java.lang.Class;
 
 version(Tango){
     static import tango.text.Ascii;
@@ -50,10 +51,10 @@ class Boolean : ValueWrapperT!(bool) {
         }
     }
 
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(bool);
+            TYPE_ = Class.fromType!(bool);
         }
         return TYPE_;
     }

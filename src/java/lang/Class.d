@@ -1,6 +1,7 @@
 module java.lang.Class;
 
 import java.lang.util;
+import java.lang.String;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.Package;

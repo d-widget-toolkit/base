@@ -3,6 +3,7 @@ module java.lang.String;
 import java.lang.util;
 import java.lang.interfaces;
 import java.lang.exceptions;
+import java.lang.Class;
 
 version(Tango){
     static import tango.stdc.stringz;
@@ -788,10 +789,10 @@ class StringCharSequence : CharSequence {
 }
 
 class StringCls {
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(char[]);
+            TYPE_ = Class.fromType!(char[]);
         }
         return TYPE_;
     }

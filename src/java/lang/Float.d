@@ -3,6 +3,7 @@ module java.lang.Float;
 import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
+import java.lang.Class;
 
 class Float : Number {
 
@@ -40,10 +41,10 @@ class Float : Number {
         }
     }
 
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(float);
+            TYPE_ = Class.fromType!(float);
         }
         return TYPE_;
     }

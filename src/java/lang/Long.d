@@ -2,6 +2,7 @@ module java.lang.Long;
 
 import java.lang.util;
 import java.lang.Number;
+import java.lang.Class;
 
 class Long : Number {
     public static const long MIN_VALUE = long.min;
@@ -46,10 +47,10 @@ class Long : Number {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(long);
+            TYPE_ = Class.fromType!(long);
         }
         return TYPE_;
     }

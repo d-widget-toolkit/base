@@ -2,6 +2,7 @@ module java.lang.Double;
 
 import java.lang.util;
 import java.lang.Number;
+import java.lang.Class;
 
 class Double : Number {
     public static double POSITIVE_INFINITY = double.infinity;
@@ -26,10 +27,10 @@ class Double : Number {
         return 0.0;
     }
 
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(double);
+            TYPE_ = Class.fromType!(double);
         }
         return TYPE_;
     }

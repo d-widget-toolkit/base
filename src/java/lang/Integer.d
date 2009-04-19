@@ -3,6 +3,7 @@ module java.lang.Integer;
 import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
+import java.lang.Class;
 
 version(Tango){
 } else { // Phobos
@@ -148,10 +149,10 @@ class Integer : Number {
         }
     }
 
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(int);
+            TYPE_ = Class.fromType!(int);
         }
         return TYPE_;
     }

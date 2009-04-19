@@ -3,6 +3,7 @@ module java.lang.Byte;
 import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
+import java.lang.Class;
 
 version(Tango){
     static import tango.text.convert.Integer;
@@ -39,10 +40,10 @@ class Byte : Number {
         return String_valueOf(i);
     }
 
-    private static TypeInfo TYPE_;
-    public static TypeInfo TYPE(){
+    private static Class TYPE_;
+    public static Class TYPE(){
         if( TYPE_ is null ){
-            TYPE_ = typeid(byte);
+            TYPE_ = Class.fromType!(byte);
         }
         return TYPE_;
     }
