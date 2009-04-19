@@ -29,9 +29,9 @@ class PrintStream{
     void print(char c){
         implMissing(__FILE__, __LINE__);
     }
-    void print(char[] s){
-        implMissing(__FILE__, __LINE__);
-    }
+    //void print(char[] s){
+    //    implMissing(__FILE__, __LINE__);
+    //}
     void print(double d){
         implMissing(__FILE__, __LINE__);
     }
@@ -59,9 +59,9 @@ class PrintStream{
     void println(char x){
         implMissing(__FILE__, __LINE__);
     }
-    void println(char[] x){
-        implMissing(__FILE__, __LINE__);
-    }
+    //void println(char[] x){
+    //    implMissing(__FILE__, __LINE__);
+    //}
     void println(double x){
         implMissing(__FILE__, __LINE__);
     }

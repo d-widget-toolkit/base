@@ -27,17 +27,17 @@ abstract class AbstractSet : AbstractCollection, Set {
 
 
     public bool     isEmpty(){ return super.isEmpty(); }
-    public Iterator iterator(){ return super.iterator(); }
+    //public Iterator iterator(){ return super.iterator(); }
     public bool     remove(Object o){ return super.remove(o); }
     public bool     remove(String o){ return super.remove(o); }
     public bool     removeAll(Collection c){ return super.removeAll(c); }
     public bool     retainAll(Collection c){ return super.retainAll(c); }
-    public int      size(){ return super.size(); }
+    //public int      size(){ return super.size(); }
     public Object[] toArray(){ return super.toArray(); }
     public Object[] toArray(Object[] a){ return super.toArray(a); }
     public String   toString(){ return super.toString(); }
 
     // only for D
-    public int opApply (int delegate(ref Object value) dg){ return super.opApply(dg); }
+    //public int opApply (int delegate(ref Object value) dg){ return super.opApply(dg); }
 }
 

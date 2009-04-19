@@ -33,9 +33,9 @@ class PrintWriter{
     void print(char c){
         implMissing(__FILE__, __LINE__);
     }
-    void print(char[] s){
-        implMissing(__FILE__, __LINE__);
-    }
+    //void print(char[] s){
+    //    implMissing(__FILE__, __LINE__);
+    //}
     void print(double d){
         implMissing(__FILE__, __LINE__);
     }
@@ -63,9 +63,9 @@ class PrintWriter{
     void println(char x){
         implMissing(__FILE__, __LINE__);
     }
-    void println(char[] x){
-        implMissing(__FILE__, __LINE__);
-    }
+    //void println(char[] x){
+    //    implMissing(__FILE__, __LINE__);
+    //}
     void println(double x){
         implMissing(__FILE__, __LINE__);
     }
@@ -87,12 +87,12 @@ class PrintWriter{
     protected void setError(){
         implMissing(__FILE__, __LINE__);
     }
-    void write(char[] buf){
-        implMissing(__FILE__, __LINE__);
-    }
-    void write(char[] buf, int off, int len){
-        implMissing(__FILE__, __LINE__);
-    }
+    //void write(char[] buf){
+    //    implMissing(__FILE__, __LINE__);
+    //}
+    //void write(char[] buf, int off, int len){
+    //    implMissing(__FILE__, __LINE__);
+    //}
     void write(int c){
         implMissing(__FILE__, __LINE__);
     }
