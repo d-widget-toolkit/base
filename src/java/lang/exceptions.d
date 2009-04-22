@@ -55,6 +55,12 @@ class InternalError : Exception {
     }
 }
 
+class ArithmeticException : Exception {
+    this( String e = null ){
+        super(e);
+    }
+}
+
 class ClassCastException : Exception {
     this( String e = null ){
         super(e);
@@ -67,6 +73,24 @@ class IllegalStateException : Exception {
     }
     this( Exception e ){
         super(e.toString);
+    }
+}
+
+class NoSuchMethodException : Exception {
+    this( String e = null){
+        super(e);
+    }
+}
+
+class IllegalAccessException : Exception {
+    this( String e = null){
+        super(e);
+    }
+}
+
+class SecurityException : Exception {
+    this( String e = null){
+        super(e);
     }
 }
 

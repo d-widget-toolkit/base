@@ -16,6 +16,9 @@ abstract class AbstractMap : Map {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    bool        containsKey(String key){
+        return containsKey(stringcast(key));
+    }
     bool        containsKey(Object key){
         implMissing( __FILE__, __LINE__ );
         return false;
@@ -33,6 +36,9 @@ abstract class AbstractMap : Map {
         return false;
     }
 
+    Object         get(String key){
+        return get(stringcast(key));
+    }
     Object         get(Object key){
         implMissing( __FILE__, __LINE__ );
         return null;
@@ -49,12 +55,24 @@ abstract class AbstractMap : Map {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    Object         put(String key, String value){
+        return put(stringcast(key),stringcast(value));
+    }
+    Object         put(Object key, String value){
+        return put(key,stringcast(value));
+    }
+    Object         put(String key, Object value){
+        return put(stringcast(key),value);
+    }
     Object         put(Object key, Object value){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
     void   putAll(Map t){
         implMissing( __FILE__, __LINE__ );
+    }
+    Object         remove(String key){
+        return remove(stringcast(key));
     }
     Object         remove(Object key){
         implMissing( __FILE__, __LINE__ );

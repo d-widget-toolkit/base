@@ -2,12 +2,23 @@ module java.math.BigInteger;
 
 import java.lang.all;
 import java.util.Random;
+version(Tango){
+    import tango.math.BigInt;
+} else { // Phobos
+}
 
 class BigInteger : Number {
 
-    static BigInteger ONE;
-    static BigInteger ZERO;
+    static const BigInteger ZERO;
+    static const BigInteger ONE;
      
+    private BigInt bi;
+
+    static this(){
+        ZERO = BigInteger.valueOf(0);
+        ONE  = BigInteger.valueOf(1);
+    }
+
     this(byte[] val){
         implMissing(__FILE__, __LINE__ );
     }
@@ -21,10 +32,27 @@ class BigInteger : Number {
         implMissing(__FILE__, __LINE__ );
     }
     this(String val){
-        implMissing(__FILE__, __LINE__ );
+        bi = BigInt( val );
     }
     this(String val, int radix){
-        implMissing(__FILE__, __LINE__ );
+        if( radix is 10 ){
+            bi = BigInt( val );
+        }
+        else if( radix is 16 ){
+            bi = BigInt( "0x" ~ val );
+        }
+        else {
+            implMissing(__FILE__, __LINE__ );
+        }
+    }
+    private this( BigInt v ){
+        bi = v;
+    }
+    private this( BigInteger v ){
+        bi = v.bi;
+    }
+    private this( long v ){
+        bi = BigInt(v);
     }
     BigInteger abs(){
         implMissing(__FILE__, __LINE__ );
@@ -47,7 +75,7 @@ class BigInteger : Number {
         return 0;
     }
     int bitLength(){
-        implMissing(__FILE__, __LINE__ );
+        //implMissing(__FILE__, __LINE__ );
         return 0;
     }
     BigInteger clearBit(int n){
@@ -131,8 +159,9 @@ class BigInteger : Number {
         return null;
     }
     BigInteger multiply(BigInteger val){
-        implMissing(__FILE__, __LINE__ );
-        return null;
+        auto res = new BigInteger(this);
+        res.bi *= val.bi;
+        return res;
     }
     BigInteger negate(){
         implMissing(__FILE__, __LINE__ );
@@ -147,8 +176,18 @@ class BigInteger : Number {
         return null;
     }
     BigInteger pow(int exponent){
-        implMissing(__FILE__, __LINE__ );
-        return null;
+        if( exponent < 0 ){
+            throw new ArithmeticException("Negative exponent");
+        }
+        if( bi.isZero() ){
+            return exponent is 0 ? ONE : this;
+        }
+        auto a = bi;
+        while(exponent>0){
+            a *= bi;
+            exponent--;
+        }
+        return new BigInteger(a);
     }
     static BigInteger probablePrime(int bitLength, Random rnd){
         implMissing(__FILE__, __LINE__ );
@@ -171,8 +210,9 @@ class BigInteger : Number {
         return null;
     }
     int signum(){
-        implMissing(__FILE__, __LINE__ );
-        return 0;
+        if( bi.isZero() ) return 0;
+        if( bi.isNegative() ) return -1;
+        return 1;
     }
     BigInteger subtract(BigInteger val){
         implMissing(__FILE__, __LINE__ );
@@ -195,8 +235,8 @@ class BigInteger : Number {
         return null;
     }
     static BigInteger valueOf(long val){
-        implMissing(__FILE__, __LINE__ );
-        return null;
+        auto res = new BigInteger(val);
+        return res;
     }
     BigInteger xor(BigInteger val){
         implMissing(__FILE__, __LINE__ );

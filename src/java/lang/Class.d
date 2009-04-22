@@ -91,7 +91,7 @@ class Class {
         implMissing(__FILE__, __LINE__ );
         return null;
     }
-    Method getMethod(String name, Class parameterTypes...){
+    Method getMethod(String name, Class[] parameterTypes...){
         implMissing(__FILE__, __LINE__ );
         return null;
     }

@@ -1,10 +1,12 @@
 module java.lang.reflect.Method;
 
+import java.lang.reflect.AccessibleObject;
+
 import java.lang.all;
 import java.lang.Class;
 import java.lang.String;
 
-class Method {
+class Method : AccessibleObject {
     public override equals_t opEquals(Object obj){
         implMissing(__FILE__,__LINE__);
         return false;
