@@ -90,5 +90,24 @@ abstract class AbstractMap : Map {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
-}
+    public int opApply (int delegate(ref Object value) dg){
+        foreach( entry; entrySet() ){
+            auto me = cast(Map.Entry)entry;
+            auto v = me.getValue();
+            int res = dg( v );
+            if( res ) return res;
+        }
+        return 0;
+    }
+    public int opApply (int delegate(ref Object key, ref Object value) dg){
+        foreach( entry; entrySet() ){
+            auto me = cast(Map.Entry)entry;
+            auto k = me.getKey();
+            auto v = me.getValue();
+            int res = dg( k, v );
+            if( res ) return res;
+        }
+        return 0;
+    } 
+ }
 

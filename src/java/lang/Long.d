@@ -1,6 +1,7 @@
 module java.lang.Long;
 
 import java.lang.util;
+import java.lang.exceptions;
 import java.lang.Number;
 import java.lang.Class;
 
@@ -40,8 +41,20 @@ class Long : Number {
         return cast(double)value;
     }
     public static long parseLong(String s){
-        implMissing( __FILE__, __LINE__ );
-        return 0;
+        return parseLong( s, 10 );
+    }
+    public static long parseLong(String s, int radix){
+        version(Tango){
+            try{
+                return tango.text.convert.Integer.toLong( s, radix );
+            }
+            catch( IllegalArgumentException e ){
+                throw new NumberFormatException( e );
+            }
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+            return 0;
+        }
     }
     public static String toString( double value ){
         implMissing( __FILE__, __LINE__ );

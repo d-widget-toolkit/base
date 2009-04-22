@@ -38,6 +38,14 @@ abstract class AbstractSet : AbstractCollection, Set {
     public String   toString(){ return super.toString(); }
 
     // only for D
-    //public int opApply (int delegate(ref Object value) dg){ return super.opApply(dg); }
+    public int opApply (int delegate(ref Object value) dg){
+        auto it = iterator();
+        while( it.hasNext() ){
+            auto v = it.next();
+            int res = dg( v );
+            if( res ) return res;
+        }
+        return 0;
+    }
 }
 

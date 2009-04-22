@@ -32,6 +32,18 @@ class Character {
         }
         return toUpperCase( darr[0] );
     }
+    public static String toString(char c){
+        implMissing(__FILE__, __LINE__ );
+        return null;
+    }
+    public static String toString(wchar c){
+        implMissing(__FILE__, __LINE__ );
+        return null;
+    }
+    public static String toString(dchar c){
+        implMissing(__FILE__, __LINE__ );
+        return null;
+    }
     public static dchar toUpperCase( dchar c ){
         version(Tango){
             dchar[1] src;

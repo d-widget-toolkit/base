@@ -1,20 +1,22 @@
 module java.lang.ThreadLocal;
 import java.lang.util;
 
+static import tango.core.Thread;
+
 class ThreadLocal{
+    alias tango.core.Thread.ThreadLocal!(Object) TLSType;
+    TLSType tls;
     this(){
-        implMissing(__FILE__, __LINE__);
+        tls = new TLSType( initialValue() );
     }
     Object get(){
-        implMissing(__FILE__, __LINE__);
-        return null;
+        return tls.val();
     }
     protected  Object initialValue(){
-        implMissing(__FILE__, __LINE__);
         return null;
     }
     void set(Object value){
-        implMissing(__FILE__, __LINE__);
+        return tls.val( value );
     }
 }
 
