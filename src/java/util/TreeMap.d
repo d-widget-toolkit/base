@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeSet;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 version(Tango){
     static import tango.util.container.SortedMap;

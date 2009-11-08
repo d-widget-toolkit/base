@@ -1,6 +1,7 @@
 module java.io.PrintStream;
 
 import java.lang.all;
+import java.lang.String;
 import java.io.OutputStream;
 
 class PrintStream{

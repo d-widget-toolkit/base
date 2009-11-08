@@ -7,6 +7,7 @@ import java.lang.util;
 import java.lang.Integer;
 import java.lang.exceptions;
 import java.util.MissingResourceException;
+import java.util.Enumeration;
 version(Tango){
     //import tango.text.Util;
     import tango.io.device.File;
@@ -162,7 +163,11 @@ nextline:
         throw new MissingResourceException( "key not found", this.classinfo.name, key._idup() );
     }
 
-    public String[] getKeys(){
+    public Enumeration getKeys(){
+        implMissing(__FILE__,__LINE__);
+        return null;
+    }
+    public String[] getKeysAsArray(){
         return map.keys;
     }
 

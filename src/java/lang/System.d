@@ -5,6 +5,7 @@ module java.lang.System;
 
 import java.lang.util;
 import java.lang.exceptions;
+import java.io.PrintStream;
 
 version(Tango){
     static import tango.sys.Environment;
@@ -229,23 +230,17 @@ class System {
 
     }
 
-    static class Output {
-        public void println( String str ){
-            implMissing( __FILE__, __LINE__ );
-        }
-    }
-
-    private static Output err__;
-    public static Output err(){
+    private static PrintStream err__;
+    public static PrintStream err(){
         if( err__ is null ){
-            err__ = new Output();
+            err__ = new PrintStream(null);
         }
         return err__;
     }
-    private static Output out__;
-    public static Output out_(){
+    private static PrintStream out__;
+    public static PrintStream out_(){
         if( out__ is null ){
-            out__ = new Output();
+            out__ = new PrintStream(null);
         }
         return out__;
     }

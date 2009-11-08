@@ -5,6 +5,7 @@ import java.util.SortedSet;
 import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Comparator;
 
 version(Tango){
     static import tango.util.container.SortedMap;

@@ -8,9 +8,10 @@ interface Cloneable{
 interface Comparable {
     int compareTo(Object o);
 }
-interface Comparator {
-    int compare(Object o1, Object o2);
-}
+// is now in java.util.Comparator
+//interface Comparator {
+//    int compare(Object o1, Object o2);
+//}
 
 interface CharSequence {
     char         charAt(int index);

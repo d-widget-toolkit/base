@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Enumeration;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 class Collections {
     private static void unsupported(){

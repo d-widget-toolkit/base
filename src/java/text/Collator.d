@@ -1,6 +1,7 @@
 module java.text.Collator;
 
 import java.lang.all;
+import java.util.Comparator;
 
 class Collator : Comparator {
     public static Collator getInstance(){

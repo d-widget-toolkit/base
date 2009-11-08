@@ -2,6 +2,7 @@ module java.util.SortedSet;
 
 import java.lang.all;
 import java.util.Set;
+import java.util.Comparator;
 
 interface SortedSet : Set {
     Comparator     comparator();
