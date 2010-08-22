@@ -20,7 +20,7 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
 
     public this (){
         version(Tango){
-            buffer = new Array();
+            buffer = new Array(0);
         } else { // Phobos
             implMissing( __FILE__, __LINE__ );
         }

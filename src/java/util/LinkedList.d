@@ -32,7 +32,6 @@ class LinkedList : List {
     void   add(int index, Object element){
         version(Tango){
             list.addAt(index,element);
-            return true;
         } else { // Phobos
             implMissing( __FILE__, __LINE__ );
         }

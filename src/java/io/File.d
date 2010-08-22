@@ -10,11 +10,12 @@ version(Tango){
     static import tango.io.FilePath;
     static import tango.io.Path;
     static import tango.io.FileSystem;
+    static import tango.sys.Environment;
 } else { // Phobos
     static import std.file;
     static import std.path;
 }
-
+// Implement this more efficient by using FilePath in Tango 
 public class File {
 
     public static char separatorChar;
@@ -105,7 +106,7 @@ public class File {
 
     public String getAbsolutePath(){
         version(Tango){
-            return tango.io.FileSystem.FileSystem.toAbsolute( mFilePath );
+            return (new tango.io.FilePath.FilePath(mFilePath)).absolute(tango.sys.Environment.Environment.cwd).toString;
         } else { // Phobos
             implMissing( __FILE__, __LINE__ );
             return "";

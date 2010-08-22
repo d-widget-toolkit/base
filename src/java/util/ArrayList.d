@@ -174,7 +174,6 @@ class ArrayList : AbstractList, List {
         }
         public void   add(String o){
             implMissing( __FILE__, __LINE__ );
-            return false;
         }
         public bool   hasPrevious(){
             return idx_next > 0;

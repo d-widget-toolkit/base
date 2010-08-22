@@ -14,12 +14,10 @@ class Introspector {
 
     static void flushCaches(){
         implMissing(__FILE__, __LINE__);
-        return null;
     }
 
     static void flushFromCaches(Class clz){
         implMissing(__FILE__, __LINE__);
-        return null;
     }
 
     static BeanInfo getBeanInfo(Class beanClass){

@@ -76,7 +76,6 @@ class Collections {
         }
         public void   add(String o){
             unsupported();
-            return false; // make compiler happy
         }
         public bool   hasNext(){
             return it.hasNext();
@@ -129,7 +128,6 @@ class Collections {
         }
         public void     clear(){
             unsupported();
-            return false; // make compiler happy
         }
         public bool     contains(Object o){
             return list.contains(o);
