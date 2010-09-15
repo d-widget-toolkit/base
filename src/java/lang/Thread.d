@@ -173,5 +173,12 @@ class Thread {
     public static void yield(){
         TThread.yield();
     }
+    
+    public static void joinAll(){
+        version (Tango)
+            tango.core.Thread.thread_joinAll();
+        else
+            core.thread.thread_joinAll();
+    }
 }
 
