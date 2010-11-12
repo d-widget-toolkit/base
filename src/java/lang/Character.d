@@ -6,6 +6,7 @@ import java.lang.Class;
 
 version(Tango){
     static import tango.text.Unicode;
+    static import tango.text.UnicodeData;
 } else { // Phobos
     static import std.utf;
     static import std.uni;
@@ -154,7 +155,7 @@ class Character {
 
 bool CharacterIsDefined( dchar ch ){
     version(Tango){
-        return (ch in tango.text.UnicodeData.unicodeData) !is null;
+        return tango.text.UnicodeData.getUnicodeData(ch) !is null;
     } else { // Phobos
         implMissing( __FILE__, __LINE__);
         return false;

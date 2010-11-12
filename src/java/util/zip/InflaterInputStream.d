@@ -27,7 +27,7 @@ version(Tango){
             this.istr = istr;
         }
 
-        uint read (void[] dst){
+        size_t read (void[] dst){
             int res = istr.read( cast(byte[])dst );
             return res;
         }
