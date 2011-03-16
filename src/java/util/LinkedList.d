@@ -86,7 +86,6 @@ class LinkedList : List {
             list.clear();
         } else { // Phobos
             implMissing( __FILE__, __LINE__ );
-            return false;
         }
     }
     Object     clone(){

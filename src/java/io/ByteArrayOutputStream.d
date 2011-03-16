@@ -34,46 +34,56 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
         }
     }
 
-    public synchronized override void write( int b ){
-        version(Tango){
-            byte[1] a;
-            a[0] = b & 0xFF;
-            buffer.append(a);
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+    public override void write( int b ){
+        synchronized {
+            version(Tango){
+                byte[1] a;
+                a[0] = b & 0xFF;
+                buffer.append(a);
+            } else { // Phobos
+                implMissing( __FILE__, __LINE__ );
+            }
         }
     }
 
-    public synchronized override void write( byte[] b, int off, int len ){
-        version(Tango){
-            buffer.append( b[ off .. off + len ]);
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+    public override void write( byte[] b, int off, int len ){
+        synchronized {
+            version(Tango){
+                buffer.append( b[ off .. off + len ]);
+            } else { // Phobos
+                implMissing( __FILE__, __LINE__ );
+            }
         }
     }
 
-    public synchronized override void write( byte[] b ){
-        version(Tango){
-            buffer.append( b );
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+    public override void write( byte[] b ){
+        synchronized {
+            version(Tango){
+                buffer.append( b );
+            } else { // Phobos
+                implMissing( __FILE__, __LINE__ );
+            }
         }
     }
 
-    public synchronized void writeTo( java.io.OutputStream.OutputStream out_KEYWORDESCAPE ){
+    public void writeTo( java.io.OutputStream.OutputStream out_KEYWORDESCAPE ){
+        synchronized
         implMissing( __FILE__, __LINE__ );
     }
 
-    public synchronized void reset(){
+    public void reset(){
+        synchronized
         implMissing( __FILE__, __LINE__ );
     }
 
-    public synchronized byte[] toByteArray(){
-        version(Tango){
-            return cast(byte[])buffer.slice();
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return null;
+    public byte[] toByteArray(){
+        synchronized {
+            version(Tango){
+                return cast(byte[])buffer.slice();
+            } else { // Phobos
+                implMissing( __FILE__, __LINE__ );
+                return null;
+            }
         }
     }
 

@@ -13,6 +13,7 @@ version(Tango){
     import tango.io.device.File;
     import tango.text.locale.Core;
 } else { // Phobos
+    import std.file;
 }
 
 
@@ -182,7 +183,7 @@ nextline:
             version(Tango){
                 return new ResourceBundle( cast(String) File.get(name) );
             } else { // Phobos
-                implMissing(__FILE__,__LINE__);
+                return new ResourceBundle( cast(String) std.file.read(name) );
             }
         }
         catch( IOException e){

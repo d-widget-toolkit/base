@@ -54,30 +54,34 @@ public class BufferedInputStream : java.io.InputStream.InputStream {
             istr = null;
         }
     }
-    public synchronized int read(){
-        if( pos >= count ){
-            fill();
+    public int read(){
+        synchronized {
             if( pos >= count ){
-                return -1;
+                fill();
+                if( pos >= count ){
+                    return -1;
+                }
             }
+            return getAndCheckBuf()[pos++] & 0xFF;
         }
-        return getAndCheckBuf()[pos++] & 0xFF;
     }
 
-    public synchronized int read( byte[] b, int off, int len ){
-        return super.read( b, off, len );
+    public int read( byte[] b, int off, int len ){
+        synchronized return super.read( b, off, len );
     }
 
-    public synchronized long skip( long n ){
-        return this.istr.skip(n);
+    public long skip( long n ){
+        synchronized return this.istr.skip(n);
     }
 
-    public synchronized int available(){
-        int istr_avail = 0;
-        if( istr !is null ){
-            istr_avail = istr.available();
+    public int available(){
+        synchronized {
+            int istr_avail = 0;
+            if( istr !is null ){
+                istr_avail = istr.available();
+            }
+            return istr_avail + (count - pos);
         }
-        return istr_avail + (count - pos);
     }
 
     public synchronized void mark( int readlimit ){

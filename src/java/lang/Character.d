@@ -155,7 +155,7 @@ class Character {
 
 bool CharacterIsDefined( dchar ch ){
     version(Tango){
-        return tango.text.UnicodeData.getUnicodeData(ch) !is null;
+    	return (ch in tango.text.UnicodeData.unicodeData) !is null;
     } else { // Phobos
         implMissing( __FILE__, __LINE__);
         return false;

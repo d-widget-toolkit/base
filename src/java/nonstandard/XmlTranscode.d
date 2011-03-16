@@ -138,8 +138,8 @@ Lprocess:
                 case '\r': case '\n': case '\u0009':
                 default:
                     char toHexDigit( int i ){
-                        if( i < 10 ) return '0'+i;
-                        return 'A'+i-10;
+                        if( i < 10 ) return cast(char)('0'+i);
+                        return cast(char)('A'+i-10);
                     }
                     res ~= "#x";
                     if( c <= 0xFF ){
@@ -175,5 +175,6 @@ Lprocess:
             res ~= ';';
         }
     }
+    assert (0);
 }
 

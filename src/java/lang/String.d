@@ -14,7 +14,10 @@ version(Tango){
     static import core.exception;
     static import std.uni;
     static import std.utf;
+    static import std.array;
     static import std.string;
+    static import std.conv;
+    static import std.exception;
 }
 
 version(Tango){
@@ -31,10 +34,10 @@ version(Tango){
     public alias wstring String16;
     mixin("public alias const(char)[]     CString;");
     mixin("public alias const(wchar)[]    CString16;");
-    mixin("public alias invariant(char)*  ICharPtr;");
+    mixin("public alias immutable(char)*  ICharPtr;");
     mixin("public alias const(char)*      CCharPtr;");
     mixin("public alias const(wchar)*     CWCharPtr;");
-    mixin("public alias invariant(wchar)* IWCharPtr;");
+    mixin("public alias immutable(wchar)* IWCharPtr;");
 }
 
 int codepointIndexToIndex( CString str, int cpIndex ){
@@ -402,8 +405,7 @@ String String_valueOf( int v ){
     version(Tango){
         return tango.text.convert.Integer.toString(v);
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(String)(v);
     }
 }
 
@@ -411,8 +413,7 @@ String String_valueOf( uint v ){
     version(Tango){
         return tango.text.convert.Integer.toString(v);
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(String)(v);
     }
 }
 
@@ -420,8 +421,7 @@ String String_valueOf( long v ){
     version(Tango){
         return tango.text.convert.Integer.toString(v);
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(String)(v);
     }
 }
 
@@ -429,8 +429,7 @@ String String_valueOf( float v ){
     version(Tango){
         return tango.text.convert.Float.toString(v);
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(String)(v);
     }
 }
 
@@ -438,8 +437,7 @@ String String_valueOf( double v ){
     version(Tango){
         return tango.text.convert.Float.toString(v);
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(String)(v);
     }
 }
 
@@ -471,8 +469,7 @@ String String_valueOf( CString16 wstr ){
     version(Tango){
         return tango.text.convert.Utf.toString(wstr);
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(String)(wstr);
     }
 }
 
@@ -503,8 +500,7 @@ public int indexOf( CString str, char searched ){
         if( res is str.length ) res = -1;
         return res;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return 0;
+        return std.string.indexOf(str, searched);
     }
 }
 
@@ -515,8 +511,9 @@ public int indexOf( CString str, char searched, int startpos ){
         if( res is str.length ) res = -1;
         return res;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return 0;
+        int res = std.string.indexOf(str[startpos .. $], searched);
+        if (res !is -1) res += startpos;
+        return res;
     }
 }
 
@@ -582,8 +579,8 @@ public String replace( CString str, char from, char to ){
     version(Tango){
         return tango.text.Util.replace( str.dup, from, to );
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        auto res = std.array.replace(str, [from], [to]);
+        return std.exception.assumeUnique(res);
     }
 }
 
@@ -627,8 +624,7 @@ public String16 toWCharArray( CString str ){
     version(Tango){
         return tango.text.convert.Utf.toString16(str);
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(String16)(str);
     }
 }
 

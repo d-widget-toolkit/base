@@ -6,7 +6,7 @@ module java.util.zip.InflaterInputStream;
 import java.lang.all;
 import java.io.InputStream;
 version(Tango){
-    import tango.io.stream.Zlib;
+    import tango.io.compress.ZlibStream;
     import tango.io.device.Conduit;
     version(Windows){
         pragma(lib,"zlib.lib");

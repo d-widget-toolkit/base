@@ -64,25 +64,29 @@ class Hashtable : Dictionary, Map {
     Enumeration        keys() {
         return new ObjectEnumeration( map.keys );
     }
-    public synchronized void clear(){
-        map = null;
+    public void clear(){
+        synchronized map = null;
     }
-    public synchronized bool containsKey(Object key){
-        if( auto v = key in map ){
-            return true;
-        }
-        return false;
-    }
-    public synchronized bool containsKey(String key){
-        return containsKey(stringcast(key));
-    }
-    public synchronized bool containsValue(Object value){
-        foreach( k, v; map ){
-            if( v == value ){
+    public bool containsKey(Object key){
+        synchronized {
+            if( auto v = key in map ){
                 return true;
             }
+            return false;
         }
-        return false;
+    }
+    public bool containsKey(String key){
+        synchronized return containsKey(stringcast(key));
+    }
+    public bool containsValue(Object value){
+        synchronized {
+             foreach( k, v; map ){
+                 if( v == value ){
+                     return true;
+                 }
+             }
+             return false;
+        }
     }
     public Set  entrySet(){
         implMissing( __FILE__, __LINE__ );
@@ -92,44 +96,50 @@ class Hashtable : Dictionary, Map {
         implMissing( __FILE__, __LINE__ );
         return 0;
     }
-    public synchronized Object get(Object key){
-        if( auto v = key in map ){
-            return *v;
+    public Object get(Object key){
+        synchronized {
+            if( auto v = key in map ){
+                return *v;
+            }
+            return null;
         }
-        return null;
     }
     public hash_t toHash(){
         implMissing( __FILE__, __LINE__ );
         return 0;
     }
-    public synchronized bool isEmpty(){
-        return map.length is 0;
+    public bool isEmpty(){
+        synchronized return map.length is 0;
     }
     public Set    keySet(){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
-    public synchronized Object put(Object key, Object value){
-        Object res = null;
-        if( auto v = key in map ){
-            res = *v;
+    public Object put(Object key, Object value){
+        synchronized {
+            Object res = null;
+            if( auto v = key in map ){
+                res = *v;
+            }
+            map[ key ] = value;
+            return res;
         }
-        map[ key ] = value;
-        return res;
     }
 //     public Object put(String key, Object value)
 //     public Object put(Object key, String value)
 //     public Object put(String key, String value)
-    public synchronized void   putAll(Map t){
+    public void   putAll(Map t){
+        synchronized
         implMissing( __FILE__, __LINE__ );
     }
-    public synchronized Object remove(Object key){
+    public Object remove(Object key){
+        synchronized
         implMissing( __FILE__, __LINE__ );
         return null;
     }
 //     public Object remove(String key)
-    public synchronized int    size(){
-        return map.length;
+    public int    size(){
+        synchronized return map.length;
     }
     public Collection values(){
         implMissing( __FILE__, __LINE__ );

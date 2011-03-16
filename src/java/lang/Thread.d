@@ -56,11 +56,11 @@ class Thread {
     public this(Runnable runnable, String name){
         thread = new TThread(&internalRun);
         this.runnable = runnable;
-        thread.name = cast(char[])name;
+        thread.name = name;
     }
     public this(String name){
         thread = new TThread(&internalRun);
-        thread.name = cast(char[])name;
+        thread.name = name;
     }
 
     public void start(){
@@ -133,7 +133,7 @@ class Thread {
     }
 
     public void setName(String name){
-        thread.name = cast(char[])name;
+        thread.name = name;
     }
     public String getName(){
         return cast(String)thread.name;

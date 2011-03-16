@@ -28,7 +28,7 @@ class Math {
     static int    min(uint   a, int    b){ return a < b ? a : b; }
     static int    min(int    a, uint   b){ return a < b ? a : b; }
     static int    min(uint   a, uint   b){ return a < b ? a : b; }
-    static int    min(int    a, long   b){ return a < b ? a : b; }
+    static long   min(int    a, long   b){ return a < b ? a : b; }
     static long   min(long   a, long   b){ return a < b ? a : b; }
     static long   min(long   a, int    b){ return a < b ? a : b; }
 
@@ -42,7 +42,7 @@ class Math {
     static int    max(uint   a, int    b){ return a > b ? a : b; }
     static int    max(int    a, uint   b){ return a > b ? a : b; }
     static int    max(uint   a, uint   b){ return a > b ? a : b; }
-    static int    max(int    a, long   b){ return a > b ? a : b; }
+    static long   max(int    a, long   b){ return a > b ? a : b; }
     static long   max(long   a, long   b){ return a > b ? a : b; }
     static long   max(long   a, int    b){ return a > b ? a : b; }
 

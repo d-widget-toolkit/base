@@ -9,25 +9,24 @@ import java.util.ArrayList;
 
 version(Tango){
     static import tango.util.container.HashMap;
+    private struct ObjRef {
+        Object obj;
+        static ObjRef opCall( Object obj ){
+            ObjRef res;
+            res.obj = obj;
+            return res;
+        }
+        public hash_t toHash(){
+            return obj is null ? 0 : obj.toHash();
+        }
+        public equals_t opEquals( ObjRef other ){
+            return obj is null ? other.obj is null : obj.opEquals( other.obj );
+        }
+        public equals_t opEquals( Object other ){
+            return obj is null ? other is null : obj.opEquals( other );
+        }
+    }
 } else { // Phobos
-}
-
-private struct ObjRef {
-    Object obj;
-    static ObjRef opCall( Object obj ){
-        ObjRef res;
-        res.obj = obj;
-        return res;
-    }
-    public hash_t toHash(){
-        return obj is null ? 0 : obj.toHash();
-    }
-    public equals_t opEquals( ObjRef other ){
-        return obj is null ? other.obj is null : obj.opEquals( other.obj );
-    }
-    public equals_t opEquals( Object other ){
-        return obj is null ? other is null : obj.opEquals( other );
-    }
 }
 
 class HashMap : Map {

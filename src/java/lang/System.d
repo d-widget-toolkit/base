@@ -15,7 +15,7 @@ version(Tango){
     static import tango.stdc.stdlib;
 } else { // Phobos
     static import std.c.stdlib;
-    static import std.date;
+    static import std.datetime;
     static import std.path;
 }
 
@@ -29,7 +29,7 @@ template SimpleType(T) {
         }
     }
 
-    static void remove(inout T[] items, int index) {
+    static void remove(ref T[] items, int index) {
         if(items.length == 0)
             return;
 
@@ -53,7 +53,7 @@ template SimpleType(T) {
             items = items[0 .. index] ~ items[index + 1 .. $];
     }
 
-    static void insert(inout T[] items, T item, int index = -1) {
+    static void insert(ref T[] items, T item, int index = -1) {
         if(index == -1)
             index = items.length;
 
@@ -115,32 +115,28 @@ template SimpleType(T) {
 
 
 class System {
-    version(D_Version2){
-        mixin("alias const(T) CT;");
-    } else { // D1
-        static void arraycopyT(T)(T[] src, uint srcPos, T[] dest, uint destPos, uint len) {
-            if(len == 0) return;
+    static void arraycopyT(T)(T[] src, uint srcPos, T[] dest, uint destPos, uint len) {
+        if(len == 0) return;
 
-            assert(src);
-            assert(dest);
-            debug{validCheck(src.length - srcPos, dest.length - destPos, len);}
+        assert(src);
+        assert(dest);
+        debug{validCheck(src.length - srcPos, dest.length - destPos, len);}
 
-            // overlapping?
-            if((src.ptr <= dest.ptr && src.ptr + len > dest.ptr)
-                    ||(src.ptr >= dest.ptr && src.ptr < dest.ptr + len)){
-                if( destPos < srcPos ){
-                    for(int i=0; i<len; ++i){
-                        dest[destPos+i] = cast(T)src[srcPos+i];
-                    }
+        // overlapping?
+        if((src.ptr <= dest.ptr && src.ptr + len > dest.ptr)
+                ||(src.ptr >= dest.ptr && src.ptr < dest.ptr + len)){
+            if( destPos < srcPos ){
+                for(int i=0; i<len; ++i){
+                    dest[destPos+i] = cast(T)src[srcPos+i];
                 }
-                else{
-                    for(int i=len-1; i>=0; --i){
-                        dest[destPos+i] = cast(T)src[srcPos+i];
-                    }
-                }
-            }else{
-                dest[destPos..(len+destPos)] = cast(T[])src[srcPos..(len+srcPos)];
             }
+            else{
+                for(int i=len-1; i>=0; --i){
+                    dest[destPos+i] = cast(T)src[srcPos+i];
+                }
+            }
+        }else{
+            dest[destPos..(len+destPos)] = cast(T[])src[srcPos..(len+srcPos)];
         }
     }
 
@@ -177,7 +173,7 @@ class System {
 
     static long currentTimeMillis(){
         version(Tango) return tango.time.Clock.Clock.now().ticks() / 10000;
-        else           return std.date.getUTCtime() / (std.date.TicksPerSecond/1000);
+        else           return std.datetime.Clock.currStdTime();
     }
 
     static void exit( int code ){

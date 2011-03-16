@@ -24,7 +24,10 @@ class PropertyChangeSupport {
             list = *l;
         }
         list ~= listener;
-        listeners[ propertyName.dup ] = list;
+        version(Tango){
+            propertyName = propertyName.dup;
+        }
+        listeners[ propertyName ] = list;
     }
     void firePropertyChange(String propertyName, bool oldValue, bool newValue){
         firePropertyChange( propertyName, Boolean.valueOf(oldValue), Boolean.valueOf(newValue) );
@@ -55,7 +58,10 @@ class PropertyChangeSupport {
                 implMissing( __FILE__, __LINE__ );
             }
             if( list.length > 0 ){
-                listeners[ propertyName.dup ] = *list;
+                version(Tango){
+                    propertyName = propertyName.dup;
+                }
+                listeners[ propertyName ] = *list;
             }
             else{
                 listeners.remove( propertyName );

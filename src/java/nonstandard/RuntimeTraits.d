@@ -267,13 +267,24 @@ ClassInfo[] baseTypes (ClassInfo type)
 }
 
 ///
-ModuleInfo moduleOf (ClassInfo type)
-{
-    foreach (modula; ModuleInfo)
-        foreach (klass; modula.localClasses)
-            if (klass is type)
-                return modula;
-    return null;
+version(Tango){
+    ModuleInfo moduleOf (ClassInfo type)
+    {
+        foreach (modula; ModuleInfo)
+            foreach (klass; modula.localClasses)
+                if (klass is type)
+                    return modula;
+        return null;
+    }
+} else { // Phobos
+    ModuleInfo* moduleOf (ClassInfo type)
+    {
+        foreach (modula; ModuleInfo)
+            foreach (klass; modula.localClasses)
+                if (klass is type)
+                    return modula;
+        return null;
+    }
 }
 
 /// Returns a list of interfaces that this class directly implements.

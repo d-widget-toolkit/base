@@ -16,6 +16,9 @@ version(Tango){
     static import core.exception;
     static import std.c.stdlib;
     static import std.stdio;
+    static import std.array;
+    static import std.format;
+    static import std.exception;
     alias std.c.stdlib.exit exit;
 }
 
@@ -121,14 +124,25 @@ version(Tango){
 } else { // Phobos
     class Format{
         static String opCall( String fmt, ... ){
-            implMissing(__FILE__,__LINE__);
-            return null;
+            fmt = std.array.replace(fmt, "%", "%%");
+            fmt = std.array.replace(fmt, "{}", "%s");
+            char[] buf;
+            void putc(dchar c) {
+                if (c <= 0x7F) {
+                   buf ~= cast(char)c;
+                } else {
+                    char[4] buf2;
+                    buf ~= std.utf.toUTF8(buf2, c);
+                }
+            }
+            std.format.doFormat(&putc, _arguments, _argptr);
+            return std.exception.assumeUnique(buf);
         }
     }
 }
 
 version( D_Version2 ){
-    mixin("invariant(T)[] _idup(T)( T[] str ){ return str.idup; }");
+    mixin("immutable(T)[] _idup(T)( T[] str ){ return str.idup; }");
 } else { // D1
     String16 _idup( String16 str ){
         return str.dup;

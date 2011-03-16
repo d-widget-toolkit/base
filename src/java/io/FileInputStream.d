@@ -10,6 +10,7 @@ import java.io.InputStream;
 version(Tango){
     import TangoFile = tango.io.device.File;
 } else { // Phobos
+    static import std.stream;
 }
 
 public class FileInputStream : java.io.InputStream.InputStream {
@@ -19,6 +20,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
     version(Tango){
         private TangoFile.File conduit;
     } else { // Phobos
+        private std.stream.File conduit;
     }
     private ubyte[] buffer;
     private int buf_pos;
@@ -30,7 +32,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
         version(Tango){
             conduit = new TangoFile.File( name );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            conduit = new std.stream.File( name );
         }
         buffer = new ubyte[]( BUFFER_SIZE );
     }
@@ -40,7 +42,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
         version(Tango){
             conduit = new TangoFile.File( file.getAbsolutePath(), TangoFile.File.ReadExisting );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            conduit = new std.stream.File( file.getAbsolutePath(), std.stream.FileMode.In );
         }
         buffer = new ubyte[]( BUFFER_SIZE );
     }
@@ -70,8 +72,28 @@ public class FileInputStream : java.io.InputStream.InputStream {
                 return -1;
             }
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return 0;
+            if( eof ){
+                return -1;
+            }
+            try{
+                if( buf_pos == buf_size ){
+                    buf_pos = 0;
+                    buf_size = conduit.read( buffer );
+                }
+                if( buf_size <= 0 ){
+                    eof = true;
+                    return -1;
+                }
+                assert( buf_pos < BUFFER_SIZE, Format( "{} {}", buf_pos, buf_size ) );
+                assert( buf_size <= BUFFER_SIZE );
+                int res = cast(int) buffer[ buf_pos ];
+                buf_pos++;
+                return res;
+            }
+            catch( IOException e ){
+                eof = true;
+                return -1;
+            }
         }
     }
 
@@ -89,7 +111,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
         version(Tango){
             conduit.close();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            conduit.close();
         }
     }
 }

@@ -25,36 +25,42 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
         this.buf = aBuf[ offset .. offset+length_ESCAPE ];
     }
 
-    public synchronized int read(){
-        if( pos >= this.buf.length ){
-            return -1;
+    public int read(){
+        synchronized {
+            if( pos >= this.buf.length ){
+                return -1;
+            }
+            int result = this.buf[pos];
+            pos++;
+            return result & 0xFF;
         }
-        int result = this.buf[pos];
-        pos++;
-        return result & 0xFF;
     }
 
-    public synchronized int read( byte[] b, int off, int len ){
-        return super.read( b, off, len );
+    public int read( byte[] b, int off, int len ){
+        synchronized return super.read( b, off, len );
     }
 
-    public synchronized long skip( long n ){
-        pos += n;
-        return 0L;
-    }
-
-    public synchronized int available(){
-        if( pos >= this.buf.length ){
-            return 0;
+    public long skip( long n ){
+        synchronized {
+            pos += n;
+            return 0L;
         }
-        return this.buf.length - pos;
+    }
+
+    public int available(){
+        synchronized {
+            if( pos >= this.buf.length ){
+                return 0;
+            }
+            return this.buf.length - pos;
+        }
     }
 
     public bool markSupported(){
         return false;
     }
 
-    public void mark( int readAheadLimit ){
+    public synchronized void mark( int readAheadLimit ){
     }
 
     public synchronized void reset(){

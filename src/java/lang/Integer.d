@@ -4,9 +4,12 @@ import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
 import java.lang.Class;
+import java.lang.String;
 
 version(Tango){
 } else { // Phobos
+    static import std.conv;
+    static import std.string;
 }
 
 version(Tango){
@@ -55,7 +58,7 @@ class Integer : Number {
         version(Tango){
             return tango.text.convert.Integer.toString(i, "x" );
         } else { // Phobos
-            return std.string.toString( cast(long)i, 16u );
+            return std.string.format("%x", i);
         }
     }
 
@@ -63,7 +66,7 @@ class Integer : Number {
         version(Tango){
             return tango.text.convert.Integer.toString(i, "o" );
         } else { // Phobos
-            return std.string.toString( cast(long)i, 8u );
+            return std.string.format("%o", i);
         }
     }
 
@@ -71,7 +74,7 @@ class Integer : Number {
         version(Tango){
             return tango.text.convert.Integer.toString(i, "b" );
         } else { // Phobos
-            return std.string.toString( cast(long)i, 2u );
+            return std.string.format("%b", i);
         }
     }
 
@@ -79,7 +82,7 @@ class Integer : Number {
         version(Tango){
             return tango.text.convert.Integer.toString(i);
         } else { // Phobos
-            return std.string.toString( i );
+            return std.conv.to!(string)( i );
         }
     }
 
@@ -145,7 +148,7 @@ class Integer : Number {
         version(Tango){
             return tango.text.convert.Integer.toString( value );
         } else { // Phobos
-            return std.string.toString(value);
+            return std.conv.to!(string)(value);
         }
     }
 

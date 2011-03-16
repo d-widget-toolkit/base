@@ -132,7 +132,7 @@ class NumberFormatException : IllegalArgumentException {
 
 class RuntimeException : Exception {
     this( String file, long line, String msg = null){
-        super( msg, file, line );
+        super( msg, file, cast(size_t) line );
     }
     this( String e = null){
         super(e);
@@ -170,26 +170,51 @@ void ExceptionPrintStackTrace( Exception e ){
 
 /// Extension to the D Exception
 void ExceptionPrintStackTrace( Throwable e, void delegate ( String file, ulong line, String fmt, ... ) dg ){
-    Throwable exception = e;
-    while( exception !is null ){
-        dg( exception.file, exception.line, "Exception in {}({}): {}", exception.file, exception.line, exception.msg );
-        if( exception.info !is null ){
-            foreach( frame; exception.info ){
-                dg( exception.file, exception.line, "trc {} {}", frame.file, frame.line );
+    version(Tango){
+        Throwable exception = e;
+        while( exception !is null ){
+            dg( exception.file, exception.line, "Exception in {}({}): {}", exception.file, exception.line, exception.msg );
+            if( exception.info !is null ){
+                foreach( frame; exception.info ){
+                    dg( exception.file, exception.line, "trc {} {}", frame.file, frame.line );
+                }
             }
+            exception = exception.next;
         }
-        exception = exception.next;
+    } else { // Phobos
+        Throwable exception = e;
+        while( exception !is null ){
+            dg( exception.file, exception.line, "Exception in {}({}): {}", exception.file, exception.line, exception.msg );
+            if( exception.info !is null ){
+                foreach( line, file; exception.info ){
+                    dg( exception.file, exception.line, "trc {} {}", file, line );
+                }
+            }
+            exception = exception.next;
+        }
     }
 }
 
 void PrintStackTrace( int deepth = 100, String prefix = "trc" ){
-    auto e = new Exception( null );
-    int idx = 0;
-    const start = 3;
-    foreach( frame; e.info ){
-        if( idx >= start && idx < start+deepth ) {
-            getDwtLogger().trace( __FILE__, __LINE__, "{} {}: {}", prefix, frame.file, frame.line );
+    version(Tango){
+        auto e = new Exception( null );
+        int idx = 0;
+        const start = 3;
+        foreach( frame; e.info ){
+            if( idx >= start && idx < start+deepth ) {
+                getDwtLogger().trace( __FILE__, __LINE__, "{} {}: {}", prefix, frame.file, frame.line );
+            }
+            idx++;
         }
-        idx++;
+    } else { // Phobos
+        auto e = new Exception( null );
+        int idx = 0;
+        const start = 3;
+        foreach( line, file; e.info ){
+            if( idx >= start && idx < start+deepth ) {
+                getDwtLogger().trace( __FILE__, __LINE__, "{} {}: {}", prefix, file, line );
+            }
+            idx++;
+        }
     }
 }

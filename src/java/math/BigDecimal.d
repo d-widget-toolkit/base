@@ -45,7 +45,7 @@ class BigDecimal : Number {
          * and bogus scale calculation.
          */
         if (significand == 0) {
-            intVal = BigInteger.ZERO;
+            intVal = cast(BigInteger) BigInteger.ZERO;
             intCompact = 0;
             precision = 1;
             return;
@@ -66,7 +66,7 @@ class BigDecimal : Number {
             intVal = intVal.multiply(BigInteger.valueOf(2).pow(exponent));
         }
         if (intVal.bitLength() <= MAX_BIGINT_BITS) {
-            intCompact = intVal.longValue();
+            intCompact = cast(int)intVal.longValue();
         }
     }
     this(String val){

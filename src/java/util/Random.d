@@ -25,7 +25,8 @@ class Random {
         version(Tango){
             return kiss.toInt(2) is 0;
         } else { // Phobos
-            return (gen.next() & 1 ) is 0;
+            gen.popFront();
+            return (gen.front() & 1 ) is 0;
         }
     }
 }

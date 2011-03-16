@@ -5,6 +5,7 @@ import java.util.Random;
 version(Tango){
     import tango.math.BigInt;
 } else { // Phobos
+    import std.bigint;
 }
 
 class BigInteger : Number {
@@ -15,8 +16,8 @@ class BigInteger : Number {
     private BigInt bi;
 
     static this(){
-        ZERO = BigInteger.valueOf(0);
-        ONE  = BigInteger.valueOf(1);
+        ZERO = new BigInteger("0");
+        ONE  = new BigInteger("1");
     }
 
     this(byte[] val){
@@ -47,11 +48,9 @@ class BigInteger : Number {
         }
     }
     private this( BigInt v ){
-        getDwtLogger.error( __FILE__, __LINE__, "this({})", v.toHex );
         bi = v;
     }
     private this( BigInteger v ){
-        getDwtLogger.error( __FILE__, __LINE__, "this({})", bi.toHex );
         bi = v.bi;
     }
     private this( long v ){
@@ -140,39 +139,43 @@ class BigInteger : Number {
         return 0;
     }
     long longValue(){
-        getDwtLogger.error( __FILE__, __LINE__, "{}", bi.toHex );
-        long res = 0;
-        auto txt = bi.toHex;
-        bool sign = false;
-        if( txt[0] is '-' ){
-            sign = true;
-            txt = txt[1 .. $];
+        version(Tango){
+            getDwtLogger.error( __FILE__, __LINE__, "{}", bi.toHex );
+            long res = 0;
+            auto txt = bi.toHex;
+            bool sign = false;
+            if( txt[0] is '-' ){
+                sign = true;
+                txt = txt[1 .. $];
+            }
+            int nibbles = 0;
+            foreach( uint idx, char c; txt ){
+                if( c is '_' ) continue;
+                void addNibble( int v ){
+                    res <<= 4;
+                    res |= v;
+                    nibbles++;
+                }
+                if( c >= '0' && c <= '9' ) {
+                    addNibble( c - '0' );
+                }
+                else if( c >= 'a' && c <= 'f' ) {
+                    addNibble( c - 'a' + 10 );
+                }
+                else if( c >= 'A' && c <= 'F' ) {
+                    addNibble( c - 'A' + 10 );
+                }
+                else{
+                    getDwtLogger.error( __FILE__, __LINE__, "unknown char {} @{}", c, idx );
+                }
+            }
+            if( nibbles > 16 ){
+                getDwtLogger.error( __FILE__, __LINE__, "too much nibbles {}", nibbles );
+            }
+            return res;
+        } else { // Phobos
+            return bi.toLong();
         }
-        int nibbles = 0;
-        foreach( uint idx, char c; txt ){
-            if( c is '_' ) continue;
-            void addNibble( int v ){
-                res <<= 4;
-                res |= v;
-                nibbles++;
-            }
-            if( c >= '0' && c <= '9' ) {
-                addNibble( c - '0' );
-            }
-            else if( c >= 'a' && c <= 'f' ) {
-                addNibble( c - 'a' + 10 );
-            }
-            else if( c >= 'A' && c <= 'F' ) {
-                addNibble( c - 'A' + 10 );
-            }
-            else{
-                getDwtLogger.error( __FILE__, __LINE__, "unknown char {} @{}", c, idx );
-            }
-        }
-        if( nibbles > 16 ){
-            getDwtLogger.error( __FILE__, __LINE__, "too much nibbles {}", nibbles );
-        }
-        return res;
     }
     BigInteger max(BigInteger val){
         implMissing(__FILE__, __LINE__ );
@@ -195,7 +198,6 @@ class BigInteger : Number {
         return null;
     }
     BigInteger multiply(BigInteger val){
-        getDwtLogger.error( __FILE__, __LINE__, "multiply ({})", val.bi.toHex );
         auto res = new BigInteger(this);
         res.bi *= val.bi;
         return res;
@@ -216,8 +218,14 @@ class BigInteger : Number {
         if( exponent < 0 ){
             throw new ArithmeticException("Negative exponent");
         }
-        if( bi.isZero() ){
-            return exponent is 0 ? ONE : this;
+        version(Tango){
+            if( bi.isZero() ){
+                return exponent is 0 ? ONE : this;
+            }
+        } else { // Phobos
+            if( bi == 0 ){
+                return exponent is 0 ? cast(BigInteger)ONE : this;
+            }
         }
         auto a = bi;
         while(exponent>0){
@@ -247,8 +255,13 @@ class BigInteger : Number {
         return null;
     }
     int signum(){
-        if( bi.isZero() ) return 0;
-        if( bi.isNegative() ) return -1;
+        version(Tango) {
+            if( bi.isZero() ) return 0;
+            if( bi.isNegative() ) return -1;
+        } else { // Phobos
+            if( bi == 0 ) return 0;
+            if( bi < 0 ) return -1;
+        }
         return 1;
     }
     BigInteger subtract(BigInteger val){
