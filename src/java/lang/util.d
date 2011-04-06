@@ -216,8 +216,22 @@ bool ArrayEquals(T)( T[] a, T[] b ){
 int arrayIndexOf(T)( T[] arr, T v ){
     int res = -1;
     int idx = 0;
-    foreach( p; arr ){
-        if( p == v){
+       
+    
+    static if (is(T == interface))
+    {
+        Object[] array = cast(Object[]) arr;
+        Object value = cast(Object) v;
+    }
+        
+    else
+    {
+        auto array = arr;
+        auto value = v;
+    }
+    
+    foreach( p; array ){
+        if( p == value){
             res = idx;
             break;
         }
@@ -253,4 +267,11 @@ template getImportData(String name ){
     const ImportData getImportData = ImportData( cast(void[]) import(name), name );
 }
 
-
+template gshared (String content)
+{
+    version (D_Version2)
+        const gshared = "__gshared: " ~ content;
+        
+    else
+        const gshared = content;
+}

@@ -32,12 +32,14 @@ version(Tango){
 } else { // Phobos
     public alias string String;
     public alias wstring String16;
-    mixin("public alias const(char)[]     CString;");
-    mixin("public alias const(wchar)[]    CString16;");
-    mixin("public alias immutable(char)*  ICharPtr;");
-    mixin("public alias const(char)*      CCharPtr;");
-    mixin("public alias const(wchar)*     CWCharPtr;");
-    mixin("public alias immutable(wchar)* IWCharPtr;");
+    mixin(
+        "public alias const(char)[]     CString;
+        public alias const(wchar)[]    CString16;
+        public alias immutable(char)*  ICharPtr;
+        public alias const(char)*      CCharPtr;
+        public alias const(wchar)*     CWCharPtr;
+        public alias immutable(wchar)* IWCharPtr;"
+    );
 }
 
 int codepointIndexToIndex( CString str, int cpIndex ){
@@ -731,20 +733,44 @@ version(Tango){
     public alias tango.stdc.stringz.fromString16z fromString16z;
 } else { // Phobos
     public char* toStringz( CString s ){
-        implMissing(__FILE__,__LINE__);
+        if (s.ptr) {
+            if (s.length == 0)
+                return "\0".dup.ptr;
+                
+            else
+                return (s ~ "\0").dup.ptr;
+        }
+        
         return null;
     }
     public wchar* toString16z( CString16 s ){
-        implMissing(__FILE__,__LINE__);
+        if (s.ptr) {
+            if (s.length == 0)
+                return "\0"w.dup.ptr;
+                
+            else
+                return (s ~ "\0"w).dup.ptr;
+        }
+        
         return null;
     }
     public char[] fromStringz( CCharPtr s ){
-        implMissing(__FILE__,__LINE__);
-        return null;
+        size_t len;
+        
+        if (s)
+            while (*s++)
+                len++;
+                
+        return s[0 .. len].dup;
     }
-    public char[] fromString16z( CWCharPtr s ){
-        implMissing(__FILE__,__LINE__);
-        return null;
+    public wchar[] fromString16z( CWCharPtr s ){
+        size_t len;
+        
+        if (s)
+            while (*s++)
+                len++;
+                
+        return s[0 .. len].dup;
     }
 }
 

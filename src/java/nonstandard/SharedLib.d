@@ -52,11 +52,11 @@ struct SharedLib {
     }
     static void loadLibSymbols( Symbol[] symbols, String libname ){
         version(Tango){
-            if (auto lib = tango.sys.SharedLib.SharedLib.load(libname)) {
+            if (auto lib = tango.sys.SharedLib.SharedLib.loadNoThrow(libname)) {
                 foreach( ref s; symbols ){
-                    *s.symbol = lib.getSymbol( tango.stdc.stringz.toStringz(s.name ) );
-                    if( s.symbol is null ){
-                        getDwtLogger.error(  __FILE__, __LINE__, "{}: Symbol '{}' not found", libname, s.name );
+                    *s.symbol = lib.getSymbolNoThrow( tango.stdc.stringz.toStringz(s.name ) );
+                    if( *s.symbol is null ){
+                        //getDwtLogger.error(  __FILE__, __LINE__, "{}: Symbol '{}' not found", libname, s.name );
                     }
                 }
             } else {
@@ -66,8 +66,8 @@ struct SharedLib {
             if (auto lib = ExeModule_Load(libname)) {
                 foreach( ref s; symbols ){
                     *s.symbol = ExeModule_GetSymbol( lib, s.name );
-                    if( s.symbol is null ){
-                        getDwtLogger.error(  __FILE__, __LINE__, "{}: Symbol '{}' not found", libname, s.name );
+                    if( *s.symbol is null ){
+                        //getDwtLogger.error(  __FILE__, __LINE__, "{}: Symbol '{}' not found", libname, s.name );
                     }
                 }
             } else {

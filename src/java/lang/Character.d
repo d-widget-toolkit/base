@@ -90,14 +90,14 @@ class Character {
         version(Tango){
             return tango.text.Unicode.isDigit( c );
         } else { // Phobos
-            return cast(bool)std.ctype.isdigit(c);
+            return std.string.isNumeric(c);
         }
     }
     public static bool isLetter( dchar c ){
         version(Tango){
             return tango.text.Unicode.isLetter(c);
         } else { // Phobos
-            return cast(bool)std.ctype.isalpha(c);
+            return std.uni.isUniAlpha(c) != 0;
         }
     }
     public static bool isSpace( dchar c ){
@@ -184,8 +184,7 @@ dchar CharacterToLower( dchar c ){
         dchar[] r = tango.text.Unicode.toLower( [c] );
         return r[0];
     } else { // Phobos
-        implMissing( __FILE__, __LINE__);
-        return 0;
+        return std.uni.toUniLower(c);
     }
 }
 dchar CharacterToUpper( dchar c ){
@@ -193,32 +192,28 @@ dchar CharacterToUpper( dchar c ){
         dchar[] r = tango.text.Unicode.toUpper( [c] );
         return r[0];
     } else { // Phobos
-        implMissing( __FILE__, __LINE__);
-        return 0;
+        return std.uni.toUniUpper(c);
     }
 }
 bool CharacterIsWhitespace( dchar c ){
     version(Tango){
         return tango.text.Unicode.isWhitespace( c );
     } else { // Phobos
-        implMissing( __FILE__, __LINE__);
-        return false;
+        return std.string.iswhite(c);
     }
 }
 bool CharacterIsDigit( dchar c ){
     version(Tango){
         return tango.text.Unicode.isDigit( c );
     } else { // Phobos
-        implMissing( __FILE__, __LINE__);
-        return false;
+        return std.string.isNumeric(c);
     }
 }
 bool CharacterIsLetter( dchar c ){
     version(Tango){
         return tango.text.Unicode.isLetter( c );
     } else { // Phobos
-        implMissing( __FILE__, __LINE__);
-        return false;
+        return std.uni.isUniAlpha(c) != 0;
     }
 }
 
