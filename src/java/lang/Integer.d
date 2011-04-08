@@ -95,8 +95,12 @@ class Integer : Number {
                 throw new NumberFormatException( e );
             }
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return 0;
+            try{
+            	return std.conv.parse!(int)( s, radix );
+            }
+            catch( std.conv.ConvException e ){
+                throw new NumberFormatException( e );
+            }
         }
     }
 

@@ -158,8 +158,7 @@ String dcharToString( dchar key ){
         buf[0] = key;
         return tango.text.convert.Utf.toString( buf );
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.conv.to!(string)(key);
     }
 }
 
@@ -702,8 +701,7 @@ public String trim( CString str ){
     version(Tango){
         return tango.text.Util.trim( str ).dup;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return std.string.strip( str.idup );
     }
 }
 
