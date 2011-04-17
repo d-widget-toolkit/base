@@ -130,8 +130,16 @@ dchar firstCodePoint( CString str, out int consumed ){
         assert( res.length is 1 );
         return res[0];
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return '\0';
+        size_t ate = 0;
+        auto res = std.utf.decode(str, ate);
+
+        if (ate == 0)
+            getDwtLogger().trace( __FILE__, __LINE__, "str.length={} str={:X2}", str.length, cast(ubyte[])str );
+
+        assert(ate > 0);
+        consumed = ate;
+
+        return res;
     }
 }
 dchar firstCodePoint( CString16 str, out int consumed ){
@@ -147,8 +155,16 @@ dchar firstCodePoint( CString16 str, out int consumed ){
         assert( res.length is 1 );
         return res[0];
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return '\0';
+        size_t ate = 0;
+        auto res = std.utf.decode(str, ate);
+
+        if (ate == 0)
+            getDwtLogger().trace( __FILE__, __LINE__, "str.length={} str={:X2}", str.length, cast(ubyte[])str );
+
+        assert(ate > 0);
+        consumed = ate;
+
+        return res;
     }
 }
 
