@@ -561,7 +561,7 @@ public int lastIndexOf(CString str, char ch, int formIndex){
         if( res is str.length ) res = -1;
         return res;
     } else { // Phobos
-        return std.string.lastIndexOf(str[0 .. fromIndex], ch);
+        return std.string.lastIndexOf(str[0 .. formIndex], ch);
     }
 }
 
