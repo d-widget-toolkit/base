@@ -8,7 +8,7 @@ import java.lang.Integer;
 import java.lang.exceptions;
 import java.util.MissingResourceException;
 import java.util.Enumeration;
-import java.nonstandard.locale;
+import java.nonstandard.Locale;
 version(Tango){
     //import tango.text.Util;
     import tango.io.device.File;

@@ -4,7 +4,7 @@
  * Author: knt.roh
  * License: Public Domain
  */
-module java.nonstandard.locale;
+module java.nonstandard.Locale;
 
 import java.lang.String;
 import java.lang.util : implMissing;
