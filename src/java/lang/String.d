@@ -186,8 +186,7 @@ int codepointCount( CString str ){
         assert( ate is str.length );
         return res.length;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return 0;
+        return std.utf.count(str);
     }
 }
 
