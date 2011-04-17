@@ -545,8 +545,7 @@ public int indexOf(CString str, String ch, int start){
         if( res is str.length ) res = -1;
         return res;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return 0;
+        return std.string.indexOf(str[start .. $], ch);
     }
 }
 
@@ -562,8 +561,7 @@ public int lastIndexOf(CString str, char ch, int formIndex){
         if( res is str.length ) res = -1;
         return res;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
-        return 0;
+        return std.string.lastIndexOf(str[0 .. fromIndex], ch);
     }
 }
 
