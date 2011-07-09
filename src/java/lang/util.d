@@ -18,6 +18,8 @@ version(Tango){
     static import std.stdio;
     static import std.array;
     static import std.format;
+    static import std.typetuple;
+    static import std.traits;
     static import std.exception;
     alias std.c.stdlib.exit exit;
 }
@@ -78,23 +80,30 @@ version(Tango){
         }
     }
 } else { // Phobos
+	static import core.vararg;
+	
     class DwtLogger : IDwtLogger {
-        private this( String name ){
+        private this( String name ) {
         }
         void trace( String file, ulong line, String fmt, ... ){
-            std.stdio.writefln( "TRC %s %d: %s", file, line, fmt );
-        }
-        void info( String file, ulong line, String fmt, ... ){
-            std.stdio.writefln( "INF %s %d: %s", file, line, fmt );
-        }
-        void warn( String file, ulong line, String fmt, ... ){
-            std.stdio.writefln( "WRN %s %d: %s", file, line, fmt );
-        }
+			fmt = fmtFromTangoFmt(fmt);
+            std.stdio.writefln( "TRC %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+        }																	
+        void info( String file, ulong line, String fmt, ... ){	
+			fmt = fmtFromTangoFmt(fmt);		
+            std.stdio.writefln( "INF %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+        }																	
+        void warn( String file, ulong line, String fmt, ... ){	
+			fmt = fmtFromTangoFmt(fmt);		
+            std.stdio.writefln( "WRN %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+        }																	
         void error( String file, ulong line, String fmt, ... ){
-            std.stdio.writefln( "ERR %s %d: %s", file, line, fmt );
-        }
+			fmt = fmtFromTangoFmt(fmt);		
+            std.stdio.writefln( "ERR %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+        }																	
         void fatal( String file, ulong line, String fmt, ... ){
-            std.stdio.writefln( "FAT %s %d: %s", file, line, fmt );
+			fmt = fmtFromTangoFmt(fmt);	
+            std.stdio.writefln( "FAT %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
         }
     }
 }
@@ -119,37 +128,352 @@ void implMissing( String file, uint line ){
     exit(1);
 }
 
+void implMissingInTango(T = void)( String file, uint line ) {
+    version(Tango) {} else static assert(0, "For Tango implMissings only");
+    getDwtLogger().fatal( file, line, "implementation missing in Tango version" );
+    implMissing( file, line );
+}
+
+void implMissingInPhobos( String file = __FILE__, uint line = __LINE__ )() {
+    version(Tango) static assert(0, "For Phobos implMissings only");
+    getDwtLogger().fatal( file, line, "implementation missing in Phobos version" );
+    implMissing( file, line );
+}
+
 version(Tango){
     public alias tango.text.convert.Format.Format Format;
 } else { // Phobos
-    class Format{
-        static String opCall( String fmt, ... ){
-            fmt = std.array.replace(fmt, "%", "%%");
-            fmt = std.array.replace(fmt, "{}", "%s");
-            char[] buf;
-            void putc(dchar c) {
-                if (c <= 0x7F) {
-                   buf ~= cast(char)c;
+	private string fmtFromTangoFmt(string tangoFmt) {
+		auto app = std.array.appender!(string)();
+		app.reserve(tangoFmt.length);
+	L:	for(int i = 0; i < tangoFmt.length; ++i) {
+			char c = tangoFmt[i];
+			if(c == '%')
+				app.put("%%");
+			else if(c == '{') {
+                if(i + 1 < tangoFmt.length && tangoFmt[i + 1] == '{') {
+                    app.put('{');
+                    ++i;
                 } else {
-                    char[4] buf2;
-                    buf ~= std.utf.toUTF8(buf2, c);
+                    int j = i;
+                    do {
+                        ++j;
+                        if(j == tangoFmt.length) {
+                            app.put("{malformed format}");
+                            break L;
+                        }
+                    } while(tangoFmt[j] != '}');
+                    string f = tangoFmt[i + 1 .. j];
+                    i = j;
+                    if(f.length) {
+                        string fres = "%";
+                        try {
+                            if(std.ctype.isdigit(f[0])) {
+                                int n = std.conv.parse!(int)(f);
+                                fres ~= std.conv.to!(string)(n + 1) ~ '$';
+                            }
+                            if(f.length) {
+                                std.exception.enforce(f[0] == ':' && f.length > 1);
+                                c = f[1];
+                                if(f.length == 2 && "bodxXeEfFgG".indexOf(c) != -1)
+                                    fres ~= c;
+                                else
+                                    fres = null;
+                            } else
+                                fres ~= 's';
+                        } catch {
+                            fres = "{malformed format}";
+                        }
+                        if(fres)
+                            app.put(fres);
+                        else
+                            implMissingInPhobos();
+                    } else
+                        app.put("%s");
                 }
-            }
-            std.format.doFormat(&putc, _arguments, _argptr);
-            return std.exception.assumeUnique(buf);
+			} else
+				app.put(c);
+		}
+        return app.data();
+	}
+    
+    unittest
+    {
+        alias Format Formatter;
+
+        // basic layout tests
+        assert( Formatter( "abc" ) == "abc" );
+        assert( Formatter( "{0}", 1 ) == "1" );
+        assert( Formatter( "{0}", -1 ) == "-1" );
+
+        assert( Formatter( "{}", 1 ) == "1" );
+        assert( Formatter( "{} {}", 1, 2) == "1 2" );
+        // assert( Formatter( "{} {0} {}", 1, 3) == "1 1 3" );
+        // assert( Formatter( "{} {0} {} {}", 1, 3) == "1 1 3 {invalid index}" );
+        // assert( Formatter( "{} {0} {} {:x}", 1, 3) == "1 1 3 {invalid index}" );
+        assert( Formatter( "{0} {0} {1}", 1, 3) == "1 1 3" );
+        assert( Formatter( "{0} {0} {1} {0}", 1, 3) == "1 1 3 1" );
+
+        assert( Formatter( "{0}", true ) == "true" , Formatter( "{0}", true ));
+        assert( Formatter( "{0}", false ) == "false" );
+
+        assert( Formatter( "{0}", cast(byte)-128 ) == "-128" );
+        assert( Formatter( "{0}", cast(byte)127 ) == "127" );
+        assert( Formatter( "{0}", cast(ubyte)255 ) == "255" );
+
+        assert( Formatter( "{0}", cast(short)-32768  ) == "-32768" );
+        assert( Formatter( "{0}", cast(short)32767 ) == "32767" );
+        assert( Formatter( "{0}", cast(ushort)65535 ) == "65535" );
+        // assert( Formatter( "{0:x4}", cast(ushort)0xafe ) == "0afe" );
+        // assert( Formatter( "{0:X4}", cast(ushort)0xafe ) == "0AFE" );
+
+        assert( Formatter( "{0}", -2147483648 ) == "-2147483648" );
+        assert( Formatter( "{0}", 2147483647 ) == "2147483647" );
+        assert( Formatter( "{0}", 4294967295 ) == "4294967295" );
+
+        // large integers
+        assert( Formatter( "{0}", -9223372036854775807L) == "-9223372036854775807" );
+        assert( Formatter( "{0}", 0x8000_0000_0000_0000L) == "9223372036854775808" );
+        assert( Formatter( "{0}", 9223372036854775807L ) == "9223372036854775807" );
+        assert( Formatter( "{0:X}", 0xFFFF_FFFF_FFFF_FFFF) == "FFFFFFFFFFFFFFFF" );
+        assert( Formatter( "{0:x}", 0xFFFF_FFFF_FFFF_FFFF) == "ffffffffffffffff" );
+        assert( Formatter( "{0:x}", 0xFFFF_1234_FFFF_FFFF) == "ffff1234ffffffff" );
+        // assert( Formatter( "{0:x19}", 0x1234_FFFF_FFFF) == "00000001234ffffffff" );
+        assert( Formatter( "{0}", 18446744073709551615UL ) == "18446744073709551615" );
+        assert( Formatter( "{0}", 18446744073709551615UL ) == "18446744073709551615" );
+
+        // fragments before and after
+        assert( Formatter( "d{0}d", "s" ) == "dsd" );
+        assert( Formatter( "d{0}d", "1234567890" ) == "d1234567890d" );
+
+        // brace escaping
+        assert( Formatter( "d{0}d", "<string>" ) == "d<string>d");
+        assert( Formatter( "d{{0}d", "<string>" ) == "d{0}d");
+        assert( Formatter( "d{{{0}d", "<string>" ) == "d{<string>d");
+        assert( Formatter( "d{0}}d", "<string>" ) == "d<string>}d");
+
+        // hex conversions, where width indicates leading zeroes
+        assert( Formatter( "{0:x}", 0xafe0000 ) == "afe0000" );
+        // assert( Formatter( "{0:x7}", 0xafe0000 ) == "afe0000" );
+        // assert( Formatter( "{0:x8}", 0xafe0000 ) == "0afe0000" );
+        // assert( Formatter( "{0:X8}", 0xafe0000 ) == "0AFE0000" );
+        // assert( Formatter( "{0:X9}", 0xafe0000 ) == "00AFE0000" );
+        // assert( Formatter( "{0:X13}", 0xafe0000 ) == "000000AFE0000" );
+        // assert( Formatter( "{0:x13}", 0xafe0000 ) == "000000afe0000" );
+
+        // decimal width
+        // assert( Formatter( "{0:d6}", 123 ) == "000123" );
+        // assert( Formatter( "{0,7:d6}", 123 ) == " 000123" );
+        // assert( Formatter( "{0,-7:d6}", 123 ) == "000123 " );
+
+        // width & sign combinations
+        // assert( Formatter( "{0:d7}", -123 ) == "-0000123" );
+        // assert( Formatter( "{0,7:d6}", 123 ) == " 000123" );
+        // assert( Formatter( "{0,7:d7}", -123 ) == "-0000123" );
+        // assert( Formatter( "{0,8:d7}", -123 ) == "-0000123" );
+        // assert( Formatter( "{0,5:d7}", -123 ) == "-0000123" );
+
+        // Negative numbers in various bases
+        assert( Formatter( "{:b}", cast(byte) -1 ) == "11111111" );
+        assert( Formatter( "{:b}", cast(short) -1 ) == "1111111111111111" );
+        assert( Formatter( "{:b}", cast(int) -1 )
+                == "11111111111111111111111111111111" );
+        assert( Formatter( "{:b}", cast(long) -1 )
+                == "1111111111111111111111111111111111111111111111111111111111111111" );
+
+        assert( Formatter( "{:o}", cast(byte) -1 ) == "377" );
+        assert( Formatter( "{:o}", cast(short) -1 ) == "177777" );
+        assert( Formatter( "{:o}", cast(int) -1 ) == "37777777777" );
+        assert( Formatter( "{:o}", cast(long) -1 ) == "1777777777777777777777" );
+
+        assert( Formatter( "{:d}", cast(byte) -1 ) == "-1" );
+        assert( Formatter( "{:d}", cast(short) -1 ) == "-1" );
+        assert( Formatter( "{:d}", cast(int) -1 ) == "-1" );
+        assert( Formatter( "{:d}", cast(long) -1 ) == "-1" );
+
+        assert( Formatter( "{:x}", cast(byte) -1 ) == "ff" );
+        assert( Formatter( "{:x}", cast(short) -1 ) == "ffff" );
+        assert( Formatter( "{:x}", cast(int) -1 ) == "ffffffff" );
+        assert( Formatter( "{:x}", cast(long) -1 ) == "ffffffffffffffff" );
+
+        // argument index
+        assert( Formatter( "a{0}b{1}c{2}", "x", "y", "z" ) == "axbycz" );
+        assert( Formatter( "a{2}b{1}c{0}", "x", "y", "z" ) == "azbycx" );
+        assert( Formatter( "a{1}b{1}c{1}", "x", "y", "z" ) == "aybycy" );
+
+        // alignment does not restrict the length
+        // assert( Formatter( "{0,5}", "hellohello" ) == "hellohello" );
+
+        // alignment fills with spaces
+        // assert( Formatter( "->{0,-10}<-", "hello" ) == "->hello     <-" );
+        // assert( Formatter( "->{0,10}<-", "hello" ) == "->     hello<-" );
+        // assert( Formatter( "->{0,-10}<-", 12345 ) == "->12345     <-" );
+        // assert( Formatter( "->{0,10}<-", 12345 ) == "->     12345<-" );
+
+        // chop at maximum specified length; insert ellipses when chopped
+        // assert( Formatter( "->{.5}<-", "hello" ) == "->hello<-" );
+        // assert( Formatter( "->{.4}<-", "hello" ) == "->hell...<-" );
+        // assert( Formatter( "->{.-3}<-", "hello" ) == "->...llo<-" );
+
+        // width specifier indicates number of decimal places
+        assert( Formatter( "{0:f}", 1.23f ) == "1.230000" );
+        // assert( Formatter( "{0:f4}", 1.23456789L ) == "1.2346" );
+        // assert( Formatter( "{0:e4}", 0.0001) == "1.0000e-04");
+
+        assert( Formatter( "{0:f}", 1.23f*1i ) == "1.230000i");
+        // assert( Formatter( "{0:f4}", 1.23456789L*1i ) == "1.2346*1i" );
+        // assert( Formatter( "{0:e4}", 0.0001*1i) == "1.0000e-04*1i");
+
+        assert( Formatter( "{0:f}", 1.23f+1i ) == "1.230000+1.000000i" );
+        // assert( Formatter( "{0:f4}", 1.23456789L+1i ) == "1.2346+1.0000*1i" );
+        // assert( Formatter( "{0:e4}", 0.0001+1i) == "1.0000e-04+1.0000e+00*1i");
+        assert( Formatter( "{0:f}", 1.23f-1i ) == "1.230000+-1.000000i" );
+        // assert( Formatter( "{0:f4}", 1.23456789L-1i ) == "1.2346-1.0000*1i" );
+        // assert( Formatter( "{0:e4}", 0.0001-1i) == "1.0000e-04-1.0000e+00*1i");
+
+        // 'f.' & 'e.' format truncates zeroes from floating decimals
+        // assert( Formatter( "{:f4.}", 1.230 ) == "1.23" );
+        // assert( Formatter( "{:f6.}", 1.230 ) == "1.23" );
+        // assert( Formatter( "{:f1.}", 1.230 ) == "1.2" );
+        // assert( Formatter( "{:f.}", 1.233 ) == "1.23" );
+        // assert( Formatter( "{:f.}", 1.237 ) == "1.24" );
+        // assert( Formatter( "{:f.}", 1.000 ) == "1" );
+        // assert( Formatter( "{:f2.}", 200.001 ) == "200");
+
+        // array output
+        int[] a = [ 51, 52, 53, 54, 55 ];
+        assert( Formatter( "{}", a ) == "[51, 52, 53, 54, 55]" );
+        assert( Formatter( "{:x}", a ) == "[33, 34, 35, 36, 37]" );
+        // assert( Formatter( "{,-4}", a ) == "[51  , 52  , 53  , 54  , 55  ]" );
+        // assert( Formatter( "{,4}", a ) == "[  51,   52,   53,   54,   55]" );
+        int[][] b = [ [ 51, 52 ], [ 53, 54, 55 ] ];
+        assert( Formatter( "{}", b ) == "[[51, 52], [53, 54, 55]]" );
+
+        char[1024] static_buffer;
+        static_buffer[0..10] = "1234567890";
+
+        assert (Formatter( "{}", static_buffer[0..10]) == "1234567890");
+
+        version(X86)
+        {
+            ushort[3] c = [ cast(ushort)51, 52, 53 ];
+            assert( Formatter( "{}", c ) == "[51, 52, 53]" );
+        }
+
+        /*// integer AA
+        ushort[long] d;
+        d[234] = 2;
+        d[345] = 3;
+
+        assert( Formatter( "{}", d ) == "{234 => 2, 345 => 3}" ||
+                Formatter( "{}", d ) == "{345 => 3, 234 => 2}");
+
+        // bool/string AA
+        bool[char[]] e;
+        e[ "key".dup ] = true;
+        e[ "value".dup ] = false;
+        assert( Formatter( "{}", e ) == "{key => true, value => false}" ||
+                Formatter( "{}", e ) == "{value => false, key => true}");
+
+        // string/double AA
+        char[][ double ] f;
+        f[ 1.0 ] = "one".dup;
+        f[ 3.14 ] = "PI".dup;
+        assert( Formatter( "{}", f ) == "{1.00 => one, 3.14 => PI}" ||
+                Formatter( "{}", f ) == "{3.14 => PI, 1.00 => one}");*/
+    }
+    
+	private String doVarArgFormat(TypeInfo[] _arguments, core.vararg.va_list _argptr) {
+		char[] res;
+        void putc(dchar c) {
+            std.utf.encode(res, c);
+        }
+        std.format.doFormat(&putc, _arguments, _argptr);
+		return std.exception.assumeUnique(res);
+	}
+	
+    class Format{
+        template UnTypedef(T) {
+            static if (is(T U == typedef))
+                alias std.traits.Unqual!(U) UnTypedef;
+            else
+                alias std.traits.Unqual!(T) UnTypedef;
+        }
+        static String opCall(A...)( String _fmt, A _args ){
+            //Formatting a typedef is deprecated
+            std.typetuple.staticMap!(UnTypedef, A) args;
+            foreach(i, _a; _args)
+                static if (is(T U == typedef))
+                    args[i] = cast(U) _a;
+                else
+                    args[i] = _a;
+            
+			auto writer = std.array.appender!(String)();
+            std.format.formattedWrite(writer, fmtFromTangoFmt(_fmt), args);
+            auto res = writer.data();
+            return std.exception.assumeUnique(res);
         }
     }
 }
 
-version( D_Version2 ){
-    mixin("immutable(T)[] _idup(T)( T[] str ){ return str.idup; }");
+version( D_Version2 ) {
+    //dmd v2.052 bug: mixin("alias const(Type) Name;"); will be unvisible outside it's module => we should write alias Const!(Type) Name;
+    template Immutable(T) {
+        mixin("alias immutable(T) Immutable;");
+    }
+    template Const(T) {
+        mixin("alias const(T) Const;");
+    }
+    template Shared(T) {
+        mixin("alias shared(T) Shared;");
+    }
+    
+    alias Immutable TryImmutable;
+    alias Const TryConst;
+    alias Shared TryShared;
+
+    //e.g. for passing strings to com.ibm.icu: *.text.* modules assepts String,
+    //but internal *.mangoicu.* modules work with char[] even if they don't modify it
+    std.traits.Unqual!(T)[] Unqual(T)(T[] t) {
+        return cast(std.traits.Unqual!(T)[])t;
+    }
+    
+    Immutable!(T)[] _idup(T)( T[] str ){ return str.idup; }
+    
+    template prefixedIfD2(String prefix, String content) {
+        const prefixedIfD2 = prefix ~ " " ~ content;
+    }
 } else { // D1
+    template AliasT(T) { alias T AliasT; }
+    
+    alias AliasT TryImmutable;
+    alias AliasT TryConst;
+    alias AliasT TryShared;
+    
+    T Unqual(T)(T t) { return t; }
+    
     String16 _idup( String16 str ){
         return str.dup;
     }
     String _idup( String str ){
         return str.dup;
     }
+    
+    template prefixedIfD2(String prefix, String content) {
+        const prefixedIfD2 = content;
+    }
+}
+
+template sharedStaticThis(String content) {
+    const sharedStaticThis = prefixedIfD2!("shared", "static this()" ~ content);
+}
+
+template gshared(String content) {
+    const gshared = prefixedIfD2!("__gshared:", content);
+}
+
+template constFuncs(String content) {
+    const constFuncs = prefixedIfD2!("const:", content);
 }
 
 private struct GCStats {
@@ -263,15 +587,6 @@ struct ImportData{
     }
 }
 
-template getImportData(String name ){
+template getImportData(String name) {
     const ImportData getImportData = ImportData( cast(void[]) import(name), name );
-}
-
-template gshared (String content)
-{
-    version (D_Version2)
-        const gshared = "__gshared: " ~ content;
-        
-    else
-        const gshared = content;
 }

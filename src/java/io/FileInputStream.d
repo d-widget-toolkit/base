@@ -108,11 +108,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
     }
 
     public override void close(){
-        version(Tango){
-            conduit.close();
-        } else { // Phobos
-            conduit.close();
-        }
+        conduit.close();
     }
 }
 

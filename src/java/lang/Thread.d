@@ -22,7 +22,7 @@ class Thread {
         private alias tango.core.Thread.ThreadLocal!(Thread) TTLS;
         private static TTLS tls;
     } else { // Phobos
-        mixin( "static __thread Thread tls;" );
+        private static Thread tls; //in tls
     }
 
     public static const int MAX_PRIORITY  = 10;
@@ -136,7 +136,7 @@ class Thread {
         thread.name = name;
     }
     public String getName(){
-        return cast(String)thread.name;
+        return thread.name;
     }
 
     void interrupt() {
@@ -168,7 +168,7 @@ class Thread {
         return thread;
     }
     public override String toString(){
-        return cast(String) "Thread "~cast(String)thread.name;
+        return "Thread " ~ thread.name;
     }
     public static void yield(){
         TThread.yield();

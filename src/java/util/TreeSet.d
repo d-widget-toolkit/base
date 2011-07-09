@@ -24,7 +24,7 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             set = new SetType();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(Collection c){
@@ -41,7 +41,7 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             return set.add(o, 0);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -49,7 +49,7 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             return add(stringcast(o));
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -60,7 +60,7 @@ class TreeSet : AbstractSet, SortedSet {
             }
             return true;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -68,14 +68,14 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             set.clear();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public bool    contains(Object o){
         version(Tango){
             return set.containsKey(o);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -83,7 +83,7 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             return contains(stringcast(o));
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -96,7 +96,7 @@ class TreeSet : AbstractSet, SortedSet {
             }
             return true;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -124,7 +124,7 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             return set.isEmpty();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -144,7 +144,7 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             return remove(stringcast(key));
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -160,7 +160,7 @@ class TreeSet : AbstractSet, SortedSet {
         version(Tango){
             return set.size();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -194,7 +194,7 @@ class TreeSet : AbstractSet, SortedSet {
             }
             return set.opApply(&localDg);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }

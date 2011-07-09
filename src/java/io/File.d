@@ -11,9 +11,14 @@ version(Tango){
     static import tango.io.Path;
     static import tango.io.FileSystem;
     static import tango.sys.Environment;
+    static import tango.sys.Common;
+    static import tango.stdc.stringz; //for toStringz
+    version(Posix) static import tango.stdc.posix.unistd; //for access
 } else { // Phobos
     static import std.file;
     static import std.path;
+    static import std.string; //for toStringz
+    version(Posix) static import core.sys.posix.unistd; //for access
 }
 // Implement this more efficient by using FilePath in Tango 
 public class File {
@@ -32,46 +37,42 @@ public class File {
             pathSeparator = tango.io.model.IFile.FileConst.SystemPathString;
             pathSeparatorChar = tango.io.model.IFile.FileConst.SystemPathChar;
         } else { // Phobos
-            version(Windows){
-                separator = "\\";
-                separatorChar = '\\';
-                pathSeparator = ";";
-                pathSeparatorChar = ';';
-            }
-            else{
-                separator = "/";
-                separatorChar = '/';
-                pathSeparator = ":";
-                pathSeparatorChar = ':';
-            }
+            separator = std.path.sep;
+            separatorChar = std.path.sep[0];
+            pathSeparator = std.path.pathsep;
+            pathSeparatorChar = std.path.pathsep[0];
         }
     }
 
-    private static String toStd( CString path ){
+    private static String toStd( String path ){
         version(Tango){
-            return tango.io.Path.standard( path._idup() );
+            return tango.io.Path.standard( path.dup );
         } else { // Phobos
-            return path._idup();
+            return path;
         }
     }
-    private static String join( CString path, CString file ){
+    private static String join( String path, String file ){
         version(Tango){
-            return tango.io.Path.join( path._idup(), file._idup() );
+            return tango.io.Path.join( toStd(path), toStd(file) );
         } else { // Phobos
-            return std.path.join( path._idup(), file._idup() );
+            return std.path.join( toStd(path), toStd(file) );
         }
     }
 
-    public this ( CString pathname ){
+    public this ( String pathname ){
         mFilePath = toStd( pathname );
     }
 
-    public this ( CString parent, CString child ){
-        mFilePath = join( toStd(parent), toStd(child) );
+    public this ( String parent, String child ){
+        mFilePath = join( parent, child );
     }
 
-    public this ( java.io.File.File parent, CString child ){
-        mFilePath = join( parent.mFilePath, toStd(child) );
+    public this ( java.io.File.File parent, String child ){
+        version(Tango){
+            mFilePath = tango.io.Path.join( parent.mFilePath, toStd(child) );
+        } else { // Phobos
+            mFilePath = std.path.join( parent.mFilePath, toStd(child) );
+        }
     }
 
     public int getPrefixLength(){
@@ -108,18 +109,12 @@ public class File {
         version(Tango){
             return (new tango.io.FilePath.FilePath(mFilePath)).absolute(tango.sys.Environment.Environment.cwd).toString;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return "";
+            return std.path.rel2abs(mFilePath);
         }
     }
 
     public java.io.File.File getAbsoluteFile(){
-        version(Tango){
-            return new File( getAbsolutePath() );
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return null;
-        }
+        return new File( getAbsolutePath() );
     }
 
     public String getCanonicalPath(){
@@ -138,20 +133,27 @@ public class File {
     }
 
     public bool canWrite(){
-        version(Tango){
-            return tango.io.Path.isWritable(mFilePath);
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return false;
-        }
+        version(Windows) { //Windows's ACL isn't supported
+            version(Tango) {
+                return tango.io.Path.isWritable(mFilePath);
+            } else { // Phobos
+                return !(std.file.getAttributes(mFilePath) & 1); //FILE_ATTRIBUTE_READONLY = 1
+            }
+        } else version(Posix) { //workaround Tango's bug (isWritable is always true)
+            version(Tango) {
+                return tango.stdc.posix.unistd.access (tango.stdc.stringz.toStringz(mFilePath), 2) is 0; //W_OK = 2
+            } else { // Phobos
+                return core.sys.posix.unistd.access (std.string.toStringz(mFilePath), 2) is 0; //W_OK = 2
+            }
+        } else
+            static assert(0);
     }
 
     public bool exists(){
         version(Tango){
             return tango.io.Path.exists(mFilePath);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return false;
+            return std.file.exists(mFilePath);
         }
     }
 
@@ -159,8 +161,7 @@ public class File {
         version(Tango){
             return tango.io.Path.isFolder(mFilePath);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return false;
+            return std.file.isDir(mFilePath);
         }
     }
 
@@ -238,12 +239,12 @@ public class File {
         return null;
     }
 
-    public static java.io.File.File createTempFile( CString prefix, CString suffix, java.io.File.File directory ){
+    public static java.io.File.File createTempFile( String prefix, String suffix, java.io.File.File directory ){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
 
-    public static java.io.File.File createTempFile( CString prefix, CString suffix ){
+    public static java.io.File.File createTempFile( String prefix, String suffix ){
         implMissing( __FILE__, __LINE__ );
         return null;
     }

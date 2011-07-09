@@ -9,6 +9,7 @@ import java.lang.all;
 version(Tango){
     import tango.io.device.Array;
 } else { // Phobos
+    import std.outbuffer;
 }
 
 public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
@@ -16,13 +17,14 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
     version(Tango){
         protected Array buffer;
     } else { // Phobos
+        protected OutBuffer buffer;
     }
 
     public this (){
         version(Tango){
             buffer = new Array(0);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            buffer = new OutBuffer();
         }
     }
 
@@ -30,38 +32,38 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
         version(Tango){
             buffer = new Array(par_size);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            buffer = new OutBuffer();
+            buffer.reserve(par_size);
         }
     }
 
     public override void write( int b ){
         synchronized {
             version(Tango){
-                byte[1] a;
-                a[0] = b & 0xFF;
+                byte[1] a = b & 0xFF;
                 buffer.append(a);
             } else { // Phobos
-                implMissing( __FILE__, __LINE__ );
+                buffer.write(cast(ubyte)(b & 0xFF));
             }
         }
     }
 
-    public override void write( byte[] b, int off, int len ){
+    public override void write( in byte[] b, int off, int len ){
         synchronized {
             version(Tango){
-                buffer.append( b[ off .. off + len ]);
+                buffer.append( b[ off .. off + len ] );
             } else { // Phobos
-                implMissing( __FILE__, __LINE__ );
+                buffer.write( cast(ubyte[]) b[ off .. off + len ]);
             }
         }
     }
 
-    public override void write( byte[] b ){
+    public override void write( in byte[] b ){
         synchronized {
             version(Tango){
                 buffer.append( b );
             } else { // Phobos
-                implMissing( __FILE__, __LINE__ );
+                buffer.write( cast(ubyte[]) b );
             }
         }
     }
@@ -79,10 +81,9 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
     public byte[] toByteArray(){
         synchronized {
             version(Tango){
-                return cast(byte[])buffer.slice();
+                return cast(byte[]) buffer.slice();
             } else { // Phobos
-                implMissing( __FILE__, __LINE__ );
-                return null;
+                return cast(byte[]) buffer.toBytes();
             }
         }
     }
@@ -107,7 +108,7 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
         return null;
     }
 
-    public  override void close(){
+    public override void close(){
         implMissing( __FILE__, __LINE__ );
     }
 }

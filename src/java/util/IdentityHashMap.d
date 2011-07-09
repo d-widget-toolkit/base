@@ -25,7 +25,7 @@ class IdentityHashMap : Map {
         version(Tango){
             map = new MapType();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(int initialCapacity){
@@ -37,7 +37,7 @@ class IdentityHashMap : Map {
         version(Tango){
             map = new MapType(loadFactor);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(Map m){
@@ -49,7 +49,7 @@ class IdentityHashMap : Map {
         version(Tango){
             map.clear();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public bool containsKey(Object key){
@@ -57,7 +57,7 @@ class IdentityHashMap : Map {
             Object v;
             return map.get(key, v );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -68,7 +68,7 @@ class IdentityHashMap : Map {
         version(Tango){
             return map.contains(value);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -80,7 +80,7 @@ class IdentityHashMap : Map {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -100,7 +100,7 @@ class IdentityHashMap : Map {
             }
             return false;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -111,7 +111,7 @@ class IdentityHashMap : Map {
             }
             return null;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -125,7 +125,7 @@ class IdentityHashMap : Map {
         version(Tango){
             return map.isEmpty();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -137,7 +137,7 @@ class IdentityHashMap : Map {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -150,7 +150,7 @@ class IdentityHashMap : Map {
             map[ key ] = value;
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -169,7 +169,7 @@ class IdentityHashMap : Map {
                 map[k] = v;
             }
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public Object remove(Object key){
@@ -182,7 +182,7 @@ class IdentityHashMap : Map {
             map.remove(key);
             return null;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -193,7 +193,7 @@ class IdentityHashMap : Map {
         version(Tango){
             return map.size();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -205,7 +205,7 @@ class IdentityHashMap : Map {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -214,7 +214,7 @@ class IdentityHashMap : Map {
         version(Tango){
             return map.opApply( dg );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -222,7 +222,7 @@ class IdentityHashMap : Map {
         version(Tango){
             return map.opApply( dg );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }

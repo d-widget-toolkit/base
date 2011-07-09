@@ -100,6 +100,12 @@ class IndexOutOfBoundsException : Exception {
     }
 }
 
+class StringIndexOutOfBoundsException : IndexOutOfBoundsException {
+    this( String e = null){
+        super(e);
+    }
+}
+
 class InterruptedException : Exception {
     this( String e = null ){
         super(e);

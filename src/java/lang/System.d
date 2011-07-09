@@ -81,12 +81,7 @@ template SimpleType(T) {
         }
     }
 
-    version(D_Version2){
-        mixin("alias const(T) CT;");
-    } else { // D1
-        alias T CT;
-    }
-    static void arraycopy(CT[] src, uint srcPos, T[] dest, uint destPos, uint len)
+    static void arraycopy(in T[] src, uint srcPos, T[] dest, uint destPos, uint len)
     {
         if(len == 0) return;
 

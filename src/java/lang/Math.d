@@ -17,34 +17,8 @@ class Math {
     static int    abs(int    a){ return a > 0 ? a : -a; }
     static long   abs(long   a){ return a > 0 ? a : -a; }
 
-    static double min(double a, double b){ return a < b ? a : b; }
-    static double min(double a, int    b){ return a < b ? a : b; }
-    static float  min(float  a, float  b){ return a < b ? a : b; }
-    static float  min(float  a, int    b){ return a < b ? a : b; }
-    static float  min(int    a, float  b){ return a < b ? a : b; }
-    static int    min(byte   a, byte   b){ return a < b ? a : b; }
-    static int    min(byte   a, int    b){ return a < b ? a : b; }
-    static int    min(int    a, int    b){ return a < b ? a : b; }
-    static int    min(uint   a, int    b){ return a < b ? a : b; }
-    static int    min(int    a, uint   b){ return a < b ? a : b; }
-    static int    min(uint   a, uint   b){ return a < b ? a : b; }
-    static long   min(int    a, long   b){ return a < b ? a : b; }
-    static long   min(long   a, long   b){ return a < b ? a : b; }
-    static long   min(long   a, int    b){ return a < b ? a : b; }
-
-    static double max(double a, double b){ return a > b ? a : b; }
-    static double max(double a, int    b){ return a > b ? a : b; }
-    static float  max(float  a, float  b){ return a > b ? a : b; }
-    static float  max(float  a, int    b){ return a > b ? a : b; }
-    static float  max(int    a, float  b){ return a > b ? a : b; }
-    static int    max(byte   a, byte   b){ return a > b ? a : b; }
-    static int    max(int    a, int    b){ return a > b ? a : b; }
-    static int    max(uint   a, int    b){ return a > b ? a : b; }
-    static int    max(int    a, uint   b){ return a > b ? a : b; }
-    static int    max(uint   a, uint   b){ return a > b ? a : b; }
-    static long   max(int    a, long   b){ return a > b ? a : b; }
-    static long   max(long   a, long   b){ return a > b ? a : b; }
-    static long   max(long   a, int    b){ return a > b ? a : b; }
+    static typeof(T1.init < T2.init ? T1.init : T2.init) min(T1, T2)(T1 a, T2 b){ return a < b ? a : b; }
+    static typeof(T1.init > T2.init ? T1.init : T2.init) max(T1, T2)(T1 a, T2 b){ return a > b ? a : b; }
 
 
     static double sin(double a)  { return MathLib.sin(a); }

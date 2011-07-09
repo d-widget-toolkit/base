@@ -4,10 +4,12 @@ import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
 import java.lang.Class;
+import java.lang.String;
 
 version(Tango){
     static import tango.text.convert.Integer;
 } else { // Phobos
+    static import std.conv;
 }
 class Byte : Number {
     public static const byte MIN_VALUE = byte.min;
@@ -27,8 +29,12 @@ class Byte : Number {
                 throw new NumberFormatException( e );
             }
         } else { // Phobos
-            implMissing( __FILE__, __LINE__);
-            return 0;
+            try{
+                return std.conv.to!(byte)(s);
+            }
+            catch( std.conv.ConvException e ){
+                throw new NumberFormatException( e );
+            }
         }
     }
     this( byte value ){

@@ -21,7 +21,7 @@ class HashSet : Set {
         version(Tango){
             set = new SetType();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(Collection c){
@@ -29,28 +29,28 @@ class HashSet : Set {
             set = new SetType();
             addAll(c);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(int initialCapacity){
         version(Tango){
             set = new SetType();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(int initialCapacity, float loadFactor){
         version(Tango){
             set = new SetType(loadFactor);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public bool    add(Object o){
         version(Tango){
             return set.add(o);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -68,14 +68,14 @@ class HashSet : Set {
         version(Tango){
             set.clear();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public bool    contains(Object o){
         version(Tango){
             return set.contains(o);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -98,7 +98,7 @@ class HashSet : Set {
         version(Tango){
             return set.isEmpty();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -125,7 +125,7 @@ class HashSet : Set {
         version(Tango){
             return new LocalIterator(set.iterator());
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -133,7 +133,7 @@ class HashSet : Set {
         version(Tango){
             return set.remove(o);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -152,7 +152,7 @@ class HashSet : Set {
         version(Tango){
             return set.size();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -167,7 +167,7 @@ class HashSet : Set {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -185,7 +185,7 @@ class HashSet : Set {
         version(Tango){
             return set.opApply(dg);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }

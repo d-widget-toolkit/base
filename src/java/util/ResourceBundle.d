@@ -13,7 +13,7 @@ version(Tango){
     //import tango.text.Util;
     import tango.io.device.File;
 } else { // Phobos
-    import std.file;
+    static import std.file;
 }
 
 
@@ -24,7 +24,7 @@ class ResourceBundle {
     /++
      + First entry is the default entry if no maching locale is found
      +/
-    public this( ImportData[] data ){
+    public this( in ImportData[] data ){
         char[] name = caltureName.dup;
         if( name.length is 5 && name[2] is '-' ){
             name[2] = '_';
@@ -48,7 +48,7 @@ class ResourceBundle {
         //Trace.formatln( "ResourceBundle default" );
         initialize( cast(String)data[0].data );
     }
-    public this( ImportData data ){
+    public this( in ImportData data ){
         initialize( cast(String)data.data );
     }
     public this( String data ){
@@ -101,7 +101,7 @@ nextline:
                         case '\\': c = '\\'; break;
                         case '\"': c = '\"'; break;
                         case 'u' :
-                               dchar d = Integer.parseInt( line[ pos+1 .. pos+5 ], 16 );
+                               c = Integer.parseInt( line[ pos+1 .. pos+5 ], 16 );
                                pos += 4;
                                break;
                         default: break;
@@ -137,25 +137,17 @@ nextline:
             key = java.lang.util.trim(key);
             value = java.lang.util.trim(value);
 
-            version(D_Version2){
-                map[ key.idup ] = value.idup;
-            } else {
-                map[ key.dup ] = value.dup;
-            }
+            map[ _idup(key) ] = _idup(value);
         }
     }
 
-    public bool hasString( CString key ){
+    public bool hasString( String key ){
         return ( key in map ) !is null;
     }
 
-    public String getString( CString key ){
+    public String getString( String key ){
         if( auto v = key in map ){
-            version(D_Version2){
-                return (*v).idup;
-            } else {
-                return (*v).dup;
-            }
+            return _idup(*v);
         }
         throw new MissingResourceException( "key not found", this.classinfo.name, key._idup() );
     }
@@ -168,13 +160,13 @@ nextline:
         return map.keys;
     }
 
-    public static ResourceBundle getBundle( ImportData[] data ){
+    public static ResourceBundle getBundle( in ImportData[] data ){
         return new ResourceBundle( data );
     }
-    public static ResourceBundle getBundle( ImportData data ){
+    public static ResourceBundle getBundle( in ImportData data ){
         return new ResourceBundle( data );
     }
-    public static ResourceBundle getBundle( CString name ){
+    public static ResourceBundle getBundle( String name ){
         try{
             version(Tango){
                 return new ResourceBundle( cast(String) File.get(name) );

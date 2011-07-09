@@ -1,5 +1,6 @@
 module java.lang.wrappers;
 
+import java.lang.util;
 import java.lang.String;
 
 abstract class ArrayWrapper{
@@ -30,7 +31,7 @@ class ArrayWrapperT(T) : ArrayWrapper {
     }
     static if( is( T == char )){
         public override String toString(){
-            return cast(String)array;
+            return _idup(array);
         }
     }
 }
@@ -88,8 +89,8 @@ Object[] StringArrayToObjectArray( String[] strs ){
 }
 
 String stringcast( Object o ){
-    if( auto str = cast(ArrayWrapperString) o ){
-        return cast(String)str.array;
+    if( auto swrapper = cast(ArrayWrapperString) o ){
+        return swrapper.toString();
     }
     return null;
 }
@@ -119,7 +120,7 @@ String[] stringArrayFromObject( Object obj ){
         String[] res = new String[ wrapper.array.length ];
         foreach( idx, o; wrapper.array ){
             if( auto swrapper = cast(ArrayWrapperString) o ){
-                res[idx] = cast(String)swrapper.array;
+                res[idx] = swrapper.toString();
             }
         }
         return res;

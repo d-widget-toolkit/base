@@ -33,7 +33,7 @@ class Timer {
                 elements = 0;
                 nullOnEmpty = false;
             } else { // Phobos
-                implMissing(__FILE__,__LINE__);
+                implMissingInPhobos();
             }
         }
 
@@ -79,7 +79,7 @@ class Timer {
                     cond.notify();
                 }
             } else { // Phobos
-                implMissing(__FILE__,__LINE__);
+                implMissingInPhobos();
             }
         }
 
@@ -154,7 +154,7 @@ class Timer {
                     return task;
                 }
             } else { // Phobos
-                implMissing(__FILE__,__LINE__);
+                implMissingInPhobos();
                 return null;
             }
         }
@@ -166,7 +166,7 @@ class Timer {
                     cond.notify();
                 }
             } else { // Phobos
-                implMissing(__FILE__,__LINE__);
+                implMissingInPhobos();
             }
         }
 
@@ -178,7 +178,7 @@ class Timer {
                     cond.notify();
                 }
             } else { // Phobos
-                implMissing(__FILE__,__LINE__);
+                implMissingInPhobos();
             }
         }
 

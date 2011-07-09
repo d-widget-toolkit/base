@@ -277,7 +277,7 @@ class ArrayList : AbstractList, List {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }

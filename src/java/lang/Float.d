@@ -4,12 +4,19 @@ import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
 import java.lang.Class;
+import java.lang.String;
+
+version(Tango){
+    static import tango.text.convert.Float;
+} else { // Phobos
+    static import std.conv;
+}
 
 class Float : Number {
 
-    public static float POSITIVE_INFINITY = (1.0f / 0.0f);
-    public static float NEGATIVE_INFINITY = ((-1.0f) / 0.0f);
-    public static float NaN = (0.0f / 0.0f);
+    public static float POSITIVE_INFINITY = float.infinity;
+    public static float NEGATIVE_INFINITY = -float.infinity;
+    public static float NaN = float.nan;
     public static float MAX_VALUE = 3.4028235e+38f;
     public static float MIN_VALUE = float.min; //1.4e-45f
     public static int SIZE = 32;
@@ -20,12 +27,11 @@ class Float : Number {
         this.value = value;
     }
     this( String str ){
-        implMissing( __FILE__, __LINE__ );
         super();
+        this.value = parseFloat(str);
     }
     public static String toString( float value ){
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return String_valueOf(value);
     }
     public static float parseFloat( String s ){
         version(Tango){
@@ -36,8 +42,12 @@ class Float : Number {
                 throw new NumberFormatException( e );
             }
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return 0.0f;
+            try{
+                return std.conv.to!(float)(s);
+            }
+            catch( std.conv.ConvException e ){
+                throw new NumberFormatException( e );
+            }
         }
     }
 

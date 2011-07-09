@@ -41,7 +41,7 @@ class HashMap : Map {
         version(Tango){
             map = new MapType();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(int initialCapacity){
@@ -51,7 +51,7 @@ class HashMap : Map {
         version(Tango){
             map = new MapType(loadFactor);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(Map m){
@@ -62,7 +62,7 @@ class HashMap : Map {
         version(Tango){
             map.clear();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public bool containsKey(Object key){
@@ -71,7 +71,7 @@ class HashMap : Map {
             ObjRef keyr = ObjRef(key);
             return map.get(keyr, v );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -83,7 +83,7 @@ class HashMap : Map {
             ObjRef valuer = ObjRef(value);
             return map.contains(valuer);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -95,7 +95,7 @@ class HashMap : Map {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -115,7 +115,7 @@ class HashMap : Map {
             }
             return false;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -127,7 +127,7 @@ class HashMap : Map {
             }
             return null;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -141,7 +141,7 @@ class HashMap : Map {
         version(Tango){
             return map.isEmpty();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -153,7 +153,7 @@ class HashMap : Map {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -168,7 +168,7 @@ class HashMap : Map {
             map[ keyr ] = valuer;
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -187,7 +187,7 @@ class HashMap : Map {
                 map[ObjRef(k)] = ObjRef(v);
             }
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public Object remove(Object key){
@@ -200,7 +200,7 @@ class HashMap : Map {
             }
             return null;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -211,7 +211,7 @@ class HashMap : Map {
         version(Tango){
             return map.size();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -223,7 +223,7 @@ class HashMap : Map {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -235,7 +235,7 @@ class HashMap : Map {
             }
             return map.opApply( &ldg );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -246,7 +246,7 @@ class HashMap : Map {
             }
             return map.opApply( &ldg );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }

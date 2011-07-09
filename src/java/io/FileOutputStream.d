@@ -11,8 +11,7 @@ import java.lang.all;
 version(Tango){
     import TangoFile = tango.io.device.File;
 } else { // Phobos
-    static import std.file;
-    static import std.path;
+    static import std.stream;
 }
 
 public class FileOutputStream : java.io.OutputStream.OutputStream {
@@ -20,15 +19,16 @@ public class FileOutputStream : java.io.OutputStream.OutputStream {
     alias java.io.OutputStream.OutputStream.write write;
     alias java.io.OutputStream.OutputStream.close close;
     version(Tango){
-        TangoFile.File fc;
+        private TangoFile.File fc;
     } else { // Phobos
+        private std.stream.File fc;
     }
 
     public this ( String name ){
         version(Tango){
             fc = new TangoFile.File( name, TangoFile.File.WriteCreate );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            fc = new std.stream.File( name, std.stream.FileMode.OutNew );
         }
     }
 
@@ -36,7 +36,7 @@ public class FileOutputStream : java.io.OutputStream.OutputStream {
         version(Tango){
             fc = new TangoFile.File( name, append ? TangoFile.File.WriteAppending : TangoFile.File.WriteCreate );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            fc = new std.stream.File( name, append ? std.stream.FileMode.Append : std.stream.FileMode.OutNew );
         }
     }
 
@@ -49,21 +49,16 @@ public class FileOutputStream : java.io.OutputStream.OutputStream {
     }
 
     public override void write( int b ){
-        ubyte[1] a;
-        a[0] = b & 0xFF;
         version(Tango){
+            ubyte[1] a = b & 0xFF;
             fc.write(a);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            fc.write(cast(byte)(b & 0xFF));
         }
     }
 
     public override void close(){
-        version(Tango){
-            fc.close();
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-        }
+        fc.close();
     }
 
     public void finalize(){

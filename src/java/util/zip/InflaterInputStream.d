@@ -6,7 +6,7 @@ module java.util.zip.InflaterInputStream;
 import java.lang.all;
 import java.io.InputStream;
 version(Tango){
-    import tango.io.compress.ZlibStream;
+    import tango.io.stream.Zlib;
     import tango.io.device.Conduit;
     version(Windows){
         pragma(lib,"zlib.lib");
@@ -84,7 +84,7 @@ public class InflaterInputStream : java.io.InputStream.InputStream {
         version(Tango){
             tangoIstr = new ZlibInput( new InputStreamWrapper(istr ));
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
 
@@ -97,7 +97,7 @@ public class InflaterInputStream : java.io.InputStream.InputStream {
             }
             return -1;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return -1;
         }
     }

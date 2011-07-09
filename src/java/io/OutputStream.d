@@ -12,13 +12,13 @@ public abstract class OutputStream {
 
     public abstract void write( int b );
 
-    public void write( byte[] b ){
+    public void write( in byte[] b ){
         foreach( bv; b ){
             write(bv);
         }
     }
 
-    public void write( byte[] b, int off, int len ){
+    public void write( in byte[] b, int off, int len ){
         write(b[off .. off+len]);
     }
 

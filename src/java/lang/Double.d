@@ -1,8 +1,16 @@
 module java.lang.Double;
 
 import java.lang.util;
+import java.lang.exceptions;
 import java.lang.Number;
 import java.lang.Class;
+import java.lang.String;
+
+version(Tango){
+    static import tango.text.convert.Float;
+} else { // Phobos
+    static import std.conv;
+}
 
 class Double : Number {
     public static double POSITIVE_INFINITY = double.infinity;
@@ -15,16 +23,28 @@ class Double : Number {
         this.value = value;
     }
     this( String str ){
-        implMissing( __FILE__, __LINE__ );
         super();
+        this.value = parseDouble(str);
     }
     public static String toString( double value ){
-        implMissing( __FILE__, __LINE__ );
-        return null;
+        return String_valueOf(value);
     }
     public static double parseDouble(String s){
-        implMissing( __FILE__, __LINE__ );
-        return 0.0;
+        version(Tango){
+            try{
+                return tango.text.convert.Float.toFloat( s );
+            }
+            catch( IllegalArgumentException e ){
+                throw new NumberFormatException( e );
+            }
+        } else { // Phobos
+            try{
+                return std.conv.to!(double)(s);
+            }
+            catch( std.conv.ConvException e ){
+                throw new NumberFormatException( e );
+            }
+        }
     }
 
     private static Class TYPE_;

@@ -15,7 +15,7 @@ public abstract class InputStream {
     public abstract int read();
 
     public int read( byte[] b ){
-        foreach( uint idx, inout byte val; b ){
+        foreach( uint idx, ref byte val; b ){
             int c = read();
             if( c == -1 ){
                 return ( idx == 0 ) ? -1 : idx;

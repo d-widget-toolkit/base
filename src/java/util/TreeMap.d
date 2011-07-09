@@ -27,7 +27,7 @@ class TreeMap : Map, SortedMap {
         version(Tango){
             map = new MapType();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     public this(Comparator c){
@@ -43,7 +43,7 @@ class TreeMap : Map, SortedMap {
         version(Tango){
             map.clear();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     Comparator     comparator(){
@@ -55,7 +55,7 @@ class TreeMap : Map, SortedMap {
             Object v;
             return map.get(key, v );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -66,7 +66,7 @@ class TreeMap : Map, SortedMap {
         version(Tango){
             return map.contains(value);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -78,7 +78,7 @@ class TreeMap : Map, SortedMap {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -98,7 +98,7 @@ class TreeMap : Map, SortedMap {
             }
             return false;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -109,7 +109,7 @@ class TreeMap : Map, SortedMap {
             }
             throw new tango.core.Exception.NoSuchElementException( "TreeMap.firstKey" );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -136,7 +136,7 @@ class TreeMap : Map, SortedMap {
         version(Tango){
             return map.isEmpty();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -148,7 +148,7 @@ class TreeMap : Map, SortedMap {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -161,7 +161,7 @@ class TreeMap : Map, SortedMap {
             if( map.size() ) return res;
             throw new tango.core.Exception.NoSuchElementException( "TreeMap.lastKey" );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -175,7 +175,7 @@ class TreeMap : Map, SortedMap {
             map[key] = value;
             return null;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -199,7 +199,7 @@ class TreeMap : Map, SortedMap {
             map.take(key,res);
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -210,7 +210,7 @@ class TreeMap : Map, SortedMap {
         version(Tango){
             return map.size();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -230,7 +230,7 @@ class TreeMap : Map, SortedMap {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -239,7 +239,7 @@ class TreeMap : Map, SortedMap {
         version(Tango){
             return map.opApply( dg );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -247,7 +247,7 @@ class TreeMap : Map, SortedMap {
         version(Tango){
             return map.opApply( dg );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }

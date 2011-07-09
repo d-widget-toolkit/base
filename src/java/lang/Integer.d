@@ -4,16 +4,14 @@ import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
 import java.lang.Class;
+import java.lang.Character;
 import java.lang.String;
 
 version(Tango){
+    static import tango.text.convert.Integer;
 } else { // Phobos
     static import std.conv;
     static import std.string;
-}
-
-version(Tango){
-} else { // Phobos
 }
 
 
@@ -39,64 +37,59 @@ class Integer : Number {
     }
 
     public static String toString( int i, int radix ){
-        switch( radix ){
-            case 2:
-                return toBinaryString(i);
-            case 8:
-                return toOctalString(i);
-            case 10:
-                return toString(i);
-            case 16:
-                return toHexString(i);
-            default:
-                implMissing( __FILE__, __LINE__ );
-                return null;
+        if(radix < Character.MIN_RADIX || radix > Character.MAX_RADIX)
+            radix = 10;
+        version(Tango){
+            switch( radix ){
+                case 10:
+                    return tango.text.convert.Integer.toString(i);
+                case 16:
+                    return tango.text.convert.Integer.toString(i, "x" );
+                case 2:
+                    return tango.text.convert.Integer.toString(i, "b" );
+                case 8:
+                    return tango.text.convert.Integer.toString(i, "o" );
+                default:
+                    implMissingInTango( __FILE__, __LINE__ );
+                    return null;
+            }
+        } else { // Phobos
+            return std.conv.to!(String)(i, radix);
         }
     }
 
     public static String toHexString( int i ){
-        version(Tango){
-            return tango.text.convert.Integer.toString(i, "x" );
-        } else { // Phobos
-            return std.string.format("%x", i);
-        }
+        return toString(i, 16);
     }
 
     public static String toOctalString( int i ){
-        version(Tango){
-            return tango.text.convert.Integer.toString(i, "o" );
-        } else { // Phobos
-            return std.string.format("%o", i);
-        }
+        return toString(i, 8);
     }
 
     public static String toBinaryString( int i ){
-        version(Tango){
-            return tango.text.convert.Integer.toString(i, "b" );
-        } else { // Phobos
-            return std.string.format("%b", i);
-        }
+        return toString(i, 2);
     }
 
     public static String toString( int i ){
-        version(Tango){
-            return tango.text.convert.Integer.toString(i);
-        } else { // Phobos
-            return std.conv.to!(string)( i );
-        }
+        return String_valueOf(i);
     }
 
     public static int parseInt( String s, int radix ){
+        if(radix < Character.MIN_RADIX || radix > Character.MAX_RADIX)
+            throw new NumberFormatException("The radix is out of range");
         version(Tango){
             try{
-                return tango.text.convert.Integer.toLong( s, radix );
+                return tango.text.convert.Integer.toInt( s, radix );
             }
             catch( IllegalArgumentException e ){
                 throw new NumberFormatException( e );
             }
         } else { // Phobos
             try{
-            	return std.conv.parse!(int)( s, radix );
+                immutable res = std.conv.parse!(int)( s, radix );
+                if(s.length)
+                    throw new NumberFormatException("String has invalid characters: " ~ s);
+                return res;
             }
             catch( std.conv.ConvException e ){
                 throw new NumberFormatException( e );
@@ -113,7 +106,7 @@ class Integer : Number {
     }
 
     public static Integer valueOf( String s ){
-        return valueOf( parseInt(s));
+        return valueOf(parseInt(s));
     }
 
     public static Integer valueOf( int i ){
@@ -149,11 +142,7 @@ class Integer : Number {
     }
 
     public override String toString(){
-        version(Tango){
-            return tango.text.convert.Integer.toString( value );
-        } else { // Phobos
-            return std.conv.to!(string)(value);
-        }
+        return toString(value);
     }
 
     private static Class TYPE_;

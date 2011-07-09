@@ -22,7 +22,7 @@ class LinkedList : List {
         version(Tango){
             list = new ListType();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     this( Collection c ){
@@ -33,7 +33,7 @@ class LinkedList : List {
         version(Tango){
             list.addAt(index,element);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     bool    add(Object o){
@@ -41,7 +41,7 @@ class LinkedList : List {
             list.add(o);
             return true;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -64,14 +64,14 @@ class LinkedList : List {
         version(Tango){
             list.prepend( o );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     void   addLast(Object o){
         version(Tango){
             list.append( o );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     //     void   addElement(Object obj){
@@ -85,7 +85,7 @@ class LinkedList : List {
         version(Tango){
             list.clear();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
         }
     }
     Object     clone(){
@@ -96,7 +96,7 @@ class LinkedList : List {
         version(Tango){
             return list.contains(elem);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -110,7 +110,7 @@ class LinkedList : List {
             }
             return true;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -121,7 +121,7 @@ class LinkedList : List {
         version(Tango){
             return list.get(index);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -144,7 +144,7 @@ class LinkedList : List {
         version(Tango){
             return list.get(index);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -152,7 +152,7 @@ class LinkedList : List {
         version(Tango){
             return list.get(0);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -160,7 +160,7 @@ class LinkedList : List {
         version(Tango){
             return list.get(list.size()-1);
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -183,7 +183,7 @@ class LinkedList : List {
         version(Tango){
             return list.isEmpty();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -219,7 +219,7 @@ class LinkedList : List {
         version(Tango){
             return list.remove(o,false) !is 0;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -234,7 +234,7 @@ class LinkedList : List {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return false;
         }
     }
@@ -277,7 +277,7 @@ class LinkedList : List {
         version(Tango){
             return list.size();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return 0;
         }
     }
@@ -289,7 +289,7 @@ class LinkedList : List {
         version(Tango){
             return list.toArray();
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -297,7 +297,7 @@ class LinkedList : List {
         version(Tango){
             return list.toArray( a );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }
@@ -313,7 +313,7 @@ class LinkedList : List {
             }
             return res;
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            implMissingInPhobos();
             return null;
         }
     }

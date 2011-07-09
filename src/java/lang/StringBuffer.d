@@ -1,96 +1,85 @@
 module java.lang.StringBuffer;
 
 import java.lang.util;
+import java.lang.exceptions;
+import java.lang.String;
 
 version(Tango){
     static import tango.text.Text;
     static import tango.text.convert.Utf;
 } else { // Phobos
-    static import std.uni;
+    static import std.outbuffer;
     static import std.utf;
 }
 
 class StringBuffer : CharSequence {
     version(Tango){
         alias tango.text.Text.Text!(char) TBuf;
-        TBuf buf;
     } else { // Phobos
-        const int STDINCR = 128;
-        char[] buf;
-        int used;
+        alias std.outbuffer.OutBuffer TBuf;
     }
+    private TBuf buffer;
 
     public this(){
-        version(Tango){
-            buf = new TBuf();
-        } else { // Phobos
-        }
+        buffer = new TBuf();
     }
 
     public this( int cap ){
         version(Tango){
-            buf = new TBuf(cap);
+            buffer = new TBuf(cap);
         } else { // Phobos
-            buf.length = cap;
+            buffer = new TBuf();
+            buffer.reserve(cap);
         }
     }
 
-    public this( CString content ){
+    public this( String content ){
         version(Tango){
-            buf = new TBuf( content );
+            buffer = new TBuf( content );
         } else { // Phobos
-            buf.length = content.length + STDINCR;
-            buf[ 0 .. content.length ] = content;
-            used = content.length;
+            buffer = new TBuf();
+            append(content);
         }
     }
 
     char charAt(int index){
         version(Tango){
-            return buf.slice()[ index ];
+            return buffer.slice()[ index ];
         } else { // Phobos
-            return buf[ index ];
+            return buffer.toBytes()[ index ];
         }
     }
 
     int length(){
         version(Tango){
-            return buf.length();
+            return buffer.length();
         } else { // Phobos
-            return used;
+            return buffer.offset;
         }
     }
 
     CharSequence subSequence(int start, int end){
-        version(Tango){
-            return new StringBuffer( buf.slice()[ start .. end ] );
-        } else { // Phobos
-            return new StringBuffer( cast(String)buf[ start .. end ] );
-        }
+        return new StringCharSequence( substring(start, end) );
     }
 
     String toString(){
         version(Tango){
-            return buf.slice();
+            return buffer.slice().dup;
         } else { // Phobos
-            return cast(String)buf[ 0 .. used ];
+            return buffer.toString();
         }
     }
 
-    StringBuffer append( CString s ){
+    StringBuffer append( in char[] s ){
         version(Tango){
-            buf.append( s );
+            buffer.append( s );
         } else { // Phobos
-            if( buf.length < used + s.length ){
-                buf.length = used + s.length + STDINCR;
-            }
-            buf[ used .. used + s.length ] = s;
-            used += s.length;
+            buffer.write( s );
         }
         return this;
     }
 
-    StringBuffer append( CString s, int offset, int len ){
+    StringBuffer append( in char[] s, int offset, int len ){
         return append( s[ offset .. offset+len ] );
     }
 
@@ -103,21 +92,37 @@ class StringBuffer : CharSequence {
     }
 
     StringBuffer append( char c ){
-        char[1] src;
-        src[0] = c;
-        return append( cast(String)src );
+        version(Tango){
+            char[1] src = c;
+            return append( src );
+        } else { // Phobos
+            buffer.write(c);
+            return this;
+        }
     }
 
     StringBuffer append( wchar c ){
-        wchar[1] src;
-        src[0] = c;
         version(Tango){
-            char[2] trg;
+            wchar[1] src = c;
+            char[1 * 2 + 3] trg; // or Tango will reallocate output to input.length * 2 + 3
             auto arr = tango.text.convert.Utf.toString( src, trg );
+            return append( arr );
         } else { // Phobos
-            auto arr = std.utf.toUTF8( src );
+            char[4] trg;
+            return append( trg[0 .. std.utf.encode(trg, c)] );
         }
-        return append( arr );
+    }
+
+    StringBuffer append( dchar c ){
+        version(Tango){
+            dchar[1] src = c;
+            char[1 * 2 + 4] trg; // or Tango will reallocate output to input.length * 2 + 4
+            auto arr = tango.text.convert.Utf.toString( src, trg );
+            return append( arr );
+        } else { // Phobos
+            char[4] trg;
+            return append( trg[0 .. std.utf.encode(trg, c)] );
+        }
     }
 
     StringBuffer append( bool i ){
@@ -132,103 +137,87 @@ class StringBuffer : CharSequence {
         return append( String_valueOf(i) );
     }
 
-    StringBuffer append( dchar c ){
-        dchar[1] src;
-        src[0] = c;
+    StringBuffer replace(int start, int end, in char[] str) {
+        if(start < 0 || start > length() || start > end)
+            throw new StringIndexOutOfBoundsException("start is negative, greater than length(), or greater than end");
+        
         version(Tango){
-            char[4] trg;
-            auto arr = tango.text.convert.Utf.toString( src, trg );
+            buffer.select(start, end-start);
+            buffer.replace(str);
+            buffer.select();
         } else { // Phobos
-            auto arr = std.utf.toUTF8( src );
-        }
-        return append( arr );
-    }
-
-
-    StringBuffer insert(int offset, int i){
-        return insert( offset, String_valueOf(i) );
-    }
-    StringBuffer insert(int offset, CString str){
-        return replace( offset, offset, str );
-    }
-
-    StringBuffer insert(int offset, StringBuffer other){
-        return insert( offset, other.slice());
-    }
-
-    StringBuffer replace(int start, int end, CString str) {
-        version(Tango){
-            buf.select(start, end-start);
-            buf.replace(str);
-            buf.select();
-        } else { // Phobos
-            int incr = end - start - str.length;
-            if( incr > 0 ){
-                if( buf.length < used + incr ){
-                    char[] newbuf = new char[ 2*(used + incr) + STDINCR ];
-                    newbuf[ 0 .. start ] = buf[ 0 .. start ];
-                    newbuf[ start .. start + str.length ] = str;
-                    newbuf[ start + str.length .. used + str.length ] = buf[ end .. used ];
-                    buf = newbuf;
-                }
-                else{
-                    char* s = buf.ptr + start;
-                    char* t = buf.ptr + start + str.length;
-                    char* e = buf.ptr + start + str.length;
-                    while( s !is e ){
-                        *t = *s;
-                        s++; t++;
-                    }
-                    buf[ start .. start + str.length ] = str;
-                }
+            if(end >= length()) {
+                buffer.offset = start;
+                return append(str);
             }
-            else if( incr == 0 ){
-                buf[ start .. end ] = str;
+            int strEnd = start + str.length, incr = strEnd - end;
+            
+            if( incr > 0 ) {
+                buffer.spread(end, incr);
             }
-            else{
-                buf[ start .. end ] = str;
-                char* s = buf.ptr + end;
-                char* t = buf.ptr + start + str.length;
-                char* e = buf.ptr + start + str.length;
-                while( s !is e ){
-                    *t = *s;
-                    s--; t--;
+            else if( incr < 0 ) {
+                auto bytes = buffer.toBytes();
+                bytes[ start .. strEnd ] = cast(ubyte[])str;
+                foreach (i, b; bytes[ end .. $ ]) {
+                    bytes[strEnd + i] = bytes[end + i];
                 }
+                buffer.offset += incr;
             }
-            used += incr;
+            buffer.toBytes()[ start .. strEnd ] = cast(ubyte[])str;
         }
         return this;
     }
 
+    StringBuffer insert(int offset, in char[] str){
+        return replace( offset, offset, str );
+    }
+    
+    StringBuffer insert(int offset, int i){
+        return insert( offset, String_valueOf(i) );
+    }
+
+    StringBuffer insert(int offset, StringBuffer other){
+        return insert( offset, other.slice() );
+    }
+
     void setLength( int newLength ){
+        if(newLength < 0)
+            throw new IndexOutOfBoundsException("the newLength argument is negative");
+        
         version(Tango){
-            buf.truncate( newLength );
+            buffer.truncate( newLength );
         } else { // Phobos
-            if( buf.length < newLength ){
-                buf.length = 2*newLength + STDINCR;
-            }
-            used = newLength;
+            immutable d = newLength - length();
+            if( d > 0 )
+                buffer.reserve(d);
+            else
+                buffer.offset += d;
         }
     }
 
     String substring( int start, int end ){
+        if(start < 0 || end < 0 || end > length() || start > end)
+            throw new StringIndexOutOfBoundsException("start or end are negative, if end is greater than length(), or if start is greater than end");
+        
         version(Tango){
-            return buf.slice()[ start .. end ].dup;
+            return buffer.slice()[ start .. end ].dup;
         } else { // Phobos
-            return buf[ start .. end ].idup;
+            return (cast(char[]) buffer.toBytes()[ start .. end ]).idup;
         }
     }
 
     void delete_( int start, int end ){
         replace( start, end, "" );
     }
-    String slice(){
+    
+    TryConst!(char)[] slice(){
         version(Tango){
-            return buf.slice();
+            return buffer.slice();
         } else { // Phobos
-            return cast(String)buf[ 0 .. used ];
+            return cast(TryConst!(char)[]) buffer.toBytes();
         }
     }
+    
     void truncate( int start ){
         setLength( start );
     }

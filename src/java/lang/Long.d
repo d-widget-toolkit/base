@@ -3,7 +3,16 @@ module java.lang.Long;
 import java.lang.util;
 import java.lang.exceptions;
 import java.lang.Number;
+import java.lang.Character;
 import java.lang.Class;
+import java.lang.String;
+
+version(Tango){
+    static import tango.text.convert.Integer;
+} else { // Phobos
+    static import std.conv;
+    static import std.string;
+}
 
 class Long : Number {
     public static const long MIN_VALUE = long.min;
@@ -14,8 +23,8 @@ class Long : Number {
         this.value = value;
     }
     this( String str ){
-        implMissing( __FILE__, __LINE__ );
         super();
+        this.value = parseLong(str);
     }
     public byte byteValue(){
         return cast(byte)value;
@@ -44,6 +53,8 @@ class Long : Number {
         return parseLong( s, 10 );
     }
     public static long parseLong(String s, int radix){
+        if(radix < Character.MIN_RADIX || radix > Character.MAX_RADIX)
+            throw new NumberFormatException("The radix is out of range");
         version(Tango){
             try{
                 return tango.text.convert.Integer.toLong( s, radix );
@@ -52,13 +63,19 @@ class Long : Number {
                 throw new NumberFormatException( e );
             }
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-            return 0;
+            try{
+                immutable res = std.conv.parse!(long)( s, radix );
+                if(s.length)
+                    throw new NumberFormatException("String has invalid characters: " ~ s);
+                return res;
+            }
+            catch( std.conv.ConvException e ){
+                throw new NumberFormatException( e );
+            }
         }
     }
-    public static String toString( double value ){
-        implMissing( __FILE__, __LINE__ );
-        return null;
+    public static String toString( long i ){
+        return String_valueOf(i);
     }
     private static Class TYPE_;
     public static Class TYPE(){
