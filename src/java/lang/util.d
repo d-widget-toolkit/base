@@ -16,22 +16,13 @@ version(Tango){
     static import core.exception;
     static import std.c.stdlib;
     static import std.stdio;
+    static import std.ascii;
     static import std.array;
     static import std.format;
     static import std.typetuple;
     static import std.traits;
     static import std.exception;
     alias std.c.stdlib.exit exit;
-}
-
-version(Tango){
-} else { // Phobos
-}
-version(Tango){
-} else { // Phobos
-}
-version(Tango){
-} else { // Phobos
 }
 
 interface IDwtLogger {
@@ -168,7 +159,7 @@ version(Tango){
                     if(f.length) {
                         string fres = "%";
                         try {
-                            if(std.ctype.isdigit(f[0])) {
+                            if(std.ascii.isDigit(f[0])) {
                                 int n = std.conv.parse!(int)(f);
                                 fres ~= std.conv.to!(string)(n + 1) ~ '$';
                             }
@@ -576,10 +567,10 @@ T[] arrayIndexRemove(T)(T[] arr, uint n) {
 }
 
 struct ImportData{
-    void[] data;
+    TryImmutable!(void)[] data;
     String name;
 
-    public static ImportData opCall( void[] data, String name ){
+    public static ImportData opCall( TryImmutable!(void)[] data, String name ){
         ImportData res;
         res.data = data;
         res.name = name;
@@ -588,5 +579,5 @@ struct ImportData{
 }
 
 template getImportData(String name) {
-    const ImportData getImportData = ImportData( cast(void[]) import(name), name );
+    const ImportData getImportData = ImportData( cast(TryImmutable!(void)[]) import(name), name );
 }

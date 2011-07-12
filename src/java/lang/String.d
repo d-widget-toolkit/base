@@ -122,7 +122,7 @@ public String toUpperCase( String str ){
     version(Tango){
         return tango.text.Unicode.toUpper( str );
     } else { // Phobos
-        return cast(String) std.string.toupper( str );
+        return cast(String) std.string.toUpper( str );
     }
 }
 
@@ -458,7 +458,7 @@ public String toLowerCase( String src ){
     version(Tango){
         return tango.text.Unicode.toLower( src );
     } else { // Phobos
-        return cast(String) std.string.tolower(src);
+        return cast(String) std.string.toLower(src);
     }
 }
 
