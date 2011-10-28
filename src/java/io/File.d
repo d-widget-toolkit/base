@@ -55,7 +55,7 @@ public class File {
         version(Tango){
             return tango.io.Path.join( toStd(path), toStd(file) );
         } else { // Phobos
-            return std.path.join( toStd(path), toStd(file) );
+            return std.path.buildPath( toStd(path), toStd(file) );
         }
     }
 
@@ -71,7 +71,7 @@ public class File {
         version(Tango){
             mFilePath = tango.io.Path.join( parent.mFilePath, toStd(child) );
         } else { // Phobos
-            mFilePath = std.path.join( parent.mFilePath, toStd(child) );
+            mFilePath = std.path.buildPath( parent.mFilePath, toStd(child) );
         }
     }
 
@@ -109,7 +109,7 @@ public class File {
         version(Tango){
             return (new tango.io.FilePath.FilePath(mFilePath)).absolute(tango.sys.Environment.Environment.cwd).toString;
         } else { // Phobos
-            return std.path.rel2abs(mFilePath);
+            return std.path.absolutePath(mFilePath);
         }
     }
 
