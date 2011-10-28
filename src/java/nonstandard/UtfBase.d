@@ -285,7 +285,7 @@ UTF8shift toUTF8shift( in char[] s, in UTF8index i, in UCSshift dn ) {
             j += s.UTF8strideAt(j);
             if(j > s.endIndex())
                 throw new UTF8Exception(Format("toUTF8shift (dn = {}): No end of the UTF-8 sequence", dn), s, i);
-        } while(--tdn)
+        } while(--tdn);
     else if(tdn < 0) {
         do {
             if(!val(j))
@@ -300,13 +300,13 @@ UTF8shift toUTF8shift( in char[] s, in UTF8index i, in UCSshift dn ) {
                     throw new UTF8Exception(Format("toUTF8shift (dn = {}): No start of the UTF-8 sequence before", dn), s, i);
                 ++l;
                 dec(j);
-            } while(!s.isUTF8sequenceStart(j))
+            } while(!s.isUTF8sequenceStart(j));
             l -= val(s.UTF8strideAt(j));
             if(l > 0)
                 throw new UTF8Exception(Format("toUTF8shift (dn = {}): Overlong UTF-8 sequence before", dn), s, i);
             else if(l < 0)
                 throw new UTF8Exception(Format("toUTF8shift (dn = {}): Too short UTF-8 sequence before", dn), s, i);
-        } while(++tdn)
+        } while(++tdn);
     }
     return j - i;
 }
@@ -334,7 +334,7 @@ void adjustUTF8index( in char[] s, ref UTF8index i ){
             throw new UTF8Exception("adjustUTF8index: No start of the UTF-8 sequence", s, i);
         ++l;
         dec(res);
-    } while(!s.isUTF8sequenceStart(res))
+    } while(!s.isUTF8sequenceStart(res));
     l -= val(s.UTF8strideAt(i));
     if(l > 0)
         throw new UTF8Exception("adjustUTF8index: Overlong UTF-8 sequence", s, i);

@@ -33,7 +33,7 @@ version(Tango){
             return null;
         }
         void set(Object value){
-            return tls = value;
+            tls = value;
         }
     }
 }
