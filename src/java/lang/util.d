@@ -459,6 +459,10 @@ template sharedStaticThis(String content) {
     const sharedStaticThis = prefixedIfD2!("shared", "static this()" ~ content);
 }
 
+template sharedStatic_This(String content) {
+    const sharedStatic_This = prefixedIfD2!("shared", "private static void static_this()" ~ content);
+}
+
 template gshared(String content) {
     const gshared = prefixedIfD2!("__gshared:", content);
 }
