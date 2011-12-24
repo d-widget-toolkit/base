@@ -611,7 +611,9 @@ debug (UnitTest)
     }
 
     unittest {
-        typedef int myint;
+        enum myint : int {
+            init = int.init
+        }
         assert (typeid(myint) !is null, "null typeid(myint)");
         assert (isInteger (typeid(myint)));
     }

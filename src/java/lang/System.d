@@ -110,12 +110,12 @@ template SimpleType(T) {
 
 
 class System {
-    static void arraycopyT(T)(T[] src, uint srcPos, T[] dest, uint destPos, uint len) {
+    static void arraycopy(T)(in T[] src, uint srcPos, T[] dest, uint destPos, uint len) {
         if(len == 0) return;
 
         assert(src);
         assert(dest);
-        debug{validCheck(src.length - srcPos, dest.length - destPos, len);}
+        debug{SimpleType!(T).validCheck(src.length - srcPos, dest.length - destPos, len);}
 
         // overlapping?
         if((src.ptr <= dest.ptr && src.ptr + len > dest.ptr)
@@ -134,37 +134,6 @@ class System {
             dest[destPos..(len+destPos)] = cast(T[])src[srcPos..(len+srcPos)];
         }
     }
-
-    alias SimpleType!(int).arraycopy arraycopy;
-    alias SimpleType!(byte).arraycopy arraycopy;
-    alias SimpleType!(double).arraycopy arraycopy;
-    alias SimpleType!(float).arraycopy arraycopy;
-    alias SimpleType!(short).arraycopy arraycopy;
-    alias SimpleType!(long).arraycopy arraycopy;
-    alias SimpleType!(uint).arraycopy arraycopy;
-    alias SimpleType!(ushort).arraycopy arraycopy;
-    alias SimpleType!(ubyte).arraycopy arraycopy;
-    alias SimpleType!(ulong).arraycopy arraycopy;
-    alias SimpleType!(char).arraycopy arraycopy;
-    alias SimpleType!(wchar).arraycopy arraycopy;
-    alias SimpleType!(Object).arraycopy arraycopy;
-    alias SimpleType!(void*).arraycopy arraycopy;
-
-    alias SimpleType!(int[]).arraycopy arraycopy;
-    alias SimpleType!(byte[]).arraycopy arraycopy;
-    alias SimpleType!(double[]).arraycopy arraycopy;
-    alias SimpleType!(float[]).arraycopy arraycopy;
-    alias SimpleType!(short[]).arraycopy arraycopy;
-    alias SimpleType!(long[]).arraycopy arraycopy;
-    alias SimpleType!(uint[]).arraycopy arraycopy;
-    alias SimpleType!(ushort[]).arraycopy arraycopy;
-    alias SimpleType!(ubyte[]).arraycopy arraycopy;
-    alias SimpleType!(ulong[]).arraycopy arraycopy;
-    alias SimpleType!(String).arraycopy arraycopy;
-    alias SimpleType!(wchar[]).arraycopy arraycopy;
-    alias SimpleType!(Object[]).arraycopy arraycopy;
-    alias SimpleType!(void*[]).arraycopy arraycopy;
-    alias SimpleType!(void*[]).arraycopy arraycopy;
 
     static long currentTimeMillis(){
         version(Tango) return tango.time.Clock.Clock.now().ticks() / 10000;

@@ -65,8 +65,8 @@ mixin(constFuncs!("
         }
 "));
     }*/
-    typedef int UTF16index;
-    typedef int UTF16shift;
+    alias int UTF16index;
+    alias int UTF16shift;
 
     ///UTF-8 (UCS Transformation Format — 8-bit)
     //typedef int UTF8index;
