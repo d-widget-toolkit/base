@@ -280,32 +280,37 @@ UTF8shift toUTF8shift( in char[] s, in UTF8index i, in UCSshift dn ) {
     s.validateUTF8index(i);
     UTF8index j = i;
     UCSshift tdn = dn;
-    if(tdn > 0)
+    if(tdn > 0) {
         do {
             j += s.UTF8strideAt(j);
-            if(j > s.endIndex())
+            if(j > s.endIndex()) {
                 throw new UTF8Exception(Format("toUTF8shift (dn = {}): No end of the UTF-8 sequence", dn), s, i);
+            }
         } while(--tdn);
-    else if(tdn < 0) {
+    } else if(tdn < 0) {
         do {
-            if(!val(j))
+            if(!val(j)) {
                 if(tdn == -1) {
                     j = s.preFirstIndex();
                     break;
-                } else
+                } else {
                     throw new UTF8Exception(Format("toUTF8shift (dn = {}): Can only go down to -1, not {}", dn, tdn), s, i);
+                }
+            }
             int l = 0;
             do {
-                if(!val(j))
+                if(!val(j)) {
                     throw new UTF8Exception(Format("toUTF8shift (dn = {}): No start of the UTF-8 sequence before", dn), s, i);
+                }
                 ++l;
                 dec(j);
             } while(!s.isUTF8sequenceStart(j));
             l -= val(s.UTF8strideAt(j));
-            if(l > 0)
+            if(l > 0) {
                 throw new UTF8Exception(Format("toUTF8shift (dn = {}): Overlong UTF-8 sequence before", dn), s, i);
-            else if(l < 0)
+            } else if(l < 0) {
                 throw new UTF8Exception(Format("toUTF8shift (dn = {}): Too short UTF-8 sequence before", dn), s, i);
+            }
         } while(++tdn);
     }
     return j - i;
