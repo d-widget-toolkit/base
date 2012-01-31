@@ -22,7 +22,7 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
 
     public this (){
         version(Tango){
-            buffer = new Array(0);
+            buffer = new Array(0, 1);
         } else { // Phobos
             buffer = new OutBuffer();
         }
@@ -30,7 +30,7 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
 
     public this ( int par_size ){
         version(Tango){
-            buffer = new Array(par_size);
+            buffer = new Array(par_size, 1);
         } else { // Phobos
             buffer = new OutBuffer();
             buffer.reserve(par_size);
@@ -109,7 +109,7 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
     }
 
     public override void close(){
-        implMissing( __FILE__, __LINE__ );
+        // Nothing.
     }
 }
 
