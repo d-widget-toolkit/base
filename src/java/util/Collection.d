@@ -10,7 +10,7 @@ interface Collection {
     public void   clear();
     public bool    contains(Object o);
     public bool    containsAll(Collection c);
-    public int    opEquals(Object o);
+    public equals_t	opEquals(Object o);
     public hash_t   toHash();
     public bool    isEmpty();
     public Iterator   iterator();

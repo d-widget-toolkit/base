@@ -15,7 +15,7 @@ interface List : Collection {
     public bool     contains(Object o);
     public bool     contains(String o);
     public bool     containsAll(Collection c);
-    public int      opEquals(Object o);
+    public equals_t opEquals(Object o);
     public Object   get(int index);
     public hash_t   toHash();
     public int      indexOf(Object o);
