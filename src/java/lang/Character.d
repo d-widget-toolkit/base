@@ -23,7 +23,7 @@ class Character {
             implMissingInTango( __FILE__, __LINE__);
             return false;
         } else { // Phobos
-            return !!std.uni.isUniUpper(c);
+            return !!std.uni.isUpper(c);
         }
     }
     public static dchar toUpperCase( dchar c ){
@@ -32,7 +32,7 @@ class Character {
             dchar[] r = tango.text.Unicode.toUpper( src );
             return r[0];
         } else { // Phobos
-            return std.uni.toUniUpper( c );
+            return std.uni.toUpper( c );
         }
     }
     public static String toString( char c ){
@@ -65,7 +65,7 @@ class Character {
             dchar[] r = tango.text.Unicode.toLower( src );
             return r[0];
         } else { // Phobos
-            return std.uni.toUniLower( c );
+            return std.uni.toLower( c );
         }
     }
     ///Determines if the specified character is ISO-LATIN-1 white space.
@@ -148,7 +148,7 @@ class Character {
         version(Tango){
             return tango.text.Unicode.isLetter(c);
         } else { // Phobos
-            return !!std.uni.isUniAlpha(c);
+            return !!std.uni.isAlpha(c);
         }
     }
     public static bool isLetterOrDigit( dchar c ){

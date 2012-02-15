@@ -6,7 +6,7 @@ import java.util.Collection;
 
 interface Map {
     interface Entry {
-        int   opEquals(Object o);
+        equals_t   opEquals(Object o);
         Object     getKey();
         Object     getValue();
         hash_t     toHash();
