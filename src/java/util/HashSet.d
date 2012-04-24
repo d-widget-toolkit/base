@@ -91,7 +91,7 @@ class HashSet : Set {
         return 0;
     }
     public override hash_t    toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     public bool    isEmpty(){

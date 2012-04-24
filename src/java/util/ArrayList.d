@@ -98,7 +98,13 @@ class ArrayList : AbstractList, List {
         return data[index];
     }
     public override hash_t toHash(){
-        return super.toHash();
+        // http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html#hashCode()
+        hash_t hashCode = 1;
+        for( int i = 0; i < data.length; i++ ){
+            Object obj = data[i];
+            hashCode = 31 * hashCode + (obj is null ? 0 : obj.toHash());
+        }
+        return hashCode;
     }
     int    indexOf(Object o){
         foreach( i, v; data ){

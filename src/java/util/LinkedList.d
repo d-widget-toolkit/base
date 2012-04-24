@@ -165,7 +165,7 @@ class LinkedList : List {
         }
     }
     hash_t    toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     int    indexOf(Object elem){

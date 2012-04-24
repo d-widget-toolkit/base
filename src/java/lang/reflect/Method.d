@@ -36,7 +36,7 @@ class Method : AccessibleObject {
         return null;
     }
     public override hash_t toHash(){
-        implMissing(__FILE__,__LINE__);
+        implMissingSafe(__FILE__,__LINE__);
         return 0;
     }
     Object invoke(Object obj, Object[] args){

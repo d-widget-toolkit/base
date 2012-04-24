@@ -100,7 +100,7 @@ class Vector : AbstractList, List {
         return vect[index];
     }
     public hash_t    toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     public int    indexOf(Object elem){

@@ -463,8 +463,19 @@ public String toLowerCase( String src ){
 }
 
 /// Extension to String
-public hash_t toHash( String src ){
-    return typeid(String).getHash(&src);
+version(Tango){
+    public hash_t toHash( String src ){
+        return typeid(String).getHash(&src);
+    }
+} else { // Phobos
+    mixin(`@safe nothrow public hash_t toHash( String src ){
+        // http://docs.oracle.com/javase/7/docs/api/java/lang/String.html#hashCode%28%29
+        hash_t hash = 0;
+        foreach( i, c; src ){
+            hash += c * 31 ^ (src.length - 1 - i);
+        }
+        return hash;
+    }`);
 }
 public alias toHash String_toHash;
 
