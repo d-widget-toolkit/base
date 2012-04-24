@@ -9,7 +9,11 @@ interface Map {
         equals_t   opEquals(Object o);
         Object     getKey();
         Object     getValue();
-        hash_t     toHash();
+        version(Tango){
+            public hash_t   toHash();
+        } else { // Phobos
+            mixin(`@safe nothrow public hash_t   toHash();`);
+        }
         Object     setValue(Object value);
     }
     public void clear();
@@ -20,7 +24,11 @@ interface Map {
     public equals_t opEquals(Object o);
     public Object get(Object key);
     public Object get(String key);
-    public hash_t toHash();
+    version(Tango){
+        public hash_t   toHash();
+    } else { // Phobos
+        mixin(`@safe nothrow public hash_t   toHash();`);
+    }
     public bool isEmpty();
     public Set    keySet();
     public Object put(Object key, Object value);
@@ -62,8 +70,8 @@ class MapEntry : Map.Entry {
         return map.get(key);
     }
     public override hash_t toHash(){
-        return ( getKey()   is null ? 0 : getKey().toHash()   ) ^
-               ( getValue() is null ? 0 : getValue().toHash() );
+        return ( key   is null ? 0 : key.toHash()   ) ^
+               ( 0 );
     }
     public Object     setValue(Object value){
         return map.put( key, value );

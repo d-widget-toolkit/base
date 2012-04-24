@@ -121,12 +121,17 @@ class TreeMap : Map, SortedMap {
         return get(stringcast(key));
     }
     public override hash_t toHash(){
-        // http://java.sun.com/j2se/1.4.2/docs/api/java/util/AbstractMap.html#hashCode()
-        hash_t res = 0;
-        foreach( e; entrySet() ){
-            res += e.toHash();
+        version(Tango){
+            // http://java.sun.com/j2se/1.4.2/docs/api/java/util/AbstractMap.html#hashCode()
+            hash_t res = 0;
+            foreach( e; entrySet() ){
+                res += e.toHash();
+            }
+            return res;
+        } else { // Phobos
+            implMissingSafe( __FILE__, __LINE__ );
+            return false;
         }
-        return res;
     }
     SortedMap headMap(Object toKey){
         implMissing( __FILE__, __LINE__ );

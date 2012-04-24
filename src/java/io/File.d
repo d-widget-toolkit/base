@@ -37,10 +37,10 @@ public class File {
             pathSeparator = tango.io.model.IFile.FileConst.SystemPathString;
             pathSeparatorChar = tango.io.model.IFile.FileConst.SystemPathChar;
         } else { // Phobos
-            separator = std.path.sep;
-            separatorChar = std.path.sep[0];
-            pathSeparator = std.path.pathsep;
-            pathSeparatorChar = std.path.pathsep[0];
+            separator = std.path.dirSeparator;
+            separatorChar = std.path.dirSeparator[0];
+            pathSeparator = std.path.pathSeparator;
+            pathSeparatorChar = std.path.pathSeparator[0];
         }
     }
 

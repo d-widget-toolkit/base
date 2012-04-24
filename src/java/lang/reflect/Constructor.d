@@ -30,7 +30,7 @@ class Constructor {
         return null;
     }
     public override hash_t toHash(){
-        implMissing(__FILE__,__LINE__);
+        implMissingSafe(__FILE__,__LINE__);
         return 0;
     }
     Object newInstance(Object[] initargs){

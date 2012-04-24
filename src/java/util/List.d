@@ -17,7 +17,11 @@ interface List : Collection {
     public bool     containsAll(Collection c);
     public equals_t opEquals(Object o);
     public Object   get(int index);
-    public hash_t   toHash();
+    version(Tango){
+        public hash_t   toHash();
+    } else { // Phobos
+        mixin(`@safe nothrow public hash_t   toHash();`);
+    }
     public int      indexOf(Object o);
     public bool     isEmpty();
     public Iterator iterator();

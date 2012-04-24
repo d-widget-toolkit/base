@@ -39,7 +39,7 @@ abstract class AbstractCollection : Collection {
     }
     abstract  Iterator      iterator();
     override hash_t toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     bool        remove(Object o){

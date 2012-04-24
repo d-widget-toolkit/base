@@ -172,7 +172,7 @@ class System {
                 case "user.dir" : return "";
                 case "file.separator" : 
                     version(Tango) return tango.io.model.IFile.FileConst.PathSeparatorString ;
-                    else           return std.path.sep;
+                    else           return std.path.dirSeparator;
                 default: return null;
             }
         }

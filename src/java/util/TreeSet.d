@@ -113,7 +113,7 @@ class TreeSet : AbstractSet, SortedSet {
         return null;
     }
     public override hash_t    toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     public SortedSet      headSet(Object toElement){

@@ -105,7 +105,7 @@ class Hashtable : Dictionary, Map {
         }
     }
     public hash_t toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     public bool isEmpty(){
