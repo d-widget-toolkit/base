@@ -78,7 +78,7 @@ class Stack : Vector {
         return null;
     }
     hash_t    toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     int    indexOf(Object elem){

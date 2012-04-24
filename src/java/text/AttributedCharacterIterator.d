@@ -26,7 +26,7 @@ interface AttributedCharacterIterator : CharacterIterator {
         }
 
         override hash_t toHash(){
-            implMissing(__FILE__, __LINE__);
+            implMissingSafe(__FILE__, __LINE__);
             return 0;
         }
 

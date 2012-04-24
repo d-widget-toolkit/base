@@ -132,6 +132,15 @@ void implMissingInPhobos( String file = __FILE__, uint line = __LINE__ )() {
 }
 
 version(Tango){
+    alias implMissing implMissingSafe;
+} else { // Phobos
+    mixin(`@safe nothrow
+    void implMissingSafe( String file, uint line ) {
+        // impossible processing
+    }`);
+}
+
+version(Tango){
     public alias tango.text.convert.Format.Format Format;
 } else { // Phobos
 	private string fmtFromTangoFmt(string tangoFmt) {

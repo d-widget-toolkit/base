@@ -257,7 +257,9 @@ class Collections {
     }
     static class SynchronizedList : List {
         private List list;
-        private this( List list ){ this.list = list; }
+        private this( List list ){
+            this.list = list;
+        }
         // Collection
         public int opApply (int delegate(ref Object value) dg){ synchronized(this){ return this.list.opApply(dg); } }
         // List
@@ -272,7 +274,7 @@ class Collections {
         public bool     containsAll(Collection c){ synchronized(this){ return this.list.containsAll(c); } }
         public equals_t      opEquals(Object o){ synchronized(this){ return cast(equals_t)this.list.opEquals(o); } }
         public Object   get(int index){ synchronized(this){ return this.list.get(index); } }
-        public hash_t   toHash(){ synchronized(this){ return this.list.toHash(); } }
+        public hash_t   toHash(){ return this.list.toHash(); }
         public int      indexOf(Object o){ synchronized(this){ return this.list.indexOf(o); } }
         public bool     isEmpty(){ synchronized(this){ return this.list.isEmpty(); } }
         public Iterator iterator(){ synchronized(this){ return this.list.iterator(); } }
@@ -316,7 +318,7 @@ class Collections {
         public equals_t opEquals(Object o){ synchronized(this){ return this.map.opEquals(o); } }
         public Object get(Object key){ synchronized(this){ return this.map.get(key); } }
         public Object get(String key){ synchronized(this){ return this.map.get(key); } }
-        public hash_t toHash(){ synchronized(this){ return this.map.toHash(); } }
+        public hash_t toHash(){ return this.map.toHash(); }
         public bool isEmpty(){ synchronized(this){ return this.map.isEmpty(); } }
         public Set    keySet(){ synchronized(this){ return this.map.keySet(); } }
         public Object put(Object key, Object value){ synchronized(this){ return this.map.put(key,value); } }

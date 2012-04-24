@@ -14,7 +14,7 @@ abstract class AbstractSet : AbstractCollection, Set {
         return 0;
     }
     hash_t      toHash(){
-        implMissing( __FILE__, __LINE__ );
+        implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
     public bool     add(Object o){ return super.add(o); }

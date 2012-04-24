@@ -138,7 +138,7 @@ class Integer : Number {
     }
 
     public override  hash_t toHash(){
-        return intValue();
+        return value;
     }
 
     public override String toString(){

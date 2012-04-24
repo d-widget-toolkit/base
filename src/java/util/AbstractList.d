@@ -33,50 +33,11 @@ abstract class AbstractList : AbstractCollection, List {
     public bool contains(Object o){ return super.contains(o); }
     public bool contains(String str){ return contains(stringcast(str)); }
     public bool     containsAll(Collection c){ return super.containsAll(c); }
-    public equals_t  opEquals(Object o){
-        if( auto other = cast(List)o ){
-            if( other is cast(List)this ){
-                return true;
-            }
-            auto it1 = this.iterator();
-            auto it2 = other.iterator();
-            while(true){
-                bool n1 = it1.hasNext();
-                bool n2 = it2.hasNext();
-                if( !n1 && !n2 ) return true;
-                if( (n1 && !n2) || (!n1 && n2 )) return false;
-                Object o1 = it1.next();
-                Object o2 = it2.next();
-                if( o1 is null ){
-                    if( o2 !is null ){
-                        return false;
-                    }
-                }
-                else{
-                    if( o2 is null ){
-                        return false;
-                    }
-                    if( o1 != o2 ){
-                        return false;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    public abstract equals_t opEquals(Object o);
 
     public abstract Object get(int index);
 
-    public hash_t  toHash(){
-        // http://java.sun.com/j2se/1.4.2/docs/api/java/util/List.html#hashCode()
-        hash_t hashCode = 1;
-        Iterator i = iterator();
-        while (i.hasNext()) {
-            Object obj = i.next();
-            hashCode = 31 * hashCode + (obj is null ? 0 : obj.toHash());
-        }
-        return hashCode;
-    }
+    public abstract hash_t  toHash();
 
     public int    indexOf(Object o){
         auto it = listIterator();
