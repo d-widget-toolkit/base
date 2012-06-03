@@ -5,7 +5,50 @@ version(Tango){
     static import tango.sys.SharedLib;
     static import tango.stdc.stringz;
 } else { // Phobos
-    import std.loader;
+    static import std.string;
+
+    private alias void* HXModule;
+
+    version(Windows){
+        import core.sys.windows.windows;
+        import std.utf;
+
+        private HXModule ExeModule_Load(string name) {
+            return LoadLibraryW(toUTFz!(wchar*)(name));
+        }
+
+        private void* ExeModule_GetSymbol(HXModule lib, string name) {
+            return GetProcAddress(lib, std.string.toStringz(name));
+        }
+
+        private bool ExeModule_Release(ref HXModule lib) {
+            if (FreeLibrary(lib)) {
+                lib = null;
+                return true;
+            } else {
+                return false;
+            }
+        }
+    } else { // Posix
+        import core.sys.posix.dlfcn;
+
+        private HXModule ExeModule_Load(string name) {
+            return dlopen(std.string.toStringz(name), RTLD_NOW);
+        }
+
+        private void* ExeModule_GetSymbol(HXModule lib, string name) {
+            return dlsym(lib, std.string.toStringz(name));
+        }
+
+        private bool ExeModule_Release(ref HXModule lib) {
+            if (0 == dlclose(lib)) {
+                lib = null;
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 }
 
 struct Symbol {
