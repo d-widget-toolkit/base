@@ -4,6 +4,7 @@ version(Tango){
     static import tango.core.Thread;
 } else { // Phobos
     static import core.thread;
+    static import core.time;
 }
 import java.lang.util;
 import java.lang.Runnable;
@@ -160,7 +161,7 @@ class Thread {
         version(Tango){
             TThread.sleep(time/1000.0);
         } else { // Phobos
-            TThread.sleep(time*10_000);
+            TThread.sleep(core.time.dur!("msecs")(time));
         }
     }
     public TThread nativeThread(){

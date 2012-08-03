@@ -40,7 +40,11 @@ class WeakHashMap {
     }
 
     Object[ Ref ] data;
-    ClassInfo gcLock;
+    version(Tango){
+        ClassInfo gcLock;
+    } else { // Phobos
+        mixin("const ClassInfo gcLock;");
+    }
     this(){
         unhookKey = new Ref(null);
         gcLock = ClassInfo.find( "gcx.GCLock" );
