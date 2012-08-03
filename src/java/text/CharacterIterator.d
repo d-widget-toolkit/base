@@ -3,7 +3,7 @@ module java.text.CharacterIterator;
 import java.lang.all;
 
 interface CharacterIterator {
-    static const char DONE = '\u00FF';
+    static const wchar DONE = '\u00FF';
     Object clone();
     char   current();
     char   first();

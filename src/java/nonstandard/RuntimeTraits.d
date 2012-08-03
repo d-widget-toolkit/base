@@ -9,33 +9,44 @@
  */
 module java.nonstandard.RuntimeTraits;
 import java.lang.all;
+
+version(Tango){
+    private const String CONST_CLASS_INFO = "new ClassInfo()";
+    private const String CONST_TYPE_INFO = "new TypeInfo()";
+} else { // Phobos
+    private const String CONST_CLASS_INFO = "new const(ClassInfo)()";
+    private const String CONST_TYPE_INFO = "new const(TypeInfo)()";
+}
+alias typeof(mixin(CONST_CLASS_INFO)) ConstClassInfo;
+alias typeof(mixin(CONST_TYPE_INFO)) ConstTypeInfo;
+
 // Only DWT
-public bool isJavaPrimitive( TypeInfo type ){
+public bool isJavaPrimitive( in TypeInfo type ){
     return isBool(type) || isInteger(type) || isCharacter(type) || isFloat(type);
 }
 
-public TypeInfo_Class getTypeInfo( ClassInfo ci ){
+public TypeInfo_Class getTypeInfo( in ClassInfo ci ){
     return null;
 }
 
-public TypeInfo_Class getSuperclass( ClassInfo ci ){
+public TypeInfo_Class getSuperclass( in ClassInfo ci ){
     return getSuperclass(getTypeInfo(ci));
 }
-public TypeInfo_Class getSuperclass( TypeInfo ti ){
+public TypeInfo_Class getSuperclass( in TypeInfo ti ){
     return null;
 }
 
-public TypeInfo_Interface[] getInterfaces( ClassInfo ci ){
+public TypeInfo_Interface[] getInterfaces( in ClassInfo ci ){
     return getInterfaces(getTypeInfo(ci));
 }
-public TypeInfo_Interface[] getInterfaces( TypeInfo ti ){
+public TypeInfo_Interface[] getInterfaces( in TypeInfo ti ){
     return null;
 }
 
-public String getName( ClassInfo ci ){
+public String getName( in ClassInfo ci ){
     return ci.name;
 }
-public String getName( TypeInfo ti ){
+public String getName( in TypeInfo ti ){
     if( isClass(ti) ){
         return getName( asClass(ti));
     }
@@ -44,7 +55,7 @@ public String getName( TypeInfo ti ){
 
 // End DWT. Start Tango...
 /// If the given type represents a typedef, return the actual type.
-TypeInfo realType (TypeInfo type)
+ConstTypeInfo realType (in TypeInfo type)
 {
     // TypeInfo_Typedef.next() doesn't return the actual type.
     // I think it returns TypeInfo_Typedef.base.next().
@@ -58,7 +69,7 @@ TypeInfo realType (TypeInfo type)
 }
 
 /// If the given type represents a class, return its ClassInfo; else return null;
-ClassInfo asClass (TypeInfo type)
+ConstClassInfo asClass (in TypeInfo type)
 {
     if (isInterface (type))
     {
@@ -75,14 +86,15 @@ ClassInfo asClass (TypeInfo type)
 
 /** Returns true iff one type is an ancestor of the other, or if the types are the same.
  * If either is null, returns false. */
-bool isDerived (ClassInfo derived, ClassInfo base)
+bool isDerived (in ClassInfo derived, in ClassInfo base)
 {
     if (derived is null || base is null)
         return false;
+    ConstClassInfo* pderived = &derived;
     do
-        if (derived is base)
+        if (*pderived is base)
             return true;
-    while ((derived = derived.base) !is null);
+    while ((pderived = &derived.base) !is null);
     return false;
 }
 
@@ -90,7 +102,7 @@ bool isDerived (ClassInfo derived, ClassInfo base)
  * by iface. This is an expensive operation (linear in the number of
  * interfaces and base classes).
  */
-bool implements (ClassInfo implementor, ClassInfo iface)
+bool implements (in ClassInfo implementor, in ClassInfo iface)
 {
     foreach (info; applyInterfaces (implementor))
     {
@@ -102,7 +114,7 @@ bool implements (ClassInfo implementor, ClassInfo iface)
 
 /** Returns true iff an instance of class test is implicitly castable to target. 
  * This is an expensive operation (isDerived + implements). */
-bool isImplicitly (ClassInfo test, ClassInfo target)
+bool isImplicitly (in ClassInfo test, in ClassInfo target)
 {
     // Keep isDerived first.
     // isDerived will be much faster than implements.
@@ -111,7 +123,7 @@ bool isImplicitly (ClassInfo test, ClassInfo target)
 
 /** Returns true iff an instance of type test is implicitly castable to target. 
  * If the types describe classes or interfaces, this is an expensive operation. */
-bool isImplicitly (TypeInfo test, TypeInfo target)
+bool isImplicitly (in TypeInfo test, in TypeInfo target)
 {
     // A lot of special cases. This is ugly.
     if (test is target)
@@ -165,13 +177,14 @@ bool isImplicitly (TypeInfo test, TypeInfo target)
 }
 
 ///
-ClassInfo[] baseClasses (ClassInfo type)
+ConstClassInfo[] baseClasses (in ClassInfo type)
 {
     if (type is null)
         return null;
-    ClassInfo[] types;
-    while ((type = type.base) !is null)
-        types ~= type;
+    ConstClassInfo[] types;
+    ConstClassInfo* ptype = &type;
+    while ((ptype = &ptype.base) !is null)
+        types ~= *ptype;
     return types;
 }
 
@@ -179,14 +192,15 @@ ClassInfo[] baseClasses (ClassInfo type)
  * or indirectly. This includes base interfaces of types the class implements,
  * and interfaces that base classes implement, and base interfaces of interfaces
  * that base classes implement. This is an expensive operation. */
-ClassInfo[] baseInterfaces (ClassInfo type)
+ConstClassInfo[] baseInterfaces (in ClassInfo type)
 {
     if (type is null)
         return null;
-    ClassInfo[] types = directInterfaces (type);
-    while ((type = type.base) !is null)
+    ConstClassInfo[] types = directInterfaces (type);
+    ConstClassInfo* ptype = &type;
+    while ((ptype = &ptype.base) !is null)
     {
-        types ~= interfaceGraph (type);
+        types ~= interfaceGraph (*ptype);
     }
     return types;
 }
@@ -214,9 +228,9 @@ ClassInfo[] baseInterfaces (ClassInfo type)
  * // interfaces = [I2.classinfo]
  * ---
  */
-ClassInfo[] interfaceGraph (ClassInfo type)
+ConstClassInfo[] interfaceGraph (in ClassInfo type)
 {
-    ClassInfo[] info;
+    ConstClassInfo[] info;
     foreach (iface; type.interfaces)
     {
         info ~= iface.classinfo;
@@ -229,20 +243,13 @@ ClassInfo[] interfaceGraph (ClassInfo type)
 struct applyInterfaces
 {
     ///
-    static applyInterfaces opCall (ClassInfo type)
-    {
-        applyInterfaces apply;
-        apply.type = type;
-        return apply;
-    }
-
-    ///
-    int opApply (int delegate (ref ClassInfo) dg)
+    int opApply (int delegate (ref ConstClassInfo) dg)
     {
         int result = 0;
-        for (; type; type = type.base)
+        ConstClassInfo* ptype = &type;
+        for (; *ptype !is null; ptype = &type.base)
         {
-            foreach (iface; type.interfaces)
+            foreach (iface; ptype.interfaces)
             {
                 result = dg (iface.classinfo);
                 if (result)
@@ -255,11 +262,11 @@ struct applyInterfaces
         return result;
     }
 
-    ClassInfo type;
+    ConstClassInfo type;
 }
 
 ///
-ClassInfo[] baseTypes (ClassInfo type)
+ConstClassInfo[] baseTypes (in ClassInfo type)
 {
     if (type is null)
         return null;
@@ -268,7 +275,7 @@ ClassInfo[] baseTypes (ClassInfo type)
 
 ///
 version(Tango){
-    ModuleInfo moduleOf (ClassInfo type)
+    ModuleInfo moduleOf (in ClassInfo type)
     {
         foreach (modula; ModuleInfo)
             foreach (klass; modula.localClasses)
@@ -277,7 +284,7 @@ version(Tango){
         return null;
     }
 } else { // Phobos
-    ModuleInfo* moduleOf (ClassInfo type)
+    ModuleInfo* moduleOf (in ClassInfo type)
     {
         foreach (modula; ModuleInfo)
             foreach (klass; modula.localClasses)
@@ -288,9 +295,9 @@ version(Tango){
 }
 
 /// Returns a list of interfaces that this class directly implements.
-ClassInfo[] directInterfaces (ClassInfo type)
+ConstClassInfo[] directInterfaces (in ClassInfo type)
 {
-    ClassInfo[] types;
+    ConstClassInfo[] types;
     foreach (iface; type.interfaces)
         types ~= iface.classinfo;
     return types;
@@ -299,9 +306,9 @@ ClassInfo[] directInterfaces (ClassInfo type)
 /** Returns a list of all types that are derived from the given type. This does not 
  * count interfaces; that is, if type is an interface, you will only get derived 
  * interfaces back. It is an expensive operations. */
-ClassInfo[] derivedTypes (ClassInfo type)
+ConstClassInfo[] derivedTypes (in ClassInfo type)
 {
-    ClassInfo[] types;
+    ConstClassInfo[] types;
     foreach (modula; ModuleInfo)
         foreach (klass; modula.localClasses)
             if (isDerived (klass, type) && (klass !is type))
@@ -310,7 +317,7 @@ ClassInfo[] derivedTypes (ClassInfo type)
 }
 
 ///
-bool isDynamicArray (TypeInfo type)
+bool isDynamicArray (in TypeInfo type)
 {
     // This implementation is evil.
     // Array typeinfos are named TypeInfo_A?, and defined individually for each
@@ -319,138 +326,138 @@ bool isDynamicArray (TypeInfo type)
     // So any TypeInfo with length 11 and starting with TypeInfo_A is an array
     // type.
     // Also, TypeInfo_Array is an array type.
-    type = realType (type);
-    return ((type.classinfo.name[9] == 'A') && (type.classinfo.name.length == 11)) || ((cast(TypeInfo_Array) type) !is null);
+    auto type2 = realType (type);
+    return ((type2.classinfo.name[9] == 'A') && (type2.classinfo.name.length == 11)) || ((cast(TypeInfo_Array) type2) !is null);
 }
 
 ///
-bool isStaticArray (TypeInfo type)
+bool isStaticArray (in TypeInfo type)
 {
-    type = realType (type);
-    return (cast(TypeInfo_StaticArray) type) !is null;
+    auto type2 = realType (type);
+    return (cast(TypeInfo_StaticArray) type2) !is null;
 }
 
 /** Returns true iff the given type is a dynamic or static array (false for associative
  * arrays and non-arrays). */
-bool isArray (TypeInfo type)
+bool isArray (in TypeInfo type)
 {
-    type = realType (type);
-    return isDynamicArray (type) || isStaticArray (type);
+    auto type2 = realType (type);
+    return isDynamicArray (type2) || isStaticArray (type2);
 }
 
 ///
-bool isAssociativeArray (TypeInfo type)
+bool isAssociativeArray (in TypeInfo type)
 {
-    type = realType (type);
-    return (cast(TypeInfo_AssociativeArray) type) !is null;
+    auto type2 = realType (type);
+    return (cast(TypeInfo_AssociativeArray) type2) !is null;
 }
 
 ///
-bool isCharacter (TypeInfo type)
+bool isCharacter (in TypeInfo type)
 {
-    type = realType (type);
-    return (type is typeid(char) || type is typeid(wchar) || type is typeid(dchar));
+    auto type2 = realType (type);
+    return (type2 is typeid(char) || type2 is typeid(wchar) || type2 is typeid(dchar));
 }
 
 ///
-bool isString (TypeInfo type)
+bool isString (in TypeInfo type)
 {
-    type = realType (type);
-    return isArray (type) && isCharacter (valueType (type));
+    auto type2 = realType (type);
+    return isArray (type2) && isCharacter (valueType (type2));
 }
 
 ///
-bool isUnsignedInteger (TypeInfo type)
+bool isUnsignedInteger (in TypeInfo type)
 {
-    type = realType (type);
-    return (type is typeid(uint) || type is typeid(ulong) || type is typeid(ushort) || type is typeid(ubyte));
+    auto type2 = realType (type);
+    return (type2 is typeid(uint) || type2 is typeid(ulong) || type2 is typeid(ushort) || type2 is typeid(ubyte));
 }
 
 ///
-bool isSignedInteger (TypeInfo type)
+bool isSignedInteger (in TypeInfo type)
 {
-    type = realType (type);
-    return (type is typeid(int) || type is typeid(long) || type is typeid(short) || type is typeid(byte));
+    auto type2 = realType (type);
+    return (type2 is typeid(int) || type2 is typeid(long) || type2 is typeid(short) || type2 is typeid(byte));
 }
 
 ///
-bool isInteger (TypeInfo type)
+bool isInteger (in TypeInfo type)
 {
-    type = realType (type);
-    return isSignedInteger (type) || isUnsignedInteger (type);
+    auto type2 = realType (type);
+    return isSignedInteger (type2) || isUnsignedInteger (type2);
 }
 
 ///
-bool isBool (TypeInfo type)
+bool isBool (in TypeInfo type)
 {
-    type = realType (type);
-    return (type is typeid(bool));
+    auto type2 = realType (type);
+    return (type2 is typeid(bool));
 }
 
 ///
-bool isFloat (TypeInfo type)
+bool isFloat (in TypeInfo type)
 {
-    type = realType (type);
-    return (type is typeid(float) || type is typeid(double) || type is typeid(real));
+    auto type2 = realType (type);
+    return (type2 is typeid(float) || type2 is typeid(double) || type2 is typeid(real));
 }
 
 ///
-bool isPrimitive (TypeInfo type)
+bool isPrimitive (in TypeInfo type)
 {
-    type = realType (type);
-    return (isArray (type) || isAssociativeArray (type) || isCharacter (type) || isFloat (type) || isInteger (type));
+    auto type2 = realType (type);
+    return (isArray (type2) || isAssociativeArray (type2) || isCharacter (type2) || isFloat (type2) || isInteger (type2));
 }
 
 /// Returns true iff the given type represents an interface.
-bool isInterface (TypeInfo type)
+bool isInterface (in TypeInfo type)
 {
     return (cast(TypeInfo_Interface) type) !is null;
 }
 
 ///
-bool isPointer (TypeInfo type)
+bool isPointer (in TypeInfo type)
 {
-    type = realType (type);
-    return (cast(TypeInfo_Pointer) type) !is null;
+    auto type2 = realType (type);
+    return (cast(TypeInfo_Pointer) type2) !is null;
 }
 
 /// Returns true iff the type represents a class (false for interfaces).
-bool isClass (TypeInfo type)
+bool isClass (in TypeInfo type)
 {
-    type = realType (type);
-    return (cast(TypeInfo_Class) type) !is null;
+    auto type2 = realType (type);
+    return (cast(TypeInfo_Class) type2) !is null;
 }
 
 ///
-bool isStruct (TypeInfo type)
+bool isStruct (in TypeInfo type)
 {
-    type = realType (type);
-    return (cast(TypeInfo_Struct) type) !is null;
+    auto type2 = realType (type);
+    return (cast(TypeInfo_Struct) type2) !is null;
 }
 
 ///
-bool isFunction (TypeInfo type)
+bool isFunction (in TypeInfo type)
 {
-    type = realType (type);
-    return ((cast(TypeInfo_Function) type) !is null) || ((cast(TypeInfo_Delegate) type) !is null);
+    auto type2 = realType (type);
+    return ((cast(TypeInfo_Function) type2) !is null) || ((cast(TypeInfo_Delegate) type2) !is null);
 }
 
 /** Returns true iff the given type is a reference type. */
-bool isReferenceType (TypeInfo type)
+bool isReferenceType (in TypeInfo type)
 {
     return isClass (type) || isPointer (type) || isDynamicArray (type);
 }
 
 /** Returns true iff the given type represents a user-defined type. 
  * This does not include functions, delegates, aliases, or typedefs. */
-bool isUserDefined (TypeInfo type)
+bool isUserDefined (in TypeInfo type)
 {
     return isClass (type) || isStruct (type);
 }
 
 /** Returns true for all value types, false for all reference types.
  * For functions and delegates, returns false (is this the way it should be?). */
-bool isValueType (TypeInfo type)
+bool isValueType (in TypeInfo type)
 {
     return !(isDynamicArray (type) || isAssociativeArray (type) || isPointer (type) || isClass (type) || isFunction (
             type));
@@ -458,28 +465,28 @@ bool isValueType (TypeInfo type)
 
 /** The key type of the given type. For an array, size_t; for an associative
  * array T[U], U. */
-TypeInfo keyType (TypeInfo type)
+ConstTypeInfo keyType (in TypeInfo type)
 {
-    type = realType (type);
-    auto assocArray = cast(TypeInfo_AssociativeArray) type;
+    auto type2 = realType (type);
+    auto assocArray = cast(TypeInfo_AssociativeArray) type2;
     if (assocArray)
         return assocArray.key;
-    if (isArray (type))
+    if (isArray (type2))
         return typeid(size_t);
     return null;
 }
 
 /** The value type of the given type -- given T[] or T[n], T; given T[U],
  * T; given T*, T; anything else, null. */
-TypeInfo valueType (TypeInfo type)
+ConstTypeInfo valueType (in TypeInfo type)
 {
-    type = realType (type);
-    if (isArray (type))
-        return type.next;
-    auto assocArray = cast(TypeInfo_AssociativeArray) type;
+    auto type2 = realType (type);
+    if (isArray (type2))
+        return type2.next;
+    auto assocArray = cast(TypeInfo_AssociativeArray) type2;
     if (assocArray)
         return assocArray.value;
-    auto pointer = cast(TypeInfo_Pointer) type;
+    auto pointer = cast(TypeInfo_Pointer) type2;
     if (pointer)
         return pointer.m_next;
     return null;
@@ -487,13 +494,13 @@ TypeInfo valueType (TypeInfo type)
 
 /** If the given type represents a delegate or function, the return type
  * of that function. Otherwise, null. */
-TypeInfo returnType (TypeInfo type)
+ConstTypeInfo returnType (in TypeInfo type)
 {
-    type = realType (type);
-    auto delegat = cast(TypeInfo_Delegate) type;
+    auto type2 = realType (type);
+    auto delegat = cast(TypeInfo_Delegate) type2;
     if (delegat)
         return delegat.next;
-    auto func = cast(TypeInfo_Function) type;
+    auto func = cast(TypeInfo_Function) type2;
     if (func)
         return func.next;
     return null;
