@@ -20,7 +20,7 @@ class Float : Number {
     public static float MAX_VALUE = 3.4028235e+38f;
     public static float MIN_VALUE = float.min; //1.4e-45f
     public static int SIZE = 32;
-    private float value;
+    private float value = 0;
 
     this( float value ){
         super();
