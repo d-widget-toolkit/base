@@ -17,7 +17,7 @@ class Double : Number {
     public static double NEGATIVE_INFINITY = -double.infinity;
     public static double MAX_VALUE = double.max;
     public static double MIN_VALUE = double.min;
-    private double value;
+    private double value = 0;
     this( double value ){
         super();
         this.value = value;
