@@ -11,10 +11,12 @@ class PushbackReader : Reader {
     void unread( char c ){
         implMissing(__FILE__,__LINE__);
     }
+    override
     int read(char[] cbuf, int off, int len){
         implMissing(__FILE__,__LINE__);
         return 0;
     }
+    override
     void  close(){
         implMissing(__FILE__,__LINE__);
     }

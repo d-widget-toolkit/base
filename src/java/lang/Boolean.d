@@ -25,6 +25,7 @@ class Boolean : ValueWrapperT!(bool) {
     public equals_t opEquals( int other ){
         return value == ( other !is 0 );
     }
+    override
     public equals_t opEquals( Object other ){
         if( auto o = cast(Boolean)other ){
             return value == o.value;

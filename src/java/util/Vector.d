@@ -23,9 +23,11 @@ class Vector : AbstractList, List {
     public this(int initialCapacity, int capacityIncrement){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     public void   add(int index, Object element){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     public bool    add(Object o){
         if( used + 1 >= vect.length ){
             vect.length = vect.length + capacityIncrement;
@@ -34,13 +36,16 @@ class Vector : AbstractList, List {
         used++;
         return true;
     }
+    override
     public bool    add(String o){
         return add(stringcast(o));
     }
+    override
     public bool    addAll(Collection c){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
+    override
     public bool    addAll(int index, Collection c){
         implMissing( __FILE__, __LINE__ );
         return false;
@@ -51,6 +56,7 @@ class Vector : AbstractList, List {
     public int    capacity(){
         return vect.length;
     }
+    override
     public void   clear(){
         used = 0;
     }
@@ -58,13 +64,16 @@ class Vector : AbstractList, List {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public bool    contains(Object elem){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
+    override
     public bool    contains(String str){
         return contains(stringcast(str));
     }
+    override
     public bool    containsAll(Collection c){
         implMissing( __FILE__, __LINE__ );
         return false;
@@ -85,6 +94,7 @@ class Vector : AbstractList, List {
    public  void   ensureCapacity(int minCapacity){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     public equals_t opEquals(Object o){
         implMissing( __FILE__, __LINE__ );
         return false;
@@ -93,16 +103,19 @@ class Vector : AbstractList, List {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public Object     get(int index){
         if( index >= used || index < 0 ){
             throw new ArrayIndexOutOfBoundsException( __FILE__, __LINE__ );
         }
         return vect[index];
     }
+    override
     public hash_t    toHash(){
         implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
+    override
     public int    indexOf(Object elem){
         implMissing( __FILE__, __LINE__ );
         return 0;
@@ -114,9 +127,11 @@ class Vector : AbstractList, List {
     public void   insertElementAt(Object obj, int index){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     public bool    isEmpty(){
         return used is 0;
     }
+    override
     public Iterator   iterator(){
         implMissing( __FILE__, __LINE__ );
         return null;
@@ -125,6 +140,7 @@ class Vector : AbstractList, List {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public int    lastIndexOf(Object elem){
         implMissing( __FILE__, __LINE__ );
         return 0;
@@ -133,25 +149,31 @@ class Vector : AbstractList, List {
         implMissing( __FILE__, __LINE__ );
         return 0;
     }
+    override
     public ListIterator   listIterator(){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public ListIterator   listIterator(int index){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public Object     remove(int index){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public bool    remove(Object o){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
+    override
     public bool remove(String key){
         return remove(stringcast(key));
     }
+    override
     public bool    removeAll(Collection c){
         implMissing( __FILE__, __LINE__ );
         return false;
@@ -166,13 +188,16 @@ class Vector : AbstractList, List {
     public void   removeElementAt(int index){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     protected  void     removeRange(int fromIndex, int toIndex){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     public bool    retainAll(Collection c){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
+    override
     public Object     set(int index, Object element){
         implMissing( __FILE__, __LINE__ );
         return null;
@@ -183,24 +208,30 @@ class Vector : AbstractList, List {
     public void   setSize(int newSize){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     public int    size(){
         return used;
     }
+    override
     public List   subList(int fromIndex, int toIndex){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public Object[]   toArray(){
         return vect[ 0 .. used ].dup;
     }
+    override
     public Object[]   toArray(Object[] a){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     String[]   toArray(String[] a){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public String     toString(){
         implMissing( __FILE__, __LINE__ );
         return null;
@@ -210,6 +241,7 @@ class Vector : AbstractList, List {
     }
 
     // only for D
+    override
     public int opApply (int delegate(ref Object value) dg){
         implMissing( __FILE__, __LINE__ );
         return 0;

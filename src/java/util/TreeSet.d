@@ -37,6 +37,7 @@ class TreeSet : AbstractSet, SortedSet {
         implMissing( __FILE__, __LINE__ );
     }
 
+    override
     public bool    add(Object o){
         version(Tango){
             return set.add(o, 0);
@@ -45,6 +46,7 @@ class TreeSet : AbstractSet, SortedSet {
             return false;
         }
     }
+    override
     public bool    add(String o){
         version(Tango){
             return add(stringcast(o));
@@ -53,6 +55,7 @@ class TreeSet : AbstractSet, SortedSet {
             return false;
         }
     }
+    override
     public bool    addAll(Collection c){
         version(Tango){
             foreach( o; c ){
@@ -64,6 +67,7 @@ class TreeSet : AbstractSet, SortedSet {
             return false;
         }
     }
+    override
     public void   clear(){
         version(Tango){
             set.clear();
@@ -71,6 +75,7 @@ class TreeSet : AbstractSet, SortedSet {
             implMissingInPhobos();
         }
     }
+    override
     public bool    contains(Object o){
         version(Tango){
             return set.containsKey(o);
@@ -79,6 +84,7 @@ class TreeSet : AbstractSet, SortedSet {
             return false;
         }
     }
+    override
     public bool     contains(String o){
         version(Tango){
             return contains(stringcast(o));
@@ -87,6 +93,7 @@ class TreeSet : AbstractSet, SortedSet {
             return false;
         }
     }
+    override
     public bool    containsAll(Collection c){
         version(Tango){
             foreach( o; c ){
@@ -120,6 +127,7 @@ class TreeSet : AbstractSet, SortedSet {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public bool    isEmpty(){
         version(Tango){
             return set.isEmpty();
@@ -128,6 +136,7 @@ class TreeSet : AbstractSet, SortedSet {
             return false;
         }
     }
+    override
     public Iterator   iterator(){
         implMissing( __FILE__, __LINE__ );
         return null;
@@ -136,10 +145,12 @@ class TreeSet : AbstractSet, SortedSet {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public bool    remove(Object o){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
+    override
     public bool remove(String key){
         version(Tango){
             return remove(stringcast(key));
@@ -148,14 +159,17 @@ class TreeSet : AbstractSet, SortedSet {
             return false;
         }
     }
+    override
     public bool    removeAll(Collection c){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
+    override
     public bool    retainAll(Collection c){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
+    override
     public int    size(){
         version(Tango){
             return set.size();
@@ -172,10 +186,12 @@ class TreeSet : AbstractSet, SortedSet {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public Object[]   toArray(){
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public Object[]   toArray(Object[] a){
         implMissing( __FILE__, __LINE__ );
         return null;
@@ -187,6 +203,7 @@ class TreeSet : AbstractSet, SortedSet {
 
 
     // only for D
+    override
     public int opApply (int delegate(ref Object value) dg){
         version(Tango){
             int localDg( ref Object key, ref int value ){

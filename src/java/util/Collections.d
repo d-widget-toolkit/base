@@ -138,12 +138,14 @@ class Collections {
         public bool     containsAll(Collection c){
             return list.containsAll(c);
         }
+        override
         public equals_t      opEquals(Object o){
             return cast(equals_t)list.opEquals(o);
         }
         public Object   get(int index){
             return list.get(index);
         }
+        override
         public hash_t   toHash(){
             return list.toHash();
         }
@@ -212,6 +214,7 @@ class Collections {
             implMissing(__FILE__, __LINE__ );
             return 0;
         }
+        override
         public String toString(){
             return list.toString();
         }
@@ -272,8 +275,10 @@ class Collections {
         public bool     contains(Object o){ synchronized(this){ return this.list.contains(o); } }
         public bool     contains(String o){ synchronized(this){ return this.list.contains(o); } }
         public bool     containsAll(Collection c){ synchronized(this){ return this.list.containsAll(c); } }
+        override
         public equals_t      opEquals(Object o){ synchronized(this){ return cast(equals_t)this.list.opEquals(o); } }
         public Object   get(int index){ synchronized(this){ return this.list.get(index); } }
+        override
         public hash_t   toHash(){ return this.list.toHash(); }
         public int      indexOf(Object o){ synchronized(this){ return this.list.indexOf(o); } }
         public bool     isEmpty(){ synchronized(this){ return this.list.isEmpty(); } }
@@ -292,6 +297,7 @@ class Collections {
         public Object[] toArray(){ synchronized(this){ return this.list.toArray(); } }
         public Object[] toArray(Object[] a){ synchronized(this){ return this.list.toArray(a); } }
         public String[] toArray(String[] a){ synchronized(this){ return this.list.toArray(a); } }
+        override
         public String toString(){ synchronized(this){ return this.list.toString(); } }
     }
     static List     synchronizedList(List list){
@@ -315,9 +321,11 @@ class Collections {
         public bool containsKey(String key){ synchronized(this){ return this.map.containsKey(key); } }
         public bool containsValue(Object value){ synchronized(this){ return this.map.containsValue(value); } }
         public Set  entrySet(){ synchronized(this){ return this.map.entrySet(); } }
+        override
         public equals_t opEquals(Object o){ synchronized(this){ return this.map.opEquals(o); } }
         public Object get(Object key){ synchronized(this){ return this.map.get(key); } }
         public Object get(String key){ synchronized(this){ return this.map.get(key); } }
+        override
         public hash_t toHash(){ return this.map.toHash(); }
         public bool isEmpty(){ synchronized(this){ return this.map.isEmpty(); } }
         public Set    keySet(){ synchronized(this){ return this.map.keySet(); } }

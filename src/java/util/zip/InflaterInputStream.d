@@ -88,6 +88,7 @@ public class InflaterInputStream : java.io.InputStream.InputStream {
         }
     }
 
+    override
     public int read(){
         version(Tango){
             ubyte[1] data;
@@ -102,21 +103,25 @@ public class InflaterInputStream : java.io.InputStream.InputStream {
         }
     }
 
+    override
     public int read( byte[] b, int off, int len ){
         implMissing( __FILE__, __LINE__ );
         return 0;
     }
 
+    override
     public int available(){
         implMissing( __FILE__, __LINE__ );
         return 0;
     }
 
+    override
     public long skip( long n ){
         implMissing( __FILE__, __LINE__ );
         return 0L;
     }
 
+    override
     public void close(){
         implMissing( __FILE__, __LINE__ );
     }
@@ -125,15 +130,18 @@ public class InflaterInputStream : java.io.InputStream.InputStream {
         implMissing( __FILE__, __LINE__ );
     }
 
+    override
     public bool markSupported(){
         implMissing( __FILE__, __LINE__ );
         return false;
     }
 
+    override
     public synchronized void mark( int readlimit ){
         implMissing( __FILE__, __LINE__ );
     }
 
+    override
     public synchronized void reset(){
         implMissing( __FILE__, __LINE__ );
     }

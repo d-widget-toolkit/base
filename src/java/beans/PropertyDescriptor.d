@@ -18,6 +18,7 @@ class PropertyDescriptor : FeatureDescriptor {
         implMissing(__FILE__, __LINE__);
     }
 
+    override
     equals_t opEquals(Object obj){
         implMissing(__FILE__, __LINE__);
         return 0;

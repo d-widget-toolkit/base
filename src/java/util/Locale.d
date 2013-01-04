@@ -141,6 +141,7 @@ class Locale : Cloneable {
         implMissing(__FILE__, __LINE__);
     }
 
+    override
     String toString(){
         implMissing(__FILE__, __LINE__);
         return null;
