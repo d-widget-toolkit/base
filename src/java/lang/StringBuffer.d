@@ -62,6 +62,7 @@ class StringBuffer : CharSequence {
         return new StringCharSequence( substring(start, end) );
     }
 
+    override
     String toString(){
         version(Tango){
             return buffer.slice().dup;

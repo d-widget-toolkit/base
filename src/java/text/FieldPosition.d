@@ -47,6 +47,7 @@ class FieldPosition {
     void setEndIndex(int ei){
         implMissing(__FILE__, __LINE__);
     }
+    override
     String toString(){
         implMissing(__FILE__, __LINE__);
         return null;

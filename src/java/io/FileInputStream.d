@@ -97,11 +97,13 @@ public class FileInputStream : java.io.InputStream.InputStream {
         }
     }
 
+    override
     public long skip( long n ){
         implMissing( __FILE__, __LINE__ );
         return 0L;
     }
 
+    override
     public int available(){
         implMissing( __FILE__, __LINE__ );
         return 0;

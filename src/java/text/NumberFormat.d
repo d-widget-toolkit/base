@@ -38,6 +38,7 @@ class NumberFormat : java.text.Format.Format {
         implMissing(__FILE__, __LINE__);
     }
 
+    override
     Object clone(){
         implMissing(__FILE__, __LINE__);
         return null;
@@ -68,6 +69,7 @@ class NumberFormat : java.text.Format.Format {
         return null;
     }
 
+    override
     StringBuffer format(Object number, StringBuffer toAppendTo, FieldPosition pos){
         implMissing(__FILE__, __LINE__);
         return null;
@@ -177,6 +179,7 @@ class NumberFormat : java.text.Format.Format {
         return null;
     }
 
+    override
     Object parseObject(String source, ParsePosition pos){
         implMissing(__FILE__, __LINE__);
         return null;

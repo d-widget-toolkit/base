@@ -25,6 +25,7 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
         this.buf = aBuf[ offset .. offset+length_ESCAPE ];
     }
 
+    override
     public int read(){
         synchronized {
             if( pos >= this.buf.length ){
@@ -36,10 +37,12 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
         }
     }
 
+    override
     public int read( byte[] b, int off, int len ){
         synchronized return super.read( b, off, len );
     }
 
+    override
     public long skip( long n ){
         synchronized {
             pos += n;
@@ -47,6 +50,7 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
         }
     }
 
+    override
     public int available(){
         synchronized {
             if( pos >= this.buf.length ){
@@ -56,17 +60,21 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
         }
     }
 
+    override
     public bool markSupported(){
         return false;
     }
 
+    override
     public synchronized void mark( int readAheadLimit ){
     }
 
+    override
     public synchronized void reset(){
         pos = 0;
     }
 
+    override
     public void close(){
     }
 

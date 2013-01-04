@@ -59,6 +59,7 @@ class ValueWrapperT(T) : ValueWrapper {
         }
     }
     else{
+        override
         public equals_t opEquals( Object other ){
             if( auto o = cast(ValueWrapperT!(T))other ){
                 return value == o.value;
