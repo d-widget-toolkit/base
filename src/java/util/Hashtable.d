@@ -11,18 +11,23 @@ import java.util.Set;
 // synchronized
 class Hashtable : Dictionary, Map {
 
+    override
     public Object get(String key){
         return super.get(key);
     }
+    override
     public Object put(String key, Object value){
         return super.put(key, value);
     }
+    override
     public Object put(Object key, String value){
         return super.put(key, value);
     }
+    override
     public Object put(String key, String value){
         return super.put(key, value);
     }
+    override
     public Object remove(String key){
         return super.remove(key);
     }
@@ -58,9 +63,11 @@ class Hashtable : Dictionary, Map {
         }
     }
 
+    override
     Enumeration  elements(){
         return new ObjectEnumeration( map.values );
     }
+    override
     Enumeration        keys() {
         return new ObjectEnumeration( map.keys );
     }
@@ -92,10 +99,12 @@ class Hashtable : Dictionary, Map {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public equals_t opEquals(Object o){
         implMissing( __FILE__, __LINE__ );
         return 0;
     }
+    override
     public Object get(Object key){
         synchronized {
             if( auto v = key in map ){
@@ -104,10 +113,12 @@ class Hashtable : Dictionary, Map {
             return null;
         }
     }
+    override
     public hash_t toHash(){
         implMissingSafe( __FILE__, __LINE__ );
         return 0;
     }
+    override
     public bool isEmpty(){
         synchronized return map.length is 0;
     }
@@ -115,6 +126,7 @@ class Hashtable : Dictionary, Map {
         implMissing( __FILE__, __LINE__ );
         return null;
     }
+    override
     public Object put(Object key, Object value){
         synchronized {
             Object res = null;
@@ -132,12 +144,14 @@ class Hashtable : Dictionary, Map {
         synchronized
         implMissing( __FILE__, __LINE__ );
     }
+    override
     public Object remove(Object key){
         synchronized
         implMissing( __FILE__, __LINE__ );
         return null;
     }
 //     public Object remove(String key)
+    override
     public int    size(){
         synchronized return map.length;
     }

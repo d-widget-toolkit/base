@@ -55,26 +55,32 @@ class Double : Number {
         return TYPE_;
     }
 
+    override
     public byte byteValue(){
         return cast(byte)value;
     }
 
+    override
     public short shortValue(){
         return cast(short)value;
     }
 
+    override
     public int intValue(){
         return cast(int)value;
     }
 
+    override
     public long longValue(){
         return cast(long)value;
     }
 
+    override
     public float floatValue(){
         return cast(float)value;
     }
 
+    override
     public double doubleValue(){
         return cast(double)value;
     }

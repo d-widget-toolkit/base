@@ -579,6 +579,7 @@ class StringCharSequence : CharSequence {
     CharSequence subSequence(int start, int end){
         return new StringCharSequence( str[ start .. end ]);
     }
+    override
     String toString(){
         return str;
     }

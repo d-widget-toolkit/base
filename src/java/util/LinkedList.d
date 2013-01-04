@@ -132,6 +132,7 @@ class LinkedList : List {
     void   ensureCapacity(int minCapacity){
         implMissing( __FILE__, __LINE__ );
     }
+    override
     equals_t opEquals(Object o){
         implMissing( __FILE__, __LINE__ );
         return false;
@@ -164,6 +165,7 @@ class LinkedList : List {
             return null;
         }
     }
+    override
     hash_t    toHash(){
         implMissingSafe( __FILE__, __LINE__ );
         return 0;
@@ -317,6 +319,7 @@ class LinkedList : List {
             return null;
         }
     }
+    override
     String     toString(){
         implMissing( __FILE__, __LINE__ );
         return null;

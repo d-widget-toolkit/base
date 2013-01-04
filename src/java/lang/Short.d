@@ -53,11 +53,17 @@ class Short : Number {
         return TYPE_;
     }
 
+    override
     byte byteValue(){ return cast(byte)value; }
+    override
     double doubleValue(){ return value; }
+    override
     float floatValue(){ return value; }
+    override
     int intValue(){ return value; }
+    override
     long longValue(){ return value; }
+    override
     short shortValue(){ return value; }
 }
 alias Short ValueWrapperShort;
