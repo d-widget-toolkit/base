@@ -115,8 +115,7 @@ IDwtLogger getDwtLogger(){
 void implMissing( String file, uint line ){
     getDwtLogger().fatal( file, line, "implementation missing in file {} line {}", file, line );
     getDwtLogger().fatal( file, line, "Please create a bug report at http://www.dsource.org/projects/dwt" );
-    getDwtLogger().fatal( file, line, "exiting ..." );
-    exit(1);
+    assert(false, "Implementation missing");
 }
 
 void implMissingInTango(T = void)( String file, uint line ) {
