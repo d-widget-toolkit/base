@@ -10,7 +10,7 @@ version(Tango){
 
 class Math {
 
-    public const double PI = MathLib.PI;
+    public static immutable double PI = MathLib.PI;
 
     static double abs(double a){ return a > 0 ? a : -a; }
     static float  abs(float  a){ return a > 0 ? a : -a; }
