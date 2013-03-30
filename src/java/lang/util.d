@@ -582,7 +582,8 @@ struct ImportData{
     TryImmutable!(void)[] data;
     String name;
 
-    public static ImportData opCall( TryImmutable!(void)[] data, String name ){
+    //empty () is just a hack to force opCall to be included in full in the .di file
+    public static ImportData opCall()( TryImmutable!(void)[] data, String name ){
         ImportData res;
         res.data = data;
         res.name = name;
