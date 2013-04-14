@@ -137,7 +137,7 @@ class System {
 
     static long currentTimeMillis(){
         version(Tango) return tango.time.Clock.Clock.now().ticks() / 10000;
-        else           return std.datetime.Clock.currStdTime();
+        else           return std.datetime.Clock.currStdTime() / 10000;
     }
 
     static void exit( int code ){
