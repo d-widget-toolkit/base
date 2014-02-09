@@ -110,7 +110,7 @@ class DeflaterOutputStream : java.io.OutputStream.OutputStream {
     override
     public void write(int b) {
         byte[1] bytes;
-        bytes[0] = b & 0xFF;
+        bytes[0] = cast(byte) (b & 0xFF);
         write(bytes, 0, bytes.length);
     }
 

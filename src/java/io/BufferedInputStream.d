@@ -10,7 +10,7 @@ public class BufferedInputStream : java.io.InputStream.InputStream {
 
     alias java.io.InputStream.InputStream.read read;
 
-    private const int defaultSize = 8192;
+    private enum int defaultSize = 8192;
     protected byte[] buf;
     protected int count = 0; /// The index one greater than the index of the last valid byte in the buffer.
     protected int pos   = 0; /// The current position in the buffer.

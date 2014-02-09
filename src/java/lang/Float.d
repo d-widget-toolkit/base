@@ -18,7 +18,7 @@ class Float : Number {
     public static float NEGATIVE_INFINITY = -float.infinity;
     public static float NaN = float.nan;
     public static float MAX_VALUE = 3.4028235e+38f;
-    public static float MIN_VALUE = float.min; //1.4e-45f
+    public static float MIN_VALUE = float.min_normal; //1.4e-45f
     public static int SIZE = 32;
     private float value = 0;
 

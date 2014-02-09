@@ -25,7 +25,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
     private ubyte[] buffer;
     private int buf_pos;
     private int buf_size;
-    private const int BUFFER_SIZE = 0x10000;
+    private enum int BUFFER_SIZE = 0x10000;
     private bool eof;
 
     public this ( String name ){
