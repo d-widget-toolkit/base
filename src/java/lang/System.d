@@ -110,28 +110,28 @@ template SimpleType(T) {
 
 
 class System {
-    static void arraycopy(T)(in T[] src, uint srcPos, T[] dest, uint destPos, uint len) {
+    static void arraycopy(T1, T2)(in T1[] src, uint srcPos, T2[] dest, uint destPos, uint len) {
         if(len == 0) return;
 
         assert(src);
         assert(dest);
-        debug{SimpleType!(T).validCheck(src.length - srcPos, dest.length - destPos, len);}
+        debug{SimpleType!(T1).validCheck(src.length - srcPos, dest.length - destPos, len);}
 
         // overlapping?
         if((src.ptr <= dest.ptr && src.ptr + len > dest.ptr)
                 ||(src.ptr >= dest.ptr && src.ptr < dest.ptr + len)){
             if( destPos < srcPos ){
                 for(int i=0; i<len; ++i){
-                    dest[destPos+i] = cast(T)src[srcPos+i];
+                    dest[destPos+i] = cast(T2)src[srcPos+i];
                 }
             }
             else{
                 for(int i=len-1; i>=0; --i){
-                    dest[destPos+i] = cast(T)src[srcPos+i];
+                    dest[destPos+i] = cast(T2)src[srcPos+i];
                 }
             }
         }else{
-            dest[destPos..(len+destPos)] = cast(T[])src[srcPos..(len+srcPos)];
+            dest[destPos..(len+destPos)] = cast(T2[])src[srcPos..(len+srcPos)];
         }
     }
 

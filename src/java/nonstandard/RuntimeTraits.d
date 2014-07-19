@@ -284,7 +284,7 @@ version(Tango){
         return null;
     }
 } else { // Phobos
-    ModuleInfo* moduleOf (in ClassInfo type)
+    Immutable!(ModuleInfo)* moduleOf (in ClassInfo type)
     {
         foreach (modula; ModuleInfo)
             foreach (klass; modula.localClasses)
