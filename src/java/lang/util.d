@@ -78,23 +78,23 @@ version(Tango){
         }
         void trace( String file, ulong line, String fmt, ... ){
 			fmt = fmtFromTangoFmt(fmt);
-            std.stdio.writefln( "TRC %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+            std.stdio.writefln( "TRC %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
         }																	
         void info( String file, ulong line, String fmt, ... ){	
 			fmt = fmtFromTangoFmt(fmt);		
-            std.stdio.writefln( "INF %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+            std.stdio.writefln( "INF %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
         }																	
         void warn( String file, ulong line, String fmt, ... ){	
 			fmt = fmtFromTangoFmt(fmt);		
-            std.stdio.writefln( "WRN %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+            std.stdio.writefln( "WRN %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
         }																	
         void error( String file, ulong line, String fmt, ... ){
 			fmt = fmtFromTangoFmt(fmt);		
-            std.stdio.writefln( "ERR %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+            std.stdio.writefln( "ERR %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
         }																	
         void fatal( String file, ulong line, String fmt, ... ){
 			fmt = fmtFromTangoFmt(fmt);	
-            std.stdio.writefln( "FAT %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, &fmt) );
+            std.stdio.writefln( "FAT %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
         }
     }
 }
