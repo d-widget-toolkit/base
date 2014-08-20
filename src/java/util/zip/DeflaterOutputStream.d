@@ -116,7 +116,7 @@ class DeflaterOutputStream : java.io.OutputStream.OutputStream {
 
     override
     public void write(in byte[] b) {
-        write(b, 0, b.length);
+        write(b, 0, cast(int)b.length);
     }
 
     override

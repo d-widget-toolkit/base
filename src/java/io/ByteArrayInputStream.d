@@ -56,7 +56,7 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
             if( pos >= this.buf.length ){
                 return 0;
             }
-            return this.buf.length - pos;
+            return cast(int)(this.buf.length - pos);
         }
     }
 

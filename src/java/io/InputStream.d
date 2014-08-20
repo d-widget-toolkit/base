@@ -22,7 +22,7 @@ public abstract class InputStream {
             }
             b[ idx] = cast(byte)( c & 0xFF );
         }
-        return b.length;
+        return cast(int)(b.length);
     }
 
     public int read( byte[] b, int off, int len ){

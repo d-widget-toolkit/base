@@ -99,7 +99,7 @@ String caltureName() {
                 // A settings of each category override this. 
                 res = .getenv("LANG");
             }
-            int dot = .indexOf(res, '.');
+            ptrdiff_t dot = .indexOf(res, '.');
             if (dot != -1) res = res[0 .. dot];
             return .replace(res, "_", "-");
         } else {

@@ -19,16 +19,16 @@ version(Tango){
 }
 
 ///The Universal Character Set (UCS), defined by the International Standard ISO/IEC 10646
-/*typedef*/alias int UCSindex;
+/*typedef*/alias ptrdiff_t UCSindex;
 alias UCSindex UCSshift;
 
 static if(UTFTypeCheck) {
     ///UTF-16 (16-bit Unicode Transformation Format)
     /*struct UTF16index {
-        int internalValue;
+        ptrdiff_t internalValue;
         alias internalValue val;
         
-        private static UTF16index opCall(int _val) {
+        private static UTF16index opCall(ptrdiff_t _val) {
             UTF16index t = { _val };
             return t;
         }
@@ -51,31 +51,31 @@ mixin(constFuncs!("
         }
         
         version(Windows) {
-            UTF16index opAdd(in int di) {
+            UTF16index opAdd(in ptrdiff_t di) {
                 return UTF16index(val + di);
             }
             
-            UTF16index opSub(in int di) {
+            UTF16index opSub(in ptrdiff_t di) {
                 return UTF16index(val - di);
             }
         }
         
         int opCmp(in UTF16index i2) {
-            return val - i2.val;
+            return cast(int)(val - i2.val);
         }
 "));
     }*/
-    alias int UTF16index;
-    alias int UTF16shift;
+    alias ptrdiff_t UTF16index;
+    alias ptrdiff_t UTF16shift;
 
     ///UTF-8 (UCS Transformation Format — 8-bit)
-    //typedef int UTF8index;
+    //typedef ptrdiff_t UTF8index;
     //alias UTF8index UTF8shift;
     struct UTF8index {
-        int internalValue;
+        ptrdiff_t internalValue;
         alias internalValue val;
         
-        private static UTF8index opCall(int _val) {
+        private static UTF8index opCall(ptrdiff_t _val) {
             UTF8index t = { _val };
             return t;
         }
@@ -102,18 +102,18 @@ mixin(constFuncs!("
         }
         
         int opCmp(in UTF8index i2) {
-            return val - i2.val;
+            return cast(int)(val - i2.val);
         }
 "));
     }
     
-    private UTF8index newUTF8index(int i) {
+    private UTF8index newUTF8index(ptrdiff_t i) {
         return UTF8index(i);
     }
     
-    private int val(T)(T i) {
+    private ptrdiff_t val(T)(T i) {
         static if(is(T : UTF16index))
-            return cast(int) i;
+            return cast(ptrdiff_t) i;
         else
             return i.val;
     }
@@ -123,10 +123,10 @@ mixin(constFuncs!("
     }
     
     struct UTF8shift {
-        int internalValue;
+        ptrdiff_t internalValue;
         alias internalValue val;
         
-        private static UTF8shift opCall(int _val) {
+        private static UTF8shift opCall(ptrdiff_t _val) {
             UTF8shift t = { _val };
             return t;
         }
@@ -149,13 +149,13 @@ mixin(constFuncs!("
         }
         
         int opCmp(in UTF8shift di2) {
-            return val - di2.val;
+            return cast(int)(val - di2.val);
         }
 "));
     }
     
 
-    UTF8index asUTF8index(int i) {
+    UTF8index asUTF8index(ptrdiff_t i) {
         return UTF8index(i);
     }
 
@@ -163,13 +163,13 @@ mixin(constFuncs!("
         return UTF8shift(i);
     }
 } else {
-    alias int UTF16index;
-    alias int UTF16shift;
+    alias ptrdiff_t UTF16index;
+    alias ptrdiff_t UTF16shift;
     
-    alias int UTF8index;
-    alias int UTF8shift;
+    alias ptrdiff_t UTF8index;
+    alias ptrdiff_t UTF8shift;
     
-    private int val(int i) {
+    private ptrdiff_t val(ptrdiff_t i) {
         return i;
     }
     

@@ -78,7 +78,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
             try{
                 if( buf_pos == buf_size ){
                     buf_pos = 0;
-                    buf_size = conduit.read( buffer );
+                    buf_size = cast(int)(conduit.read( buffer ));
                 }
                 if( buf_size <= 0 ){
                     eof = true;

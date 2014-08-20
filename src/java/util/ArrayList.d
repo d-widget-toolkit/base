@@ -23,7 +23,7 @@ class ArrayList : AbstractList, List {
     override
     void   add(int index, Object element){
         data.length = data.length +1;
-        System.arraycopy( data, index, data, index+1, data.length - index -1 );
+        System.arraycopy( data, index, data, index+1, cast(int)(data.length - index -1) );
         data[index] = element;
     }
     override
@@ -38,7 +38,7 @@ class ArrayList : AbstractList, List {
     override
     bool    addAll(Collection c){
         if( c.size() is 0 ) return false;
-        uint idx = data.length;
+        uint idx = cast(uint)data.length;
         data.length = data.length + c.size();
         foreach( o; c ){
             data[ idx++ ] = o;
@@ -121,13 +121,13 @@ class ArrayList : AbstractList, List {
     int    indexOf(Object o){
         foreach( i, v; data ){
             if( data[i] is o ){
-                return i;
+                return cast(int)i;
             }
             if(( data[i] is null ) || ( o is null )){
                 continue;
             }
             if( data[i] == o ){
-                return i;
+                return cast(int)i;
             }
         }
         return -1;
@@ -163,13 +163,13 @@ class ArrayList : AbstractList, List {
     int    lastIndexOf(Object o){
         foreach_reverse( i, v; data ){
             if( data[i] is o ){
-                return i;
+                return cast(int)i;
             }
             if(( data[i] is null ) || ( o is null )){
                 continue;
             }
             if( data[i] == o ){
-                return i;
+                return cast(int)i;
             }
         }
         return -1;
@@ -227,7 +227,7 @@ class ArrayList : AbstractList, List {
     override
     Object     remove(int index){
         Object res = data[index];
-        System.arraycopy( data, index+1, data, index, data.length - index - 1 );
+        System.arraycopy( data, index+1, data, index, cast(int)(data.length - index - 1) );
         data.length = data.length -1;
         return res;
     }
@@ -275,7 +275,7 @@ class ArrayList : AbstractList, List {
     }
     override
     int    size(){
-        return data.length;
+        return cast(int)data.length;
     }
     override
     List   subList(int fromIndex, int toIndex){
