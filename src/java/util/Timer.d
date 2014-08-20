@@ -41,7 +41,7 @@ class Timer {
             elements++;
             if (elements is heap.length) {
                 TimerTask new_heap[] = new TimerTask[heap.length * 2];
-                System.arraycopy(heap, 0, new_heap, 0, heap.length);
+                System.arraycopy(heap, 0, new_heap, 0, cast(int)heap.length);
                 heap = new_heap;
             }
             heap[elements] = task;

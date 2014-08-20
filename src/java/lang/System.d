@@ -148,7 +148,7 @@ class System {
         if( x is null ){
             return 0;
         }
-        return (*cast(Object *)&x).toHash();
+        return cast(int)((*cast(Object *)&x).toHash());
     }
 
     public static String getProperty( String key, String defval ){

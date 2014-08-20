@@ -71,7 +71,7 @@ version(Tango){
         }
     }
 } else { // Phobos
-	static import core.vararg;
+	import core.vararg;
 	
     class DwtLogger : IDwtLogger {
         private this( String name ) {
