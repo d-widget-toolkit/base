@@ -393,19 +393,28 @@ version(Tango){
 	
     class Format{
         template UnTypedef(T) {
-            static if (is(T U == typedef))
-                alias std.traits.Unqual!(U) UnTypedef;
-            else
+            version(Tango){
+                mixin(r"static if (is(T U == typedef))
+                    alias std.traits.Unqual!(U) UnTypedef;
+                else
+                    alias std.traits.Unqual!(T) UnTypedef;");
+            } else { // Phobos
                 alias std.traits.Unqual!(T) UnTypedef;
+            }
         }
         static String opCall(A...)( String _fmt, A _args ){
             //Formatting a typedef is deprecated
             std.typetuple.staticMap!(UnTypedef, A) args;
-            foreach(i, _a; _args)
-                static if (is(T U == typedef))
-                    args[i] = cast(U) _a;
-                else
+            foreach(i, _a; _args) {
+                version(Tango){
+                    mixin(r"static if (is(T U == typedef))
+                        args[i] = cast(U) _a;
+                    else
+                        args[i] = _a;");
+                } else { // Phobos
                     args[i] = _a;
+                }
+            }
             
 			auto writer = std.array.appender!(String)();
             std.format.formattedWrite(writer, fmtFromTangoFmt(_fmt), args);
