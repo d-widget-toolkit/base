@@ -63,7 +63,7 @@ version(Tango){
                 LCTYPE.LOCALE_SISO639LANGNAME, buf.ptr, buf.length);
             enforce(len, new Exception("LOCALE_SISO639LANGNAME", __FILE__, __LINE__));
             res ~= buf[0 .. len - 1];
-            res ~= "-";
+            res ~= '-';
             len = GetLocalInfo(LCID.LOCALE_USER_DEFAULT,
                 LCTYPE.LOCALE_SISO3166CTRYNAME, null, 0);
             enforce(len, new Exception("LOCALE_SISO3166CTRYNAME (len)", __FILE__, __LINE__));
