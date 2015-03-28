@@ -22,7 +22,7 @@ version(Tango){
 } else { // Phobos
 
 public import java.nonstandard.sync.exception;
-public import core.sync.mutex;
+public import java.nonstandard.sync.mutex;
 public import core.time;
 
 version( Windows )
@@ -437,7 +437,7 @@ private:
 version( unittest )
 {
     private import core.thread;
-    private import core.sync.mutex;
+    private import java.nonstandard.sync.mutex;
     private import core.sync.semaphore;
 
 
