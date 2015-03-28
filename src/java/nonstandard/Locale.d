@@ -75,7 +75,7 @@ version(Tango){
             return to!(String)(res);
         }
     } else version (Posix) {
-        private import std.process : getenv;
+        private import std.process : environment;
         private import std.string : indexOf, replace;
     }
 }
@@ -93,11 +93,11 @@ String caltureName() {
         } else version (Posix) {
             // LC_ALL is override to settings of all category.
             // This is undefined in almost case.
-            String res = .getenv("LC_ALL");
+            String res = .environment.get("LC_ALL", "");
             if (!res || !res.length) {
                 // LANG is basic Locale setting.
                 // A settings of each category override this. 
-                res = .getenv("LANG");
+                res = .environment.get("LANG", "");
             }
             ptrdiff_t dot = .indexOf(res, '.');
             if (dot != -1) res = res[0 .. dot];
