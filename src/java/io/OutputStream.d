@@ -18,7 +18,7 @@ public abstract class OutputStream {
         }
     }
 
-    public void write( in byte[] b, int off, int len ){
+    public void write( in byte[] b, ptrdiff_t off, ptrdiff_t len ){
         write(b[off .. off+len]);
     }
 

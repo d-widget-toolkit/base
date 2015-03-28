@@ -191,7 +191,7 @@ UTF8index firstIndex(in char[] s) {
 }
 
 UTF8index endIndex(in char[] s) {
-    return cast(UTF8index) s.length;
+    return cast(UTF8index) cast(int)/*64bit*/s.length;
 }
 
 UTF8index beforeEndIndex(in char[] s) {
@@ -272,7 +272,7 @@ UCSindex UCScount( in char[] s ){
         assert( ate is s.length );
         return res.length;
     } else { // Phobos
-        return std.utf.count(s);
+        return cast(UCSindex)/*64bit*/std.utf.count(s);
     }
 }
 
@@ -369,7 +369,7 @@ dchar dcharAt( in char[] s, in UTF8index i, out UTF8shift stride = UTF8dummyShif
     } else { // Phobos
         size_t ate = 0;
         dchar res = std.utf.decode(str, ate);
-        stride = cast(UTF8shift)ate;
+        stride = cast(UTF8shift)cast(int)/*64bit*/ate;
         return res;
     }
 }

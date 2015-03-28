@@ -78,7 +78,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
             try{
                 if( buf_pos == buf_size ){
                     buf_pos = 0;
-                    buf_size = cast(int)(conduit.read( buffer ));
+                    buf_size = cast(int)/*64bit*/conduit.read( buffer );
                 }
                 if( buf_size <= 0 ){
                     eof = true;
@@ -104,7 +104,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
     }
 
     override
-    public int available(){
+    public ptrdiff_t available(){
         implMissing( __FILE__, __LINE__ );
         return 0;
     }

@@ -54,7 +54,7 @@ class Vector : AbstractList, List {
         add(obj);
     }
     public int    capacity(){
-        return cast(int)vect.length;
+        return cast(int)/*64bit*/vect.length;
     }
     override
     public void   clear(){

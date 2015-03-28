@@ -25,15 +25,15 @@ version(Tango){
     alias std.c.stdlib.exit exit;
 }
 
-interface IDwtLogger {
-    void trace( String file, ulong line, String fmt, ... );
-    void info( String file, ulong line, String fmt, ... );
-    void warn( String file, ulong line, String fmt, ... );
-    void error( String file, ulong line, String fmt, ... );
-    void fatal( String file, ulong line, String fmt, ... );
-}
-
 version(Tango){
+    interface IDwtLogger {
+        void trace( String file, ulong line, String fmt, ... );
+        void info( String file, ulong line, String fmt, ... );
+        void warn( String file, ulong line, String fmt, ... );
+        void error( String file, ulong line, String fmt, ... );
+        void fatal( String file, ulong line, String fmt, ... );
+    }
+
     class DwtLogger : IDwtLogger {
         tango.util.log.Log.Logger logger;
         private this( char[] name ){
@@ -71,35 +71,35 @@ version(Tango){
         }
     }
 } else { // Phobos
-	import core.vararg;
-	
-    class DwtLogger : IDwtLogger {
+    class IDwtLogger {
         private this( String name ) {
         }
-        void trace( String file, ulong line, String fmt, ... ){
-			fmt = fmtFromTangoFmt(fmt);
-            std.stdio.writefln( "TRC %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
-        }																	
-        void info( String file, ulong line, String fmt, ... ){	
-			fmt = fmtFromTangoFmt(fmt);		
-            std.stdio.writefln( "INF %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
-        }																	
-        void warn( String file, ulong line, String fmt, ... ){	
-			fmt = fmtFromTangoFmt(fmt);		
-            std.stdio.writefln( "WRN %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
-        }																	
-        void error( String file, ulong line, String fmt, ... ){
-			fmt = fmtFromTangoFmt(fmt);		
-            std.stdio.writefln( "ERR %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
-        }																	
-        void fatal( String file, ulong line, String fmt, ... ){
-			fmt = fmtFromTangoFmt(fmt);	
-            std.stdio.writefln( "FAT %s %s: %s", file, line, doVarArgFormat(typeid(fmt) ~ _arguments, cast(core.vararg.va_list)&fmt) );
+        void trace(T...)( String file, ulong line, String fmt, T args ){
+            fmt = fmtFromTangoFmt(fmt);
+            std.stdio.writefln( "TRC %s %s: %s", file, line, std.string.format(fmt, args) );
+        }
+        void info(T...)( String file, ulong line, String fmt, T args ){
+            fmt = fmtFromTangoFmt(fmt);
+            std.stdio.writefln( "INF %s %s: %s", file, line, std.string.format(fmt, args) );
+        }
+        void warn(T...)( String file, ulong line, String fmt, T args ){
+            fmt = fmtFromTangoFmt(fmt);
+            std.stdio.writefln( "WRN %s %s: %s", file, line, std.string.format(fmt, args) );
+        }
+        void error(T...)( String file, ulong line, String fmt, T args ){
+            fmt = fmtFromTangoFmt(fmt);
+            std.stdio.writefln( "ERR %s %s: %s", file, line, std.string.format(fmt, args) );
+        }
+        void fatal(T...)( String file, ulong line, String fmt, T args ){
+            fmt = fmtFromTangoFmt(fmt);
+            std.stdio.writefln( "FAT %s %s: %s", file, line, std.string.format(fmt, args) );
         }
     }
+
+    alias IDwtLogger DwtLogger;
 }
 
-private DwtLogger dwtLoggerInstance;
+private IDwtLogger dwtLoggerInstance;
 
 IDwtLogger getDwtLogger(){
     if( dwtLoggerInstance is null ){

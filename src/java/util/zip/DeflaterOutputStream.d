@@ -120,7 +120,7 @@ class DeflaterOutputStream : java.io.OutputStream.OutputStream {
     }
 
     override
-    void write(in byte[] b, int off, int len) {
+    void write(in byte[] b, ptrdiff_t off, ptrdiff_t len) {
         buf ~= b[off .. off + len];
         deflate();
     }

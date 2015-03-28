@@ -21,7 +21,7 @@ version(Tango){
 
 template SimpleType(T) {
     debug{
-        static void validCheck(uint SrcLen, uint DestLen, uint copyLen){
+        static void validCheck(size_t SrcLen, size_t DestLen, size_t copyLen){
             if(SrcLen < copyLen || DestLen < copyLen|| SrcLen < 0 || DestLen < 0){
                 //Util.trace("Error : SimpleType.arraycopy(), out of bounds.");
                 assert(0);
@@ -29,7 +29,7 @@ template SimpleType(T) {
         }
     }
 
-    static void remove(ref T[] items, int index) {
+    static void remove(ref T[] items, ptrdiff_t index) {
         if(items.length == 0)
             return;
 
@@ -39,7 +39,7 @@ template SimpleType(T) {
 
         T element = items[index];
 
-        int length = items.length;
+        size_t length = items.length;
         if(length == 1){
             items.length = 0;
             return;// element;
@@ -53,7 +53,7 @@ template SimpleType(T) {
             items = items[0 .. index] ~ items[index + 1 .. $];
     }
 
-    static void insert(ref T[] items, T item, int index = -1) {
+    static void insert(ref T[] items, T item, ptrdiff_t index = -1) {
         if(index == -1)
             index = items.length;
 
@@ -81,7 +81,7 @@ template SimpleType(T) {
         }
     }
 
-    static void arraycopy(in T[] src, uint srcPos, T[] dest, uint destPos, uint len)
+    static void arraycopy(in T[] src, size_t srcPos, T[] dest, size_t destPos, size_t len)
     {
         if(len == 0) return;
 
@@ -93,12 +93,12 @@ template SimpleType(T) {
         if((src.ptr <= dest.ptr && src.ptr + len > dest.ptr)
          ||(src.ptr >= dest.ptr && src.ptr < dest.ptr + len)){
             if( destPos < srcPos ){
-                for(int i=0; i<len; ++i){
+                for(size_t i=0; i<len; ++i){
                     dest[destPos+i] = cast(T)src[srcPos+i];
                 }
             }
             else{
-                for(int i=len-1; i>=0; --i){
+                for(ptrdiff_t i=len-1; i>=0; --i){
                     dest[destPos+i] = cast(T)src[srcPos+i];
                 }
             }
@@ -110,7 +110,7 @@ template SimpleType(T) {
 
 
 class System {
-    static void arraycopy(T)(in T[] src, uint srcPos, T[] dest, uint destPos, uint len) {
+    static void arraycopy(T)(in T[] src, size_t srcPos, T[] dest, size_t destPos, size_t len) {
         if(len == 0) return;
 
         assert(src);
@@ -126,7 +126,7 @@ class System {
                 }
             }
             else{
-                for(int i=len-1; i>=0; --i){
+                for(ptrdiff_t i=len-1; i>=0; --i){
                     dest[destPos+i] = cast(T)src[srcPos+i];
                 }
             }
@@ -148,7 +148,7 @@ class System {
         if( x is null ){
             return 0;
         }
-        return cast(int)((*cast(Object *)&x).toHash());
+        return cast(int)/*64bit*/(*cast(Object *)&x).toHash();
     }
 
     public static String getProperty( String key, String defval ){
