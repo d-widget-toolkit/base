@@ -74,8 +74,10 @@ class Condition
      * Throws:
      *  SyncException on error.
      */
-    this( Mutex m ) @safe
-    {
+    this( Mutex m ) @trusted // @trusted is used to stay backwards compatible
+    {                        // versions older than 2.067.0 where
+                             // core.sys.posix.pthread.pthread_cond_init is
+                             // @system
         version( Windows )
         {
             m_blockLock = CreateSemaphoreA( null, 1, 1, null );
