@@ -169,14 +169,14 @@ String ExceptionGetLocalizedMessage( Exception e ){
     return e.msg;
 }
 
-/// Extension to the D Exception
-void ExceptionPrintStackTrace( Exception e ){
-    ExceptionPrintStackTrace( e, & getDwtLogger().error );
-}
+version(Tango){
+    /// Extension to the D Exception
+    void ExceptionPrintStackTrace( Exception e ){
+        ExceptionPrintStackTrace( e, & getDwtLogger().error );
+    }
 
-/// Extension to the D Exception
-void ExceptionPrintStackTrace( Throwable e, void delegate ( String file, ulong line, String fmt, ... ) dg ){
-    version(Tango){
+    /// Extension to the D Exception
+    void ExceptionPrintStackTrace( Throwable e, void delegate ( String file, ulong line, String fmt, ... ) dg ){
         Throwable exception = e;
         while( exception !is null ){
             dg( exception.file, exception.line, "Exception in {}({}): {}", exception.file, exception.line, exception.msg );
@@ -187,13 +187,15 @@ void ExceptionPrintStackTrace( Throwable e, void delegate ( String file, ulong l
             }
             exception = exception.next;
         }
-    } else { // Phobos
+    }
+} else { // Phobos
+    void ExceptionPrintStackTrace( Exception e ){
         Throwable exception = e;
         while( exception !is null ){
-            dg( exception.file, exception.line, "Exception in {}({}): {}", exception.file, exception.line, exception.msg );
+            getDwtLogger().error( exception.file, exception.line, "Exception in {}({}): {}", exception.file, exception.line, exception.msg );
             if( exception.info !is null ){
                 foreach( line, file; exception.info ){
-                    dg( exception.file, exception.line, "trc {} {}", file, line );
+                    getDwtLogger().error( exception.file, exception.line, "trc {} {}", file, line );
                 }
             }
             exception = exception.next;

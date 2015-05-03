@@ -38,7 +38,7 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
     }
 
     override
-    public int read( byte[] b, int off, int len ){
+    public ptrdiff_t read( byte[] b, ptrdiff_t off, ptrdiff_t len ){
         synchronized return super.read( b, off, len );
     }
 
@@ -51,7 +51,7 @@ public class ByteArrayInputStream : java.io.InputStream.InputStream {
     }
 
     override
-    public int available(){
+    public ptrdiff_t available(){
         synchronized {
             if( pos >= this.buf.length ){
                 return 0;

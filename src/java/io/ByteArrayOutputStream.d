@@ -48,7 +48,7 @@ public class ByteArrayOutputStream : java.io.OutputStream.OutputStream {
         }
     }
 
-    public override void write( in byte[] b, int off, int len ){
+    public override void write( in byte[] b, ptrdiff_t off, ptrdiff_t len ){
         synchronized {
             version(Tango){
                 buffer.append( b[ off .. off + len ] );

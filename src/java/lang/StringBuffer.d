@@ -54,7 +54,7 @@ class StringBuffer : CharSequence {
         version(Tango){
             return buffer.length();
         } else { // Phobos
-            return cast(int)(buffer.offset);
+            return cast(int)/*64bit*/buffer.offset;
         }
     }
 
@@ -151,7 +151,7 @@ class StringBuffer : CharSequence {
                 buffer.offset = start;
                 return append(str);
             }
-            int strEnd = cast(int)(start + str.length), incr = strEnd - end;
+            int strEnd = start + cast(int)/*64bit*/str.length, incr = strEnd - end;
             
             if( incr > 0 ) {
                 buffer.spread(end, incr);

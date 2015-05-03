@@ -153,7 +153,7 @@ class Hashtable : Dictionary, Map {
 //     public Object remove(String key)
     override
     public int    size(){
-        synchronized return cast(int)map.length;
+        synchronized return cast(int)/*64bit*/map.length;
     }
     public Collection values(){
         implMissing( __FILE__, __LINE__ );

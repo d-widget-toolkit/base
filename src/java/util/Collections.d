@@ -361,7 +361,7 @@ class Collections {
     static void     reverse(List list) {
         Object[] data = list.toArray();
         for( int idx = 0; idx < data.length; idx++ ){
-            list.set( cast(int)(data.length -1 -idx), data[idx] );
+            list.set( cast(int)/*64bit*/data.length -1 -idx, data[idx] );
         }
     }
     static class LocalEnumeration : Enumeration {

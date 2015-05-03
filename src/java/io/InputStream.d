@@ -22,10 +22,10 @@ public abstract class InputStream {
             }
             b[ idx] = cast(byte)( c & 0xFF );
         }
-        return cast(int)(b.length);
+        return cast(int)/*64bit*/b.length;
     }
 
-    public int read( byte[] b, int off, int len ){
+    public ptrdiff_t read( byte[] b, ptrdiff_t off, ptrdiff_t len ){
         return read( b[ off .. off+len ] );
     }
 
@@ -34,7 +34,7 @@ public abstract class InputStream {
         return 0L;
     }
 
-    public int available(){
+    public ptrdiff_t available(){
         return 0;
     }
 

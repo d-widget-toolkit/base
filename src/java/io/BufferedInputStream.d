@@ -68,7 +68,7 @@ public class BufferedInputStream : java.io.InputStream.InputStream {
     }
 
     override
-    public int read( byte[] b, int off, int len ){
+    public ptrdiff_t read( byte[] b, ptrdiff_t off, ptrdiff_t len ){
         synchronized return super.read( b, off, len );
     }
 
@@ -78,9 +78,9 @@ public class BufferedInputStream : java.io.InputStream.InputStream {
     }
 
     override
-    public int available(){
+    public ptrdiff_t available(){
         synchronized {
-            int istr_avail = 0;
+            ptrdiff_t istr_avail = 0;
             if( istr !is null ){
                 istr_avail = istr.available();
             }
