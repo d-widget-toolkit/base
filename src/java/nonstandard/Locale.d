@@ -60,7 +60,7 @@ version(Tango){
             enforce(len, new Exception("LOCALE_SISO639LANGNAME (len)", __FILE__, __LINE__));
             buf.length = len;
             len = GetLocalInfo(LCID.LOCALE_USER_DEFAULT,
-                LCTYPE.LOCALE_SISO639LANGNAME, buf.ptr, buf.length);
+                LCTYPE.LOCALE_SISO639LANGNAME, buf.ptr, cast(INT)buf.length);
             enforce(len, new Exception("LOCALE_SISO639LANGNAME", __FILE__, __LINE__));
             res ~= buf[0 .. len - 1];
             res ~= '-';
@@ -69,7 +69,7 @@ version(Tango){
             enforce(len, new Exception("LOCALE_SISO3166CTRYNAME (len)", __FILE__, __LINE__));
             buf.length = len;
             len = GetLocalInfo(LCID.LOCALE_USER_DEFAULT,
-                LCTYPE.LOCALE_SISO3166CTRYNAME, buf.ptr, buf.length);
+                LCTYPE.LOCALE_SISO3166CTRYNAME, buf.ptr, cast(INT)buf.length);
             enforce(len, new Exception("LOCALE_SISO3166CTRYNAME", __FILE__, __LINE__));
             res ~= buf[0 .. len - 1];
             return to!(String)(res);
