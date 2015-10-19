@@ -1,8 +1,8 @@
-/** 
+/**
  * Provides runtime traits, which provide much of the functionality of tango.core.Traits and
- * is-expressions, as well as some functionality that is only available at runtime, using 
- * runtime type information. 
- * 
+ * is-expressions, as well as some functionality that is only available at runtime, using
+ * runtime type information.
+ *
  * Authors: Chris Wright (dhasenan) <dhasenan@gmail.com>
  * License: tango license, apache 2.0
  * Copyright (c) 2009, CHRISTOPHER WRIGHT
@@ -112,7 +112,7 @@ bool implements (in ClassInfo implementor, in ClassInfo iface)
     return false;
 }
 
-/** Returns true iff an instance of class test is implicitly castable to target. 
+/** Returns true iff an instance of class test is implicitly castable to target.
  * This is an expensive operation (isDerived + implements). */
 bool isImplicitly (in ClassInfo test, in ClassInfo target)
 {
@@ -121,7 +121,7 @@ bool isImplicitly (in ClassInfo test, in ClassInfo target)
     return (isDerived (test, target) || implements (test, target));
 }
 
-/** Returns true iff an instance of type test is implicitly castable to target. 
+/** Returns true iff an instance of type test is implicitly castable to target.
  * If the types describe classes or interfaces, this is an expensive operation. */
 bool isImplicitly (in TypeInfo test, in TypeInfo target)
 {
@@ -130,7 +130,7 @@ bool isImplicitly (in TypeInfo test, in TypeInfo target)
         return true;
     if (isStaticArray (test) && isDynamicArray (target) && valueType (test) is valueType (target))
     {
-        // you can implicitly cast static to dynamic (currently) if they 
+        // you can implicitly cast static to dynamic (currently) if they
         // have the same value type. Other casts should be forbidden.
         return true;
     }
@@ -207,23 +207,23 @@ ConstClassInfo[] baseInterfaces (in ClassInfo type)
 
 /** Returns all the interfaces that this type directly implements, including
  * inherited interfaces. This is an expensive operation.
- * 
+ *
  * Examples:
  * ---
  * interface I1 {}
  * interface I2 : I1 {}
  * class A : I2 {}
- * 
+ *
  * auto interfaces = interfaceGraph (A.classinfo);
  * // interfaces = [I1.classinfo, I2.classinfo]
- * --- 
- * 
+ * ---
+ *
  * ---
  * interface I1 {}
  * interface I2 {}
  * class A : I1 {}
  * class B : A, I2 {}
- * 
+ *
  * auto interfaces = interfaceGraph (B.classinfo);
  * // interfaces = [I2.classinfo]
  * ---
@@ -303,8 +303,8 @@ ConstClassInfo[] directInterfaces (in ClassInfo type)
     return types;
 }
 
-/** Returns a list of all types that are derived from the given type. This does not 
- * count interfaces; that is, if type is an interface, you will only get derived 
+/** Returns a list of all types that are derived from the given type. This does not
+ * count interfaces; that is, if type is an interface, you will only get derived
  * interfaces back. It is an expensive operations. */
 ConstClassInfo[] derivedTypes (in ClassInfo type)
 {
@@ -448,7 +448,7 @@ bool isReferenceType (in TypeInfo type)
     return isClass (type) || isPointer (type) || isDynamicArray (type);
 }
 
-/** Returns true iff the given type represents a user-defined type. 
+/** Returns true iff the given type represents a user-defined type.
  * This does not include functions, delegates, aliases, or typedefs. */
 bool isUserDefined (in TypeInfo type)
 {
