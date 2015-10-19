@@ -11,14 +11,12 @@ module java.nonstandard.RuntimeTraits;
 import java.lang.all;
 
 version(Tango){
-    private const String CONST_CLASS_INFO = "new ClassInfo()";
-    private const String CONST_TYPE_INFO = "new TypeInfo()";
+    alias ClassInfo ConstClassInfo;
+    alias TypeInfo ConstTypeInfo;
 } else { // Phobos
-    private const String CONST_CLASS_INFO = "new const(ClassInfo)()";
-    private const String CONST_TYPE_INFO = "new const(TypeInfo)()";
+    mixin("alias const(TypeInfo_Class) ConstClassInfo;");
+    mixin("alias const(TypeInfo) ConstTypeInfo;");
 }
-alias typeof(mixin(CONST_CLASS_INFO)) ConstClassInfo;
-alias typeof(mixin(CONST_TYPE_INFO)) ConstTypeInfo;
 
 // Only DWT
 public bool isJavaPrimitive( in TypeInfo type ){
