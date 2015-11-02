@@ -10,7 +10,7 @@ import java.io.InputStream;
 version(Tango){
     import TangoFile = tango.io.device.File;
 } else { // Phobos
-    static import std.stream;
+    static import std.stdio;
 }
 
 public class FileInputStream : java.io.InputStream.InputStream {
@@ -20,7 +20,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
     version(Tango){
         private TangoFile.File conduit;
     } else { // Phobos
-        private std.stream.File conduit;
+        private std.stdio.File conduit;
     }
     private ubyte[] buffer;
     private int buf_pos;
@@ -32,7 +32,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
         version(Tango){
             conduit = new TangoFile.File( name );
         } else { // Phobos
-            conduit = new std.stream.File( name );
+            conduit = std.stdio.File( name, "rb" );
         }
         buffer = new ubyte[]( BUFFER_SIZE );
     }
@@ -42,7 +42,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
         version(Tango){
             conduit = new TangoFile.File( file.getAbsolutePath(), TangoFile.File.ReadExisting );
         } else { // Phobos
-            conduit = new std.stream.File( file.getAbsolutePath(), std.stream.FileMode.In );
+            conduit = std.stdio.File( file.getAbsolutePath(), "rb" );
         }
         buffer = new ubyte[]( BUFFER_SIZE );
     }
@@ -78,7 +78,7 @@ public class FileInputStream : java.io.InputStream.InputStream {
             try{
                 if( buf_pos == buf_size ){
                     buf_pos = 0;
-                    buf_size = cast(int)/*64bit*/conduit.read( buffer );
+                    buf_size = cast(int)/*64bit*/conduit.rawRead( buffer ).length;
                 }
                 if( buf_size <= 0 ){
                     eof = true;
