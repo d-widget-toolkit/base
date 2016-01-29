@@ -14,7 +14,7 @@ version(Tango){
     static import tango.time.Clock;
     static import tango.stdc.stdlib;
 } else { // Phobos
-    static import std.c.stdlib;
+    static import core.stdc.stdlib;
     static import std.datetime;
     static import std.path;
 }
@@ -142,7 +142,7 @@ class System {
 
     static void exit( int code ){
         version(Tango) tango.stdc.stdlib.exit(code);
-        else           std.c.stdlib.exit(code);
+        else           core.stdc.stdlib.exit(code);
     }
     public static int identityHashCode(Object x){
         if( x is null ){

@@ -14,7 +14,7 @@ version(Tango){
     alias tango.stdc.stdlib.exit exit;
 } else { // Phobos
     static import core.exception;
-    static import std.c.stdlib;
+    static import core.stdc.stdlib;
     static import std.stdio;
     static import std.ascii;
     static import std.array;
@@ -22,7 +22,7 @@ version(Tango){
     static import std.typetuple;
     static import std.traits;
     static import std.exception;
-    alias std.c.stdlib.exit exit;
+    alias core.stdc.stdlib.exit exit;
 }
 
 version(Tango){
