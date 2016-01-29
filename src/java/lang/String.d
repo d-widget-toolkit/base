@@ -512,7 +512,7 @@ version(Tango){
         }
     }
 } else { // Phobos
-    static import std.c.string;
+    static import core.stdc.string;
     
     public char* toStringzValidPtr( in char[] s ) {
         auto copy = new char[s.length + 1];
@@ -526,7 +526,7 @@ version(Tango){
     }
     
     public char[] fromStringz( in char* s ){
-        return s ? s[0 .. std.c.string.strlen(s)].dup : cast(char[])null;
+        return s ? s[0 .. core.stdc.string.strlen(s)].dup : cast(char[])null;
     }
     /*public string fromStringz( in char* s ){
         return std.conv.to!(string)(s);

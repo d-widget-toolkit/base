@@ -16,8 +16,8 @@ version(Tango){
     private import std.exception;
 
     version (Windows) {
-        private import std.c.string;
-        private import std.c.windows.windows;
+        private import core.stdc.string;
+        private import core.sys.windows.windows;
         private bool W_VERSION;
         static this() {
             W_VERSION = GetVersion < 0x80000000;
