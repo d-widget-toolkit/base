@@ -1,5 +1,6 @@
 module java.text.MessageFormat;
 
+static import java.lang.util;
 import java.lang.all;
 import java.text.Format;
 

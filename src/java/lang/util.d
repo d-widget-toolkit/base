@@ -18,10 +18,13 @@ version(Tango){
     static import std.stdio;
     static import std.ascii;
     static import std.array;
+    static import std.conv;
     static import std.format;
     static import std.typetuple;
     static import std.traits;
     static import std.exception;
+    static import std.string;
+    static import std.utf;
     alias core.stdc.stdlib.exit exit;
 }
 
@@ -195,7 +198,7 @@ version(Tango){
 		}
         return app.data();
 	}
-    
+
     unittest
     {
         alias Format Formatter;
@@ -381,7 +384,7 @@ version(Tango){
         assert( Formatter( "{}", f ) == "{1.00 => one, 3.14 => PI}" ||
                 Formatter( "{}", f ) == "{3.14 => PI, 1.00 => one}");*/
     }
-    
+
 	private String doVarArgFormat(TypeInfo[] _arguments, core.vararg.va_list _argptr) {
 		char[] res;
         void putc(dchar c) {
@@ -390,7 +393,7 @@ version(Tango){
         std.format.doFormat(&putc, _arguments, _argptr);
 		return std.exception.assumeUnique(res);
 	}
-	
+
     class Format{
         template UnTypedef(T) {
             version(Tango){
@@ -415,7 +418,7 @@ version(Tango){
                     args[i] = _a;
                 }
             }
-            
+
 			auto writer = std.array.appender!(String)();
             std.format.formattedWrite(writer, fmtFromTangoFmt(_fmt), args);
             auto res = writer.data();
@@ -435,7 +438,7 @@ version( D_Version2 ) {
     template Shared(T) {
         mixin("alias shared(T) Shared;");
     }
-    
+
     alias Immutable TryImmutable;
     alias Const TryConst;
     alias Shared TryShared;
@@ -445,28 +448,28 @@ version( D_Version2 ) {
     std.traits.Unqual!(T)[] Unqual(T)(T[] t) {
         return cast(std.traits.Unqual!(T)[])t;
     }
-    
+
     Immutable!(T)[] _idup(T)( T[] str ){ return str.idup; }
-    
+
     template prefixedIfD2(String prefix, String content) {
         const prefixedIfD2 = prefix ~ " " ~ content;
     }
 } else { // D1
     template AliasT(T) { alias T AliasT; }
-    
+
     alias AliasT TryImmutable;
     alias AliasT TryConst;
     alias AliasT TryShared;
-    
+
     T Unqual(T)(T t) { return t; }
-    
+
     String16 _idup( String16 str ){
         return str.dup;
     }
     String _idup( String str ){
         return str.dup;
     }
-    
+
     template prefixedIfD2(String prefix, String content) {
         const prefixedIfD2 = content;
     }
@@ -552,20 +555,20 @@ bool ArrayEquals(T)( T[] a, T[] b ){
 int arrayIndexOf(T)( T[] arr, T v ){
     int res = -1;
     int idx = 0;
-       
-    
+
+
     static if (is(T == interface))
     {
         Object[] array = cast(Object[]) arr;
         Object value = cast(Object) v;
     }
-        
+
     else
     {
         auto array = arr;
         auto value = v;
     }
-    
+
     foreach( p; array ){
         if( p == value){
             res = idx;
