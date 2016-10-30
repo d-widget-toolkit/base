@@ -23,7 +23,7 @@ class Timer {
 
         private static const int DEFAULT_SIZE = 32;
         private bool nullOnEmpty;
-        private TimerTask heap[];
+        private TimerTask[] heap;
         private int elements;
         public this() {
             version(Tango){
@@ -40,7 +40,7 @@ class Timer {
         private void add(TimerTask task) {
             elements++;
             if (elements is heap.length) {
-                TimerTask new_heap[] = new TimerTask[heap.length * 2];
+                TimerTask[] new_heap = new TimerTask[heap.length * 2];
                 System.arraycopy(heap, 0, new_heap, 0, cast(int)heap.length);
                 heap = new_heap;
             }
@@ -52,7 +52,7 @@ class Timer {
             heap[elements] = null;
             elements--;
             if (elements + DEFAULT_SIZE / 2 <= (heap.length / 4)) {
-                TimerTask new_heap[] = new TimerTask[heap.length / 2];
+                TimerTask[] new_heap = new TimerTask[heap.length / 2];
                 System.arraycopy(heap, 0, new_heap, 0, elements + 1);
                 heap = new_heap;
             }

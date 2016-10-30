@@ -183,7 +183,7 @@ version(Tango){
                                     fres = null;
                             } else
                                 fres ~= 's';
-                        } catch {
+                        } catch (Exception) {
                             fres = "{malformed format}";
                         }
                         if(fres)
@@ -384,15 +384,6 @@ version(Tango){
         assert( Formatter( "{}", f ) == "{1.00 => one, 3.14 => PI}" ||
                 Formatter( "{}", f ) == "{3.14 => PI, 1.00 => one}");*/
     }
-
-	private String doVarArgFormat(TypeInfo[] _arguments, core.vararg.va_list _argptr) {
-		char[] res;
-        void putc(dchar c) {
-            std.utf.encode(res, c);
-        }
-        std.format.doFormat(&putc, _arguments, _argptr);
-		return std.exception.assumeUnique(res);
-	}
 
     class Format{
         template UnTypedef(T) {
