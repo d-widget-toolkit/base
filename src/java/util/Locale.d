@@ -15,7 +15,7 @@ class Locale : Cloneable {
     static Locale ITALIAN;
     static Locale ITALY;
     static Locale JAPAN;
-    static Locale JAPANESE;;
+    static Locale JAPANESE;
     static Locale KOREA;
     static Locale KOREAN;
     static Locale PRC;
